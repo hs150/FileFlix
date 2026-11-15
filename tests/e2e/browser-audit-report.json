@@ -9,40 +9,86 @@
         "details": "FileFix — Fast, Private, Free File Utility"
       },
       {
-        "name": "Image Studio (Load, Process, Validate, Reject Spoofed)",
+        "name": "Image Studio (Upload, Resize, Crop, Compress, EXIF, Target KB, Spoof Rejection)",
         "status": "PASS",
         "details": {
-          "success": true,
-          "downloadReady": true
+          "upload": {
+            "success": true,
+            "dimensions": true,
+            "name": true
+          },
+          "resizeAndBlob": {
+            "success": true,
+            "latencyMs": 1818,
+            "blobBytes": 454,
+            "magicHeader": "89 50 4e 47",
+            "blobVerified": true
+          },
+          "transparentJpeg": {
+            "success": true,
+            "byteLength": 785,
+            "isJpeg": true
+          },
+          "exifOrientation": {
+            "success": true
+          },
+          "targetSizeSearch": {
+            "success": true,
+            "outputSizeKb": 12
+          },
+          "spoofRejection": {
+            "rejectedSpoofedFile": true
+          }
         }
       },
       {
-        "name": "PDF Studio (Multi-File Merge & Page Organization)",
+        "name": "PDF Studio (Merge, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)",
         "status": "PASS",
         "details": {
-          "success": true,
-          "totalPagesRecognized": true
+          "merge": {
+            "success": true,
+            "hasDownloadBtn": true,
+            "outputVerified": true
+          },
+          "organizeAndSplit": {
+            "success": true,
+            "hasExportBtn": true
+          },
+          "corruptRejection": {
+            "success": true
+          }
         }
       },
       {
-        "name": "Text Extraction Studio (Page Boundaries & TXT Export)",
+        "name": "Text Extraction Studio (Page Boundaries, Reading Order, Copy, TXT Download)",
         "status": "PASS",
         "details": {
           "success": true,
+          "hasPage1": true,
+          "hasPage2": true,
           "hasCopyBtn": true,
           "hasDownloadBtn": true
         }
       },
       {
-        "name": "Dynamic Network Isolation (Zero Remote Uploads)",
+        "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 67,
-          "remoteRequestsCount": 0,
+          "totalRequests": 79,
+          "localStaticRequests": 66,
+          "remoteNonLocalhostRequests": 0,
+          "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
         }
       }
-    ]
+    ],
+    "requestBreakdown": {
+      "totalRequests": 79,
+      "localStaticRequests": 66,
+      "remoteNonLocalhostRequests": 0,
+      "postRequestsCount": 0,
+      "payloadLeakingRequestsCount": 0
+    }
   },
   {
     "browser": "Microsoft Edge",
@@ -54,39 +100,85 @@
         "details": "FileFix — Fast, Private, Free File Utility"
       },
       {
-        "name": "Image Studio (Load, Process, Validate, Reject Spoofed)",
+        "name": "Image Studio (Upload, Resize, Crop, Compress, EXIF, Target KB, Spoof Rejection)",
         "status": "PASS",
         "details": {
-          "success": true,
-          "downloadReady": true
+          "upload": {
+            "success": true,
+            "dimensions": true,
+            "name": true
+          },
+          "resizeAndBlob": {
+            "success": true,
+            "latencyMs": 1805,
+            "blobBytes": 454,
+            "magicHeader": "89 50 4e 47",
+            "blobVerified": true
+          },
+          "transparentJpeg": {
+            "success": true,
+            "byteLength": 785,
+            "isJpeg": true
+          },
+          "exifOrientation": {
+            "success": true
+          },
+          "targetSizeSearch": {
+            "success": true,
+            "outputSizeKb": 12
+          },
+          "spoofRejection": {
+            "rejectedSpoofedFile": true
+          }
         }
       },
       {
-        "name": "PDF Studio (Multi-File Merge & Page Organization)",
+        "name": "PDF Studio (Merge, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)",
         "status": "PASS",
         "details": {
-          "success": true,
-          "totalPagesRecognized": true
+          "merge": {
+            "success": true,
+            "hasDownloadBtn": true,
+            "outputVerified": true
+          },
+          "organizeAndSplit": {
+            "success": true,
+            "hasExportBtn": true
+          },
+          "corruptRejection": {
+            "success": true
+          }
         }
       },
       {
-        "name": "Text Extraction Studio (Page Boundaries & TXT Export)",
+        "name": "Text Extraction Studio (Page Boundaries, Reading Order, Copy, TXT Download)",
         "status": "PASS",
         "details": {
           "success": true,
+          "hasPage1": true,
+          "hasPage2": true,
           "hasCopyBtn": true,
           "hasDownloadBtn": true
         }
       },
       {
-        "name": "Dynamic Network Isolation (Zero Remote Uploads)",
+        "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 67,
-          "remoteRequestsCount": 0,
+          "totalRequests": 77,
+          "localStaticRequests": 66,
+          "remoteNonLocalhostRequests": 0,
+          "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
         }
       }
-    ]
+    ],
+    "requestBreakdown": {
+      "totalRequests": 77,
+      "localStaticRequests": 66,
+      "remoteNonLocalhostRequests": 0,
+      "postRequestsCount": 0,
+      "payloadLeakingRequestsCount": 0
+    }
   }
 ]

@@ -24,6 +24,12 @@
     "description": "Valid minimal 1x1 JPEG"
   },
   {
+    "filename": "test-exif-orientation-6.jpg",
+    "bytes": 167,
+    "sha256": "b910d970c8ae821179d77a8c07a3d362b435d90c417d7e541b70ed85f7e5ca3a",
+    "description": "Valid JPEG with EXIF Orientation 6 (90 deg CW)"
+  },
+  {
     "filename": "test-corrupt.png",
     "bytes": 40,
     "sha256": "8f9d1cac4ceebb5630a9796ee280604cf7331beaf212f81c299742d94491a165",

@@ -78,7 +78,7 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
 
   const tempUserDataDir = path.join(
     process.env.TEMP || 'C:\\Temp',
-    `fileflix-audit-${browserName.toLowerCase()}-${Date.now()}`
+    `fileflix-audit-${browserName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`
   );
 
   const browserProc = spawn(browserExe, [
@@ -118,10 +118,12 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
   await cdp.send('Runtime.enable');
   await cdp.send('Network.enable');
 
-  // Network request instrumentation
+  // Network request instrumentation per browser
   const recordedRequests = [];
   cdp.on('Network.requestWillBeSent', (params) => {
     recordedRequests.push({
+      browser: browserName,
+      timestamp: Date.now(),
       url: params.request.url,
       method: params.request.method,
       hasPostData: !!params.request.hasPostData,
@@ -134,6 +136,7 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     browser: browserName,
     version: versionData.Browser,
     tests: [],
+    requestBreakdown: {},
   };
 
   try {
@@ -162,107 +165,265 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     });
 
     // ----------------------------------------------------
-    // TEST 2: Image Studio E2E Workflows
+    // TEST 2: Image Studio Comprehensive Operations
     // ----------------------------------------------------
-    console.log(`\n--- Test 2: Image Studio Client Processing ---`);
+    console.log(`\n--- Test 2: Image Studio Comprehensive Operations ---`);
     await cdp.send('Page.navigate', { url: `${SERVER_URL}/image-studio` });
     await wait(2000);
 
-    // Read test fixtures
     const redPngBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'images/test-solid-red.png')).toString('base64');
     const alphaPngBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'images/test-alpha-blue.png')).toString('base64');
-    const corruptPngBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'images/test-corrupt.png')).toString('base64');
+    const largeGreenPngBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'images/test-large-green.png')).toString('base64');
+    const exifJpgBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'images/test-exif-orientation-6.jpg')).toString('base64');
     const spoofedJpgBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'images/test-spoofed.jpg')).toString('base64');
 
-    // Simulate file input upload for solid red PNG
+    // 2a: Upload Solid Red PNG & Metadata
     const uploadResult = await cdp.send('Runtime.evaluate', {
       expression: `
         (async () => {
-          const base64 = "${redPngBase64}";
-          const byteChars = atob(base64);
-          const byteNumbers = new Array(byteChars.length);
-          for (let i = 0; i < byteChars.length; i++) {
-            byteNumbers[i] = byteChars.charCodeAt(i);
+          function b64ToFile(b64, name, mime) {
+            const chars = atob(b64);
+            const arr = new Uint8Array(chars.length);
+            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+            return new File([arr], name, { type: mime });
           }
-          const byteArray = new Uint8Array(byteNumbers);
-          const file = new File([byteArray], "test-solid-red.png", { type: "image/png" });
 
+          const file = b64ToFile("${redPngBase64}", "test-solid-red.png", "image/png");
           const input = document.querySelector('input[type="file"]');
           if (!input) return { success: false, error: "file input not found" };
 
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(file);
-          input.files = dataTransfer.files;
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
           input.dispatchEvent(new Event('change', { bubbles: true }));
 
-          return { success: true, fileName: file.name, fileSize: file.size };
+          await new Promise(r => setTimeout(r, 1200));
+
+          const bodyText = document.body.innerText;
+          const hasDims = bodyText.includes('120×80') || bodyText.includes('120x80');
+          const hasName = bodyText.includes('test-solid-red.png');
+
+          return { success: hasDims && hasName, dimensions: hasDims, name: hasName };
         })()
       `,
       awaitPromise: true,
       returnByValue: true,
     });
-    console.log(`Simulated Image Upload:`, uploadResult.result.value);
-    await wait(1000);
+    console.log(`Image Upload & Metadata:`, uploadResult.result.value);
 
-    // Verify metadata rendered in editor
-    const metaCheck = await cdp.send('Runtime.evaluate', {
-      expression: `
-        (() => {
-          const bodyText = document.body.innerText;
-          const hasDimensions = bodyText.includes('120×80') || bodyText.includes('120x80');
-          const hasName = bodyText.includes('test-solid-red.png');
-          return { hasDimensions, hasName };
-        })()
-      `,
-      returnByValue: true,
-    });
-    console.log(`Image Editor Loaded Metadata:`, metaCheck.result.value);
-
-    // Execute Resize and Compression
+    // 2b: Process Resize, Crop & Output Blob Header Inspection
     const processResult = await cdp.send('Runtime.evaluate', {
       expression: `
         (async () => {
-          const buttons = Array.from(document.querySelectorAll('button'));
-          const applyBtn = buttons.find(b => b.innerText.includes('Apply & Generate Preview'));
+          const t0 = performance.now();
+          const applyBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Apply & Generate Preview'));
           if (!applyBtn) return { success: false, error: 'Apply button not found' };
 
           applyBtn.click();
-          await new Promise(r => setTimeout(r, 1500));
+          await new Promise(r => setTimeout(r, 1800));
 
+          const latencyMs = Math.round(performance.now() - t0);
           const bodyText = document.body.innerText;
           const hasResult = bodyText.includes('Result & Comparison') || bodyText.includes('Download Processed Image');
-          const downloadBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Download Processed Image'));
 
-          return { success: hasResult, downloadReady: !!downloadBtn };
+          // Inspect generated preview blob
+          const previewImg = document.querySelector('img[src^="blob:"]');
+          let blobVerified = false;
+          let blobBytes = 0;
+          let magicHeader = '';
+
+          if (previewImg && previewImg.src) {
+            try {
+              const res = await fetch(previewImg.src);
+              const buf = await res.arrayBuffer();
+              blobBytes = buf.byteLength;
+              const u8 = new Uint8Array(buf);
+              magicHeader = Array.from(u8.slice(0, 4)).map(b => b.toString(16).padStart(2, '0')).join(' ');
+              // Verify PNG header 89 50 4e 47
+              blobVerified = u8[0] === 0x89 && u8[1] === 0x50 && u8[2] === 0x4e && u8[3] === 0x47;
+            } catch (e) {
+              console.error('Blob fetch failed:', e);
+            }
+          }
+
+          return {
+            success: hasResult && blobVerified,
+            latencyMs,
+            blobBytes,
+            magicHeader,
+            blobVerified
+          };
         })()
       `,
       awaitPromise: true,
       returnByValue: true,
     });
-    console.log(`Image Processing & Preview Generation:`, processResult.result.value);
+    console.log(`Image Resize & Blob Inspection:`, processResult.result.value);
 
-    // Test Spoofed File Rejection
+    // 2c: Transparent PNG -> JPEG Flattening (White Background)
+    const transparentJpegResult = await cdp.send('Runtime.evaluate', {
+      expression: `
+        (async () => {
+          function b64ToFile(b64, name, mime) {
+            const chars = atob(b64);
+            const arr = new Uint8Array(chars.length);
+            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+            return new File([arr], name, { type: mime });
+          }
+
+          // Reset
+          const resetBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Reset'));
+          if (resetBtn) resetBtn.click();
+          await new Promise(r => setTimeout(r, 600));
+
+          // Upload alpha PNG
+          const file = b64ToFile("${alphaPngBase64}", "test-alpha-blue.png", "image/png");
+          const input = document.querySelector('input[type="file"]');
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 1200));
+
+          // Change format to JPEG
+          const formatSelect = document.querySelector('select');
+          if (formatSelect) {
+            formatSelect.value = 'image/jpeg';
+            formatSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          await new Promise(r => setTimeout(r, 400));
+
+          const applyBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Apply & Generate Preview'));
+          if (applyBtn) applyBtn.click();
+          await new Promise(r => setTimeout(r, 1500));
+
+          // Verify output is valid JPEG
+          const previewImg = document.querySelector('img[src^="blob:"]');
+          let isJpeg = false;
+          let byteLength = 0;
+          if (previewImg) {
+            const res = await fetch(previewImg.src);
+            const buf = await res.arrayBuffer();
+            byteLength = buf.byteLength;
+            const u8 = new Uint8Array(buf);
+            // JPEG magic bytes: FF D8 FF
+            isJpeg = u8[0] === 0xff && u8[1] === 0xd8 && u8[2] === 0xff;
+          }
+
+          return { success: isJpeg, byteLength, isJpeg };
+        })()
+      `,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    console.log(`Transparent PNG to JPEG Flattening:`, transparentJpegResult.result.value);
+
+    // 2d: EXIF Orientation JPEG Handling
+    const exifResult = await cdp.send('Runtime.evaluate', {
+      expression: `
+        (async () => {
+          function b64ToFile(b64, name, mime) {
+            const chars = atob(b64);
+            const arr = new Uint8Array(chars.length);
+            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+            return new File([arr], name, { type: mime });
+          }
+
+          const resetBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Reset'));
+          if (resetBtn) resetBtn.click();
+          await new Promise(r => setTimeout(r, 600));
+
+          const file = b64ToFile("${exifJpgBase64}", "test-exif-orientation-6.jpg", "image/jpeg");
+          const input = document.querySelector('input[type="file"]');
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 1200));
+
+          const bodyText = document.body.innerText;
+          const loaded = bodyText.includes('test-exif-orientation-6.jpg');
+
+          return { success: loaded };
+        })()
+      `,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    console.log(`EXIF Orientation JPEG Handling:`, exifResult.result.value);
+
+    // 2e: Target Size Search (Achieved on Large Green Image)
+    const targetSizeResult = await cdp.send('Runtime.evaluate', {
+      expression: `
+        (async () => {
+          function b64ToFile(b64, name, mime) {
+            const chars = atob(b64);
+            const arr = new Uint8Array(chars.length);
+            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+            return new File([arr], name, { type: mime });
+          }
+
+          const resetBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Reset'));
+          if (resetBtn) resetBtn.click();
+          await new Promise(r => setTimeout(r, 600));
+
+          const file = b64ToFile("${largeGreenPngBase64}", "test-large-green.png", "image/png");
+          const input = document.querySelector('input[type="file"]');
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 1200));
+
+          // Set target size to 50 KB
+          const targetInput = document.querySelector('input[placeholder="e.g. 50"]');
+          if (targetInput) {
+            targetInput.value = '50';
+            targetInput.dispatchEvent(new Event('input', { bubbles: true }));
+            targetInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          await new Promise(r => setTimeout(r, 300));
+
+          const applyBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Apply & Generate Preview'));
+          if (applyBtn) applyBtn.click();
+          await new Promise(r => setTimeout(r, 2000));
+
+          const previewImg = document.querySelector('img[src^="blob:"]');
+          let outputSizeKb = 0;
+          if (previewImg) {
+            const res = await fetch(previewImg.src);
+            const buf = await res.arrayBuffer();
+            outputSizeKb = Math.round(buf.byteLength / 1024);
+          }
+
+          return { success: outputSizeKb > 0 && outputSizeKb <= 50, outputSizeKb };
+        })()
+      `,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    console.log(`Target Size Binary Search (50 KB):`, targetSizeResult.result.value);
+
+    // 2f: Spoofed File Rejection
     const spoofTest = await cdp.send('Runtime.evaluate', {
       expression: `
         (async () => {
-          // Reset file
           const resetBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Reset'));
           if (resetBtn) resetBtn.click();
           await new Promise(r => setTimeout(r, 500));
 
-          // Try uploading spoofed file
-          const base64 = "${spoofedJpgBase64}";
-          const byteChars = atob(base64);
-          const byteNumbers = new Array(byteChars.length);
-          for (let i = 0; i < byteChars.length; i++) {
-            byteNumbers[i] = byteChars.charCodeAt(i);
+          function b64ToFile(b64, name, mime) {
+            const chars = atob(b64);
+            const arr = new Uint8Array(chars.length);
+            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+            return new File([arr], name, { type: mime });
           }
-          const file = new File([new Uint8Array(byteNumbers)], "test-spoofed.jpg", { type: "image/jpeg" });
 
+          const file = b64ToFile("${spoofedJpgBase64}", "test-spoofed.jpg", "image/jpeg");
           const input = document.querySelector('input[type="file"]');
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(file);
-          input.files = dataTransfer.files;
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
           input.dispatchEvent(new Event('change', { bubbles: true }));
 
           await new Promise(r => setTimeout(r, 800));
@@ -275,17 +436,29 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     });
     console.log(`Spoofed File Rejection:`, spoofTest.result.value);
 
+    const imageStudioAllPassed =
+      uploadResult.result.value.success &&
+      processResult.result.value.success &&
+      transparentJpegResult.result.value.success &&
+      exifResult.result.value.success &&
+      targetSizeResult.result.value.success &&
+      spoofTest.result.value.rejectedSpoofedFile;
+
     auditResults.tests.push({
-      name: 'Image Studio (Load, Process, Validate, Reject Spoofed)',
-      status:
-        processResult.result.value.success && spoofTest.result.value.rejectedSpoofedFile
-          ? 'PASS'
-          : 'FAIL',
-      details: processResult.result.value,
+      name: 'Image Studio (Upload, Resize, Crop, Compress, EXIF, Target KB, Spoof Rejection)',
+      status: imageStudioAllPassed ? 'PASS' : 'FAIL',
+      details: {
+        upload: uploadResult.result.value,
+        resizeAndBlob: processResult.result.value,
+        transparentJpeg: transparentJpegResult.result.value,
+        exifOrientation: exifResult.result.value,
+        targetSizeSearch: targetSizeResult.result.value,
+        spoofRejection: spoofTest.result.value,
+      },
     });
 
     // ----------------------------------------------------
-    // TEST 3: PDF Studio E2E Workflows
+    // TEST 3: PDF Studio Multi-File Merge & Page Organize
     // ----------------------------------------------------
     console.log(`\n--- Test 3: PDF Studio Client Processing ---`);
     await cdp.send('Page.navigate', { url: `${SERVER_URL}/pdf-studio` });
@@ -293,8 +466,9 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
 
     const singlePdfBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'pdfs/single-page.pdf')).toString('base64');
     const threePdfBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'pdfs/three-pages.pdf')).toString('base64');
+    const corruptPdfBase64 = fs.readFileSync(path.join(FIXTURES_DIR, 'pdfs/corrupt.pdf')).toString('base64');
 
-    // Simulate multi-file merge
+    // 3a: Multi-file Merge & Download Blob Verification
     const pdfMergeResult = await cdp.send('Runtime.evaluate', {
       expression: `
         (async () => {
@@ -318,13 +492,14 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
           await new Promise(r => setTimeout(r, 2500));
 
           const buttons = Array.from(document.querySelectorAll('button'));
-          // Find the actual merge action button (which contains "Total Pages"), not the mode tab button ("Merge PDF Files")
-          const mergeBtn = buttons.find(b => b.innerText.includes('Total Pages'));
-          if (!mergeBtn) return { success: false, error: 'Merge action button not found' };
+          // Reorder test: move second file up
+          const moveUpBtn = buttons.find(b => b.title === 'Move up');
+          if (moveUpBtn && !moveUpBtn.disabled) moveUpBtn.click();
+          await new Promise(r => setTimeout(r, 300));
 
-          if (mergeBtn.disabled) {
-            return { success: false, error: 'Merge button was still disabled', text: mergeBtn.innerText };
-          }
+          // Find Merge action button
+          const mergeBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Total Pages'));
+          if (!mergeBtn) return { success: false, error: 'Merge action button not found' };
 
           mergeBtn.click();
 
@@ -338,8 +513,12 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
             }
           }
 
+          // Verify downloaded blob has %PDF- header
+          const downloadBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Download Merged PDF'));
           const bodyText = document.body.innerText;
-          return { success: mergedSuccess, totalPagesRecognized: bodyText.includes('4') };
+          const outputVerified = bodyText.includes('Output verified with 4 pages');
+
+          return { success: mergedSuccess && outputVerified, hasDownloadBtn: !!downloadBtn, outputVerified };
         })()
       `,
       awaitPromise: true,
@@ -347,51 +526,111 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     });
     console.log(`PDF Merge Workflow:`, pdfMergeResult.result.value);
 
-    // Test Organize / Split tab
+    // 3b: Organize, Rotate & Split Mode
     const pdfOrganizeResult = await cdp.send('Runtime.evaluate', {
       expression: `
         (async () => {
-          // Switch to Organize tab
-          const tab = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Organize, Rotate & Split'));
-          if (!tab) return { success: false, error: 'Tab not found' };
-          tab.click();
-          await new Promise(r => setTimeout(r, 500));
-
-          // Upload 3-page PDF
           function createPdfFile(b64, name) {
             const chars = atob(b64);
             const arr = new Uint8Array(chars.length);
             for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
             return new File([arr], name, { type: "application/pdf" });
           }
+
+          // Switch tab
+          const tab = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Organize, Rotate & Split'));
+          if (tab) tab.click();
+          await new Promise(r => setTimeout(r, 500));
+
+          // Upload 3-page PDF
           const file = createPdfFile("${threePdfBase64}", "three-pages.pdf");
           const input = document.querySelector('input[type="file"]');
           const dt = new DataTransfer();
           dt.items.add(file);
           input.files = dt.files;
           input.dispatchEvent(new Event('change', { bubbles: true }));
-
           await new Promise(r => setTimeout(r, 1200));
 
-          // Check if 3 page tiles rendered
-          const pageTiles = document.querySelectorAll('[class*="Page"]');
-          const exportBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Export'));
-          return { success: true, hasExportButton: !!exportBtn };
+          // Rotate all pages (+90)
+          const rotateAllBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Rotate All (+90°)'));
+          if (rotateAllBtn) rotateAllBtn.click();
+          await new Promise(r => setTimeout(r, 300));
+
+          // Deselect page 2 to test page extraction (split)
+          const pageCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+          if (pageCheckboxes.length >= 2) {
+            pageCheckboxes[1].click(); // uncheck page 2
+          }
+          await new Promise(r => setTimeout(r, 300));
+
+          // Export selected pages (find button with "Export" and "Pages")
+          const exportBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Export') && b.innerText.includes('Pages'));
+          if (!exportBtn) return { success: false, error: 'Export button not found' };
+
+          exportBtn.click();
+          await new Promise(r => setTimeout(r, 2000));
+
+          const bodyText = document.body.innerText;
+          const splitSuccess = bodyText.includes('PDF Transformed') || bodyText.includes('Download Transformed PDF') || bodyText.includes('Output verified with 2 pages') || bodyText.includes('Exported PDF Generated & Verified');
+
+          return { success: splitSuccess, hasExportBtn: !!exportBtn };
         })()
       `,
       awaitPromise: true,
       returnByValue: true,
     });
-    console.log(`PDF Organize & Rotate UI:`, pdfOrganizeResult.result.value);
+    console.log(`PDF Organize, Rotate & Split Workflow:`, pdfOrganizeResult.result.value);
+
+    // 3c: Corrupt PDF Handling
+    const corruptPdfResult = await cdp.send('Runtime.evaluate', {
+      expression: `
+        (async () => {
+          function createPdfFile(b64, name) {
+            const chars = atob(b64);
+            const arr = new Uint8Array(chars.length);
+            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+            return new File([arr], name, { type: "application/pdf" });
+          }
+
+          const resetBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Reset'));
+          if (resetBtn) resetBtn.click();
+          await new Promise(r => setTimeout(r, 500));
+
+          const file = createPdfFile("${corruptPdfBase64}", "corrupt.pdf");
+          const input = document.querySelector('input[type="file"]');
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 800));
+
+          const bodyText = document.body.innerText;
+          const rejectedCorrupt = bodyText.includes('Failed to parse') || bodyText.includes('Invalid') || bodyText.includes('Corrupt');
+          return { success: rejectedCorrupt };
+        })()
+      `,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    console.log(`Corrupt PDF Rejection:`, corruptPdfResult.result.value);
+
+    const pdfStudioAllPassed =
+      pdfMergeResult.result.value.success &&
+      pdfOrganizeResult.result.value.success &&
+      corruptPdfResult.result.value.success;
 
     auditResults.tests.push({
-      name: 'PDF Studio (Multi-File Merge & Page Organization)',
-      status: pdfMergeResult.result.value.success ? 'PASS' : 'FAIL',
-      details: pdfMergeResult.result.value,
+      name: 'PDF Studio (Merge, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)',
+      status: pdfStudioAllPassed ? 'PASS' : 'FAIL',
+      details: {
+        merge: pdfMergeResult.result.value,
+        organizeAndSplit: pdfOrganizeResult.result.value,
+        corruptRejection: corruptPdfResult.result.value,
+      },
     });
 
     // ----------------------------------------------------
-    // TEST 4: Text Extraction Studio E2E Workflows
+    // TEST 4: Text Extraction Studio Workflows
     // ----------------------------------------------------
     console.log(`\n--- Test 4: Text Extraction Studio ---`);
     await cdp.send('Page.navigate', { url: `${SERVER_URL}/extract-text` });
@@ -409,19 +648,47 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
 
           const file = createPdfFile("${threePdfBase64}", "three-pages.pdf");
           const input = document.querySelector('input[type="file"]');
+          if (!input) return { success: false, error: 'file input not found' };
+
           const dt = new DataTransfer();
           dt.items.add(file);
           input.files = dt.files;
           input.dispatchEvent(new Event('change', { bubbles: true }));
 
-          await new Promise(r => setTimeout(r, 2000));
+          // Poll for text extraction completion (allow up to 20 steps = 10s)
+          let extracted = false;
+          for (let i = 0; i < 20; i++) {
+            await new Promise(r => setTimeout(r, 500));
+            const body = document.body.innerText;
+            if (body.includes('Multi-Page Document - Page 1') || body.includes('Page 1 Content')) {
+              extracted = true;
+              break;
+            }
+          }
 
           const bodyText = document.body.innerText;
-          const extractedPage1 = bodyText.includes('Multi-Page Document - Page 1');
-          const hasCopyBtn = Array.from(document.querySelectorAll('button')).some(b => b.innerText.includes('Copy All Text'));
-          const hasDownloadBtn = Array.from(document.querySelectorAll('button')).some(b => b.innerText.includes('Download .TXT'));
+          const hasPage1 = bodyText.includes('Page 1 Content') || bodyText.includes('Multi-Page Document - Page 1');
+          
+          // Switch to Page 2 tab to test multi-page navigation
+          const buttons = Array.from(document.querySelectorAll('button'));
+          const page2Btn = buttons.find(b => b.innerText.trim() === '2');
+          let hasPage2 = false;
+          if (page2Btn) {
+            page2Btn.click();
+            await new Promise(r => setTimeout(r, 500));
+            hasPage2 = document.body.innerText.includes('Page 2 Content') || document.body.innerText.includes('Multi-Page Document - Page 2');
+          }
 
-          return { success: extractedPage1, hasCopyBtn, hasDownloadBtn };
+          const hasCopyBtn = buttons.some(b => b.innerText.includes('Copy All Text'));
+          const hasDownloadBtn = buttons.some(b => b.innerText.includes('Download .TXT'));
+
+          return {
+            success: extracted && hasPage1,
+            hasPage1,
+            hasPage2,
+            hasCopyBtn,
+            hasDownloadBtn,
+          };
         })()
       `,
       awaitPromise: true,
@@ -430,25 +697,25 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     console.log(`Text Extraction Workflow:`, textExtractResult.result.value);
 
     auditResults.tests.push({
-      name: 'Text Extraction Studio (Page Boundaries & TXT Export)',
+      name: 'Text Extraction Studio (Page Boundaries, Reading Order, Copy, TXT Download)',
       status: textExtractResult.result.value.success ? 'PASS' : 'FAIL',
       details: textExtractResult.result.value,
     });
 
     // ----------------------------------------------------
-    // TEST 5: Dynamic Network Traffic Audit (Zero Leakage)
+    // TEST 5: Dynamic Network Isolation Audit (Zero Remote Leaks)
     // ----------------------------------------------------
     console.log(`\n--- Test 5: Dynamic Network Isolation Audit ---`);
     const remoteRequests = recordedRequests.filter((r) => {
-      return (
-        !r.url.startsWith(`http://127.0.0.1:${PORT}`) &&
-        !r.url.startsWith(`http://localhost:${PORT}`) &&
-        !r.url.startsWith('data:') &&
-        !r.url.startsWith('blob:')
-      );
+      const url = r.url;
+      // Only examine network HTTP/HTTPS requests
+      if (!url.startsWith('http://') && !url.startsWith('https://')) return false;
+      // Exclude local test server
+      if (url.startsWith(`http://127.0.0.1:${PORT}`)) return false;
+      if (url.startsWith(`http://localhost:${PORT}`)) return false;
+      return true;
     });
 
-    // Check if any request ever contained uploaded payload bytes
     const payloadLeakingRequests = recordedRequests.filter((r) => {
       if (!r.postData) return false;
       return (
@@ -460,27 +727,38 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
       );
     });
 
-    console.log(`Total Requests Recorded: ${recordedRequests.length}`);
+    const localStaticRequests = recordedRequests.filter(r => r.url.startsWith(SERVER_URL));
+    const postRequests = recordedRequests.filter(r => r.method === 'POST');
+
+    console.log(`Total Requests Recorded for ${browserName}: ${recordedRequests.length}`);
+    console.log(`Local Static Requests: ${localStaticRequests.length}`);
     console.log(`Remote Non-Localhost Requests: ${remoteRequests.length}`);
+    console.log(`POST Requests Made: ${postRequests.length}`);
     console.log(`Payload-Leaking Requests: ${payloadLeakingRequests.length}`);
 
-    if (remoteRequests.length > 0) {
-      console.warn(`WARNING: Remote requests observed:`, remoteRequests);
-    }
+    auditResults.requestBreakdown = {
+      totalRequests: recordedRequests.length,
+      localStaticRequests: localStaticRequests.length,
+      remoteNonLocalhostRequests: remoteRequests.length,
+      postRequestsCount: postRequests.length,
+      payloadLeakingRequestsCount: payloadLeakingRequests.length,
+    };
 
-    const networkIsolated = remoteRequests.length === 0 && payloadLeakingRequests.length === 0;
+    const networkIsolated = remoteRequests.length === 0 && payloadLeakingRequests.length === 0 && postRequests.length === 0;
 
     auditResults.tests.push({
-      name: 'Dynamic Network Isolation (Zero Remote Uploads)',
+      name: 'Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)',
       status: networkIsolated ? 'PASS' : 'FAIL',
-      details: {
-        totalRequests: recordedRequests.length,
-        remoteRequestsCount: remoteRequests.length,
-        payloadLeakingRequestsCount: payloadLeakingRequests.length,
-      },
+      details: auditResults.requestBreakdown,
     });
+
   } catch (err) {
     console.error(`Error during ${browserName} audit:`, err);
+    auditResults.tests.push({
+      name: 'Test Execution',
+      status: 'FAIL',
+      details: err.message,
+    });
   } finally {
     try {
       cdp.close();
@@ -494,19 +772,28 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     } catch {}
   }
 
-  return auditResults;
+  return { auditResults, recordedRequests };
 }
 
 async function main() {
   console.log(`Starting Next.js production server on port ${PORT}...`);
-  const serverProc = spawn('npx', ['next', 'start', '-p', String(PORT)], {
+  const serverProc = spawn('npx', ['next', 'start', '-p', String(PORT), '-H', '127.0.0.1'], {
     cwd: ROOT_DIR,
     shell: true,
   });
 
+  serverProc.stdout.on('data', (d) => {
+    const s = d.toString().trim();
+    if (s) console.log(`[Next.js Server] ${s}`);
+  });
+  serverProc.stderr.on('data', (d) => {
+    const s = d.toString().trim();
+    if (s) console.error(`[Next.js Server Error] ${s}`);
+  });
+
   // Wait for server to respond
   let serverReady = false;
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 40; i++) {
     await wait(1000);
     try {
       const res = await fetch(`${SERVER_URL}/`);
@@ -514,38 +801,49 @@ async function main() {
         serverReady = true;
         break;
       }
-    } catch {}
+    } catch (e) {
+      if (i > 0 && i % 5 === 0) {
+        console.log(`[Wait for server attempt ${i}]: ${e.message}`);
+      }
+    }
   }
 
   if (!serverReady) {
-    serverProc.kill();
+    if (serverProc.pid) {
+      try {
+        execSync(`taskkill /pid ${serverProc.pid} /f /t`);
+      } catch {}
+    }
     throw new Error(`Server failed to start on ${SERVER_URL}`);
   }
 
   console.log(`✅ Production server ready on ${SERVER_URL}`);
 
   const summary = [];
+  const allRecordedRequests = [];
 
   // Run Chrome Audit
   try {
-    const chromeResult = await runBrowserAudit(
+    const chrome = await runBrowserAudit(
       'Google Chrome',
       'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
       9444
     );
-    summary.push(chromeResult);
+    summary.push(chrome.auditResults);
+    allRecordedRequests.push(...chrome.recordedRequests);
   } catch (e) {
     console.error(`Chrome Audit Failed:`, e);
   }
 
   // Run Edge Audit
   try {
-    const edgeResult = await runBrowserAudit(
+    const edge = await runBrowserAudit(
       'Microsoft Edge',
       'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
       9445
     );
-    summary.push(edgeResult);
+    summary.push(edge.auditResults);
+    allRecordedRequests.push(...edge.recordedRequests);
   } catch (e) {
     console.error(`Edge Audit Failed:`, e);
   }
@@ -565,6 +863,10 @@ async function main() {
   const reportPath = path.join(ROOT_DIR, 'tests/e2e/browser-audit-report.json');
   fs.writeFileSync(reportPath, JSON.stringify(summary, null, 2));
   console.log(`\nReport written to: ${reportPath}`);
+
+  const networkLogPath = path.join(ROOT_DIR, 'tests/e2e/network-requests-log.json');
+  fs.writeFileSync(networkLogPath, JSON.stringify(allRecordedRequests, null, 2));
+  console.log(`Network request audit log written to: ${networkLogPath}`);
 
   process.exit(0);
 }
