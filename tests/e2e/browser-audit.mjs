@@ -703,9 +703,126 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     });
 
     // ----------------------------------------------------
-    // TEST 5: Dynamic Network Isolation Audit (Zero Remote Leaks)
+    // TEST 5: Application Studio (Official Presets, Center-Crop, Pad-White, Compliance)
     // ----------------------------------------------------
-    console.log(`\n--- Test 5: Dynamic Network Isolation Audit ---`);
+    console.log(`\n--- Test 5: Application Studio Workflows ---`);
+    await cdp.send('Page.navigate', { url: `${SERVER_URL}/application-studio` });
+    await wait(2000);
+
+    const appStudioResult = await cdp.send('Runtime.evaluate', {
+      expression: `
+        (async () => {
+          function b64ToFile(b64, name, mime) {
+            const chars = atob(b64);
+            const arr = new Uint8Array(chars.length);
+            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+            return new File([arr], name, { type: mime });
+          }
+
+          // 1. Verify Page & Select elements
+          const select = document.querySelector('select');
+          if (!select) return { success: false, error: 'Preset select dropdown not found' };
+
+          // Verify all required presets exist
+          const options = Array.from(select.querySelectorAll('option')).map(o => o.value);
+          const hasUsVisa = options.includes('us-visa-ds160');
+          const hasUsPassport = options.includes('us-passport-renewal');
+          const hasSchengen = options.includes('schengen-visa-france');
+          const hasUpscPhoto = options.includes('upsc-exam-photo');
+          const hasUpscSig = options.includes('upsc-exam-signature');
+          const hasSscSig = options.includes('ssc-exam-signature');
+
+          // 2. Select US Visa Preset (600x600 px, <=240 KB, JPEG)
+          select.value = 'us-visa-ds160';
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 400));
+
+          // 3. Upload alpha-blue PNG to test center crop, resize to 600x600, JPEG flattening & KB search
+          const file = b64ToFile("${alphaPngBase64}", "test-alpha-blue.png", "image/png");
+          const input = document.querySelector('input[type="file"]');
+          if (!input) return { success: false, error: 'File input not found' };
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 1000));
+
+          // 4. Click 'Apply Official Preset' button
+          const buttons = Array.from(document.querySelectorAll('button'));
+          const applyBtn = buttons.find(b => b.innerText.includes('Apply Official Preset'));
+          if (!applyBtn) return { success: false, error: 'Apply Official Preset button not found' };
+          applyBtn.click();
+
+          // Wait for processing to complete (up to 20s)
+          let processed = false;
+          for (let i = 0; i < 40; i++) {
+            await new Promise(r => setTimeout(r, 500));
+            const body = document.body.innerText;
+            if (body.includes('Technically Compliant with Official Portal Rules') || body.includes('Output:')) {
+              processed = true;
+              break;
+            }
+          }
+
+          const pageText = document.body.innerText;
+          const isCompliant = pageText.includes('Technically Compliant with Official Portal Rules');
+          const hasDisclaimer = pageText.includes('does NOT guarantee biometric acceptance') || pageText.includes('Biometric');
+
+          // Inspect output blob directly
+          const previewImgs = Array.from(document.querySelectorAll('img[src^="blob:"]'));
+          const outputImg = previewImgs[previewImgs.length - 1];
+          let outputBytes = 0;
+          let isJpeg = false;
+          if (outputImg && outputImg.src) {
+            try {
+              const res = await fetch(outputImg.src);
+              const buf = await res.arrayBuffer();
+              outputBytes = buf.byteLength;
+              const u8 = new Uint8Array(buf);
+              isJpeg = u8[0] === 0xff && u8[1] === 0xd8 && u8[2] === 0xff;
+            } catch (e) {
+              console.error('Failed to fetch output blob:', e);
+            }
+          }
+
+          const refreshedButtons = Array.from(document.querySelectorAll('button'));
+          const hasReportBtn = refreshedButtons.some(b => b.innerText.includes('Export Compliance Report'));
+          const hasDownloadBtn = refreshedButtons.some(b => b.innerText.includes('Download Image'));
+
+          return {
+            success: processed && isCompliant && isJpeg && outputBytes <= 240 * 1024,
+            hasUsVisa,
+            hasUsPassport,
+            hasSchengen,
+            hasUpscPhoto,
+            hasUpscSig,
+            hasSscSig,
+            processed,
+            isCompliant,
+            isJpeg,
+            outputBytes,
+            outputKb: (outputBytes / 1024).toFixed(1),
+            hasDisclaimer,
+            hasReportBtn,
+            hasDownloadBtn,
+          };
+        })()
+      `,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    console.log(`Application Studio Workflow:`, appStudioResult.result.value);
+
+    auditResults.tests.push({
+      name: 'Application Studio (Official Presets, Center-Crop, Pad-White, Compliance Report & Technical Checks)',
+      status: appStudioResult.result.value.success ? 'PASS' : 'FAIL',
+      details: appStudioResult.result.value,
+    });
+
+    // ----------------------------------------------------
+    // TEST 6: Dynamic Network Isolation Audit (Zero Remote Leaks)
+    // ----------------------------------------------------
+    console.log(`\n--- Test 6: Dynamic Network Isolation Audit ---`);
     const remoteRequests = recordedRequests.filter((r) => {
       const url = r.url;
       // Only examine network HTTP/HTTPS requests
@@ -777,9 +894,9 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
 
 async function main() {
   console.log(`Starting Next.js production server on port ${PORT}...`);
-  const serverProc = spawn('npx', ['next', 'start', '-p', String(PORT), '-H', '127.0.0.1'], {
+  const nextBin = path.resolve(ROOT_DIR, 'node_modules/next/dist/bin/next');
+  const serverProc = spawn(process.execPath, [nextBin, 'start', '-p', String(PORT), '-H', '127.0.0.1'], {
     cwd: ROOT_DIR,
-    shell: true,
   });
 
   serverProc.stdout.on('data', (d) => {

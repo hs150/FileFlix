@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Image as ImageIcon, FileText, FileSearch, ShieldCheck, Zap, Lock } from "lucide-react";
+import { Image as ImageIcon, FileText, FileSearch, ShieldCheck, Zap, Lock, FileCheck } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -20,7 +20,29 @@ export default function HomePage() {
       </section>
 
       {/* Primary Tool Cards */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Application Studio */}
+        <Link
+          href="/application-studio"
+          className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-500 hover:shadow-lg transition-all duration-200"
+        >
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <FileCheck className="w-6 h-6" />
+          </div>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">
+              Application Studio
+            </h2>
+            <span className="px-2 py-0.5 text-xs font-semibold rounded bg-emerald-100 text-emerald-700">P1 Live</span>
+          </div>
+          <p className="text-sm text-slate-600 mb-4">
+            Prepare photos and signatures for U.S. Visas, Passports, UPSC, and SSC applications with exact pixel and KB validation.
+          </p>
+          <div className="text-xs text-emerald-600 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            Open Application Studio &rarr;
+          </div>
+        </Link>
+
         {/* Image Studio */}
         <Link
           href="/image-studio"
@@ -68,21 +90,21 @@ export default function HomePage() {
         {/* Text Extraction */}
         <Link
           href="/extract-text"
-          className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-500 hover:shadow-lg transition-all duration-200"
+          className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-violet-500 hover:shadow-lg transition-all duration-200"
         >
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <div className="w-12 h-12 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <FileSearch className="w-6 h-6" />
           </div>
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">
+            <h2 className="text-lg font-bold text-slate-900 group-hover:text-violet-600 transition-colors">
               Text Extraction
             </h2>
-            <span className="px-2 py-0.5 text-xs font-semibold rounded bg-emerald-100 text-emerald-700">P1 Live</span>
+            <span className="px-2 py-0.5 text-xs font-semibold rounded bg-violet-100 text-violet-700">P1 Live</span>
           </div>
           <p className="text-sm text-slate-600 mb-4">
             Extract text from digital PDFs page-by-page. Differentiates text-based from scanned PDFs honestly with direct export.
           </p>
-          <div className="text-xs text-emerald-600 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          <div className="text-xs text-violet-600 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
             Open Text Extraction &rarr;
           </div>
         </Link>

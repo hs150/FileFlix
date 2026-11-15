@@ -23,6 +23,7 @@ export default function RootLayout({
             </Link>
             <nav className="flex items-center gap-4 text-sm font-medium text-slate-600">
               <Link href="/image-studio" className="hover:text-blue-600 transition-colors">Image Studio</Link>
+              <Link href="/application-studio" className="hover:text-blue-600 transition-colors">Application Studio</Link>
               <Link href="/pdf-studio" className="hover:text-blue-600 transition-colors">PDF Studio</Link>
               <Link href="/extract-text" className="hover:text-blue-600 transition-colors">Extract Text</Link>
             </nav>

@@ -19,7 +19,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1818,
+            "latencyMs": 1809,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -71,11 +71,32 @@
         }
       },
       {
+        "name": "Application Studio (Official Presets, Center-Crop, Pad-White, Compliance Report & Technical Checks)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "hasUsVisa": true,
+          "hasUsPassport": true,
+          "hasSchengen": true,
+          "hasUpscPhoto": true,
+          "hasUpscSig": true,
+          "hasSscSig": true,
+          "processed": true,
+          "isCompliant": true,
+          "isJpeg": true,
+          "outputBytes": 2928,
+          "outputKb": "2.9",
+          "hasDisclaimer": true,
+          "hasReportBtn": true,
+          "hasDownloadBtn": true
+        }
+      },
+      {
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 79,
-          "localStaticRequests": 66,
+          "totalRequests": 113,
+          "localStaticRequests": 97,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
@@ -83,8 +104,8 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 79,
-      "localStaticRequests": 66,
+      "totalRequests": 113,
+      "localStaticRequests": 97,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
       "payloadLeakingRequestsCount": 0
@@ -110,7 +131,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1805,
+            "latencyMs": 1811,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -162,11 +183,32 @@
         }
       },
       {
+        "name": "Application Studio (Official Presets, Center-Crop, Pad-White, Compliance Report & Technical Checks)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "hasUsVisa": true,
+          "hasUsPassport": true,
+          "hasSchengen": true,
+          "hasUpscPhoto": true,
+          "hasUpscSig": true,
+          "hasSscSig": true,
+          "processed": true,
+          "isCompliant": true,
+          "isJpeg": true,
+          "outputBytes": 2928,
+          "outputKb": "2.9",
+          "hasDisclaimer": true,
+          "hasReportBtn": true,
+          "hasDownloadBtn": true
+        }
+      },
+      {
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 77,
-          "localStaticRequests": 66,
+          "totalRequests": 111,
+          "localStaticRequests": 97,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
@@ -174,8 +216,8 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 77,
-      "localStaticRequests": 66,
+      "totalRequests": 111,
+      "localStaticRequests": 97,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
       "payloadLeakingRequestsCount": 0
