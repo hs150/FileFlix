@@ -727,9 +727,9 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
           const options = Array.from(select.querySelectorAll('option')).map(o => o.value);
           const hasUsVisa = options.includes('us-visa-ds160');
           const hasUsPassport = options.includes('us-passport-renewal');
-          const hasSchengen = options.includes('schengen-visa-france');
-          const hasUpscPhoto = options.includes('upsc-exam-photo');
-          const hasUpscSig = options.includes('upsc-exam-signature');
+          const hasSchengen = options.includes('france-schengen-visa');
+          const hasUpscPhoto = options.includes('upsc-generic-photo');
+          const hasUpscSig = options.includes('upsc-generic-signature');
           const hasSscSig = options.includes('ssc-exam-signature');
 
           // 2. Select US Visa Preset (600x600 px, <=240 KB, JPEG)
@@ -758,15 +758,15 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
           for (let i = 0; i < 40; i++) {
             await new Promise(r => setTimeout(r, 500));
             const body = document.body.innerText;
-            if (body.includes('Technically Compliant with Official Portal Rules') || body.includes('Output:')) {
+            if (body.includes('Technical checks passed') || body.includes('Output:')) {
               processed = true;
               break;
             }
           }
 
           const pageText = document.body.innerText;
-          const isCompliant = pageText.includes('Technically Compliant with Official Portal Rules');
-          const hasDisclaimer = pageText.includes('does NOT guarantee biometric acceptance') || pageText.includes('Biometric');
+          const isCompliant = pageText.includes('Technical checks passed');
+          const hasDisclaimer = pageText.includes('Visual requirements not automatically verified') || pageText.includes('Biometric');
 
           // Inspect output blob directly
           const previewImgs = Array.from(document.querySelectorAll('img[src^="blob:"]'));
@@ -789,8 +789,24 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
           const hasReportBtn = refreshedButtons.some(b => b.innerText.includes('Export Compliance Report'));
           const hasDownloadBtn = refreshedButtons.some(b => b.innerText.includes('Download Image'));
 
+          // 5. Test U.S. Passport Renewal Checker-Only Mode
+          select.value = 'us-passport-renewal';
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 500));
+
+          const passportText = document.body.innerText;
+          const hasCheckerNotice = passportText.includes('Inspection Mode Active') || passportText.includes('CHECKER MODE');
+          const inspectButtons = Array.from(document.querySelectorAll('button'));
+          const inspectBtn = inspectButtons.find(b => b.innerText.includes('Inspect Photo Compliance'));
+          let checkerPassed = false;
+          if (inspectBtn) {
+            inspectBtn.click();
+            await new Promise(r => setTimeout(r, 1200));
+            checkerPassed = document.body.innerText.includes('Inspection Mode');
+          }
+
           return {
-            success: processed && isCompliant && isJpeg && outputBytes <= 240 * 1024,
+            success: processed && isCompliant && isJpeg && outputBytes <= 240 * 1024 && hasCheckerNotice && checkerPassed,
             hasUsVisa,
             hasUsPassport,
             hasSchengen,
@@ -805,6 +821,8 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
             hasDisclaimer,
             hasReportBtn,
             hasDownloadBtn,
+            hasCheckerNotice,
+            checkerPassed,
           };
         })()
       `,

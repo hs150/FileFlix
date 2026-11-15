@@ -1,295 +1,394 @@
-import { ApplicationPreset, ComplianceReport, ComplianceCheckItem } from '../types';
+import {
+  ApplicationPreset,
+  ComplianceReport,
+  ComplianceCheckItem,
+  OverallComplianceVerdict,
+} from '../types';
 
-export const APPLICATION_PRESETS_VERSION = '1.0.0';
+export const APPLICATION_PRESETS_VERSION = '2.0.0';
 
 export const APPLICATION_PRESETS: ApplicationPreset[] = [
   {
     id: 'us-visa-ds160',
-    name: 'U.S. Visa Digital Photograph (DS-160 / CEAC)',
+    displayName: 'U.S. Visa (Form DS-160) — Digital Photo',
     shortName: 'U.S. Visa (DS-160)',
-    category: 'photo',
+    country: 'United States',
     issuingAuthority: 'U.S. Department of State — Consular Electronic Application Center (CEAC)',
-    applicationType: 'Nonimmigrant Visa (DS-160) & Immigrant Visa Digital Photo',
-    officialSourceUrl: 'https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos.html',
-    verificationDate: '2026-11-16',
-    minWidth: 600,
-    maxWidth: 1200,
-    minHeight: 600,
-    maxHeight: 1200,
-    exactWidth: 600,
-    exactHeight: 600,
+    applicationName: 'Nonimmigrant Visa (DS-160) & Immigrant Visa Online Application',
+    category: 'photo',
+    mode: 'transform',
+    allowedInputFormats: ['image/jpeg', 'image/jpg'],
+    allowedOutputFormats: ['image/jpeg'],
+    recommendedOutputFormat: 'image/jpeg',
+    fileSize: {
+      isSpecified: true,
+      minBytes: 1024, // 1 KB practical lower bound (official rule specifies <= 240 KB with no lower bound)
+      maxBytes: 245760, // 240 KB exact official ceiling (240 * 1024)
+      officialDescription: 'Equal to or less than 240 KB (no minimum file size specified)',
+    },
+    pixelDimensions: {
+      isSpecified: true,
+      minWidth: 600,
+      maxWidth: 1200,
+      minHeight: 600,
+      maxHeight: 1200,
+      exactWidth: 600,
+      exactHeight: 600,
+      officialDescription: 'Square: minimum 600 × 600 pixels, maximum 1200 × 1200 pixels',
+    },
+    physicalDimensions: {
+      isSpecified: true,
+      widthMm: 51,
+      heightMm: 51,
+      faceHeightMinMm: 25,
+      faceHeightMaxMm: 35,
+      officialDescription: '2 × 2 inches (51 × 51 mm); head height between 1 inch and 1 3/8 inches (25–35 mm)',
+    },
     aspectRatio: {
+      isSpecified: true,
       width: 1,
       height: 1,
       description: '1:1 (Square)',
     },
-    minBytes: 1024, // 1 KB (no official minimum specified; only <=240 KB ceiling)
-    maxBytes: 245760, // 240 KB exact official ceiling (240 * 1024 bytes)
-    minKbDescription: 'None (or >0 KB)',
-    maxKbDescription: '240 KB (Official maximum)',
-    allowedFormats: ['image/jpeg'],
-    recommendedFormat: 'image/jpeg',
-    constraints: [
-      'Image file size must be less than or equal to 240 KB.',
-      'Dimensions must be square: minimum 600 × 600 pixels, maximum 1200 × 1200 pixels.',
-      'Color format must be 24-bit sRGB color space JPEG.',
-      'Image compression ratio must be less than or equal to 20:1.',
-      'Plain white or off-white background with zero patterns or shadows.',
-    ],
-    warnings: [
-      'CRITICAL: Must be an original, unedited photo taken within the last 6 months. Digitally altered, filtered, retouched, or AI-generated photos are strictly rejected by consular officers.',
-      'Technical validation confirms only pixel dimensions and file size. It does NOT guarantee biometric compliance (eye height 56-69% from bottom, head size 50-69%, neutral expression, no glasses).',
-    ],
-    requiresUneditedOriginal: true,
+    faceOccupancy: {
+      isSpecified: true,
+      minPercent: 50,
+      maxPercent: 69,
+      description: 'Head height must occupy between 50% and 69% of the total image height',
+    },
+    softwareTransformationPermitted: true,
+    requiresOriginalUnedited: true,
+    isExamSpecificOrVolatile: false,
+    officialSourceUrl:
+      'https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos/digital-image-requirements.html',
+    sourcePublicationDate: '2026-01-01',
+    verificationDate: '2026-11-16',
+    scopeAndLimitations:
+      'Official requirements specify: square aspect ratio, 600–1200 px, JPEG, sRGB color space, maximum 240 KB, and compression ratio equal to or less than 20:1. The photograph must be an original, unedited photo taken within the last 6 months. Retouched, digitally altered, filtered, or AI-enhanced photos are strictly rejected.',
+    warningNotice:
+      'The Department of State prohibits digitally altered photographs. Technical dimension and size compliance does NOT guarantee consular biometric acceptance.',
     defaultFittingMode: 'center-crop',
     defaultTargetKb: 200,
+    fileFixRecommendations: [
+      'FileFix can center-crop and compress to 600×600 px and <=240 KB.',
+      'Ensure the original photo was taken against a plain white or off-white background with a neutral expression.',
+      'Do not use beauty filters, background replacement tools, or retouching.',
+    ],
   },
   {
     id: 'us-passport-renewal',
-    name: 'U.S. Passport Online Renewal (OPR)',
+    displayName: 'U.S. Passport Online Renewal (OPR) — Photo Checker',
     shortName: 'U.S. Passport Renewal',
-    category: 'photo',
+    country: 'United States',
     issuingAuthority: 'U.S. Department of State — Bureau of Consular Affairs',
-    applicationType: 'Online Passport Renewal (OPR) Portal',
-    officialSourceUrl: 'https://travel.state.gov/content/travel/en/passports/have-passport/renew-online.html',
-    verificationDate: '2026-11-16',
-    minWidth: 600,
-    maxWidth: 1200,
-    minHeight: 600,
-    maxHeight: 1200,
-    exactWidth: 600,
-    exactHeight: 600,
+    applicationName: 'Online Passport Renewal (OPR) Digital Photo Upload',
+    category: 'photo',
+    mode: 'checker-only', // Explicitly checker/instruction mode per government rules!
+    allowedInputFormats: ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'],
+    allowedOutputFormats: ['image/jpeg'],
+    recommendedOutputFormat: 'image/jpeg',
+    fileSize: {
+      isSpecified: true,
+      minBytes: 55296, // 54 KB exact official minimum (54 * 1024)
+      maxBytes: 10485760, // 10 MB exact official maximum (10 * 1024 * 1024)
+      officialDescription: 'Between 54 KB and 10 MB (strict official floor and ceiling)',
+    },
+    pixelDimensions: {
+      isSpecified: true,
+      minWidth: 600,
+      maxWidth: 1200,
+      minHeight: 600,
+      maxHeight: 1200,
+      exactWidth: 600,
+      exactHeight: 600,
+      officialDescription: 'Minimum 600 × 600 pixels, maximum 1200 × 1200 pixels (Square 1:1)',
+    },
     aspectRatio: {
+      isSpecified: true,
       width: 1,
       height: 1,
       description: '1:1 (Square)',
     },
-    minBytes: 55296, // 54 KB exact official minimum (54 * 1024 bytes)
-    maxBytes: 10485760, // 10 MB exact official maximum (10 * 1024 * 1024 bytes)
-    minKbDescription: '54 KB (Official minimum)',
-    maxKbDescription: '10 MB (Official maximum)',
-    allowedFormats: ['image/jpeg', 'image/png'],
-    recommendedFormat: 'image/jpeg',
-    constraints: [
-      'Image file size must be between 54 KB and 10 MB.',
-      'Dimensions must be square: minimum 600 × 600 pixels, maximum 1200 × 1200 pixels.',
-      'Accepted file formats: JPEG (.jpg/.jpeg) or PNG (.png).',
-      'Plain white or off-white background with no textures, patterns, or cast shadows.',
-    ],
-    warnings: [
-      'OFFICIAL GUIDANCE WARNING: Official Department of State rules require an original, unedited photograph taken by someone else or on a tripod. Official guidance explicitly states: "Do not use software-edited, digitally altered, filtered, or AI-enhanced photographs." FileFix only provides technical dimension and file-size compliance.',
-      'Automated passport photo checkers inspect lighting, background uniformity, head size, and natural skin texture. Software manipulation risks application rejection.',
-    ],
-    requiresUneditedOriginal: true,
+    physicalDimensions: {
+      isSpecified: true,
+      widthMm: 51,
+      heightMm: 51,
+      officialDescription: '2 × 2 inches (51 × 51 mm)',
+    },
+    faceOccupancy: {
+      isSpecified: true,
+      minPercent: 50,
+      maxPercent: 69,
+      description: 'Head must be 1 to 1 3/8 inches (50% to 69% of image height)',
+    },
+    softwareTransformationPermitted: false, // Government explicitly warns against digitally edited photos!
+    requiresOriginalUnedited: true,
+    isExamSpecificOrVolatile: false,
+    officialSourceUrl:
+      'https://travel.state.gov/en/passports/renew-replace/online/upload-digital-photo.html',
+    sourcePublicationDate: '2026-01-01',
+    verificationDate: '2026-11-16',
+    scopeAndLimitations:
+      'Government rules require an original, unedited photo between 54 KB and 10 MB in JPG, JPEG, PNG, HEIC, or HEIF format. The official passport application provides its own built-in cropping and repositioning tool. The government explicitly warns against digitally altered, software-edited, or filtered photos.',
+    warningNotice:
+      'INSTRUCTION & REQUIREMENTS CHECKER MODE: Do not edit or transform your photograph in FileFix for passport renewal. The U.S. government provides its own cropping tool and strictly prohibits third-party software alterations. FileFix verifies your existing file without altering it.',
     defaultFittingMode: 'center-crop',
     defaultTargetKb: 500,
+    fileFixRecommendations: [
+      'Take an unedited original photo in natural lighting against a plain white background.',
+      'Verify that your file size is between 54 KB and 10 MB and resolution is at least 600×600 px.',
+      'Upload the unedited original photo directly to the official government renewal portal and use the government portal tool for final cropping.',
+    ],
   },
   {
-    id: 'schengen-visa-france',
-    name: 'Schengen Visa (France-Visas Online Portal)',
-    shortName: 'Schengen Visa (France)',
-    category: 'photo',
+    id: 'france-schengen-visa',
+    displayName: 'France / Schengen Visa — Physical & Digital Guidance',
+    shortName: 'France / Schengen Visa',
+    country: 'France / Schengen Area',
     issuingAuthority: "France-Visas / Ministère de l'Intérieur (ICAO Doc 9303 Compliant)",
-    applicationType: 'France-Visas Online Application Digital Upload',
-    officialSourceUrl: 'https://france-visas.gouv.fr/en/web/france-visas/photo-standards',
-    verificationDate: '2026-11-16',
-    minWidth: 413,
-    maxWidth: 826,
-    minHeight: 531,
-    maxHeight: 1062,
-    exactWidth: 413,
-    exactHeight: 531,
+    applicationName: 'France-Visas Online Portal & Consular Visa Application',
+    category: 'photo',
+    mode: 'transform',
+    allowedInputFormats: ['image/jpeg', 'image/jpg'],
+    allowedOutputFormats: ['image/jpeg'],
+    recommendedOutputFormat: 'image/jpeg',
+    fileSize: {
+      isSpecified: false, // Central FAQ does NOT specify a universal digital KB ceiling!
+      officialDescription: 'Official requirement not specified in central FAQ (depends on specific consular/TLScontact/VFS portal)',
+    },
+    pixelDimensions: {
+      isSpecified: false, // Central FAQ specifies physical dimensions, NOT universal pixel bounds!
+      officialDescription: 'Official requirement not specified in pixels (standard 35 × 45 mm at 300 DPI is ~413 × 531 px; at 600 DPI is ~826 × 1062 px)',
+    },
+    physicalDimensions: {
+      isSpecified: true,
+      widthMm: 35,
+      heightMm: 45,
+      faceHeightMinMm: 32,
+      faceHeightMaxMm: 36,
+      officialDescription: '35–40 mm width × 45 mm height; face height 32–36 mm from chin to top of hair',
+    },
     aspectRatio: {
+      isSpecified: true,
       width: 7,
       height: 9,
-      description: '35:45 (7:9 ratio, corresponding to 35 × 45 mm at 300 DPI)',
+      description: '7:9 (35 mm width × 45 mm height)',
     },
-    minBytes: 1024, // 1 KB (no official portal minimum specified; only <=300 KB ceiling)
-    maxBytes: 307200, // 300 KB exact France-Visas upload limit (300 * 1024 bytes)
-    minKbDescription: 'None (or >0 KB)',
-    maxKbDescription: '300 KB (Portal upload limit)',
-    allowedFormats: ['image/jpeg'],
-    recommendedFormat: 'image/jpeg',
-    constraints: [
-      'Physical aspect ratio: 35 mm width × 45 mm height (approx 413 × 531 pixels at 300 DPI).',
-      'Maximum digital upload size on France-Visas portal: 300 KB.',
-      'Format must be JPEG (.jpg/.jpeg).',
-      'Light grey or light blue background (plain white backgrounds are often rejected by French consulates).',
-    ],
-    warnings: [
-      'PORTAL VARIATION NOTICE: Schengen visa digital upload rules are set by the individual member state. This profile specifically targets the France-Visas portal. Other member states (e.g. Germany VIDEX) or physical VFS centers may require physical printouts.',
-      'Biometric rule: Face height from chin to crown must occupy between 70% and 80% of the frame (32 to 36 mm).',
-    ],
-    requiresUneditedOriginal: true,
+    faceOccupancy: {
+      isSpecified: true,
+      minPercent: 70,
+      maxPercent: 80,
+      description: 'Face must occupy between 70% and 80% of the photograph height (32 to 36 mm)',
+    },
+    softwareTransformationPermitted: true,
+    requiresOriginalUnedited: true,
+    isExamSpecificOrVolatile: true,
+    officialSourceUrl: 'https://www.france-visas.gouv.fr/en/faq',
+    verificationDate: '2026-11-16',
+    scopeAndLimitations:
+      'Official France-Visas FAQ specifies physical photo standards: 35–40 mm width, 45 mm height, face height 32–36 mm (70–80% of image), light grey or light blue background (plain white backgrounds are often rejected by French consulates). Exact digital pixel dimensions and KB limits are not universally defined in the central FAQ and depend on the external visa service portal (e.g. TLScontact, VFS Global, or direct consulate upload).',
+    warningNotice:
+      'PORTAL VARIATION NOTICE: Digital upload file size and pixel constraints are not published in the central France-Visas FAQ. FileFix applies standard 35×45 mm aspect ratio (7:9); verify portal-specific limits on your active submission portal.',
     defaultFittingMode: 'center-crop',
-    defaultTargetKb: 180,
+    defaultTargetKb: 200,
+    fileFixRecommendations: [
+      'Use 7:9 aspect ratio matching 35 × 45 mm.',
+      'Ensure background is light grey or light blue (not pure white and not patterned).',
+      'Ensure the face occupies 70% to 80% of the frame without head tilting or hair covering the face.',
+    ],
   },
   {
-    id: 'upsc-exam-photo',
-    name: 'UPSC Online Exam Application — Candidate Photograph',
-    shortName: 'UPSC Photo',
+    id: 'upsc-generic-photo',
+    displayName: 'UPSC Online (Generic FAQ) — Candidate Photograph',
+    shortName: 'UPSC Generic Photo',
+    country: 'India',
+    issuingAuthority: 'Union Public Service Commission (UPSC), India',
+    applicationName: 'UPSC One Time Registration (OTR) / Online Application — Generic FAQ',
     category: 'photo',
-    issuingAuthority: 'Union Public Service Commission (UPSC), India',
-    applicationType: 'UPSC One Time Registration (OTR) / Examination Portal',
-    officialSourceUrl: 'https://upsconline.nic.in',
-    verificationDate: '2026-11-16',
-    minWidth: 350,
-    maxWidth: 1000,
-    minHeight: 350,
-    maxHeight: 1000,
-    exactWidth: 350,
-    exactHeight: 350,
+    mode: 'transform',
+    allowedInputFormats: ['image/jpeg', 'image/jpg'],
+    allowedOutputFormats: ['image/jpeg'],
+    recommendedOutputFormat: 'image/jpeg',
+    fileSize: {
+      isSpecified: true,
+      minBytes: 20480, // 20 KB exact official floor (20 * 1024)
+      maxBytes: 307200, // 300 KB exact official ceiling (300 * 1024)
+      officialDescription: 'Strictly between 20 KB and 300 KB (UPSC OTR Generic FAQ)',
+    },
+    pixelDimensions: {
+      isSpecified: true,
+      minWidth: 350,
+      maxWidth: 1000,
+      minHeight: 350,
+      maxHeight: 1000,
+      exactWidth: 350,
+      exactHeight: 350,
+      officialDescription: 'Minimum 350 × 350 pixels, maximum 1000 × 1000 pixels (Square 1:1)',
+    },
     aspectRatio: {
+      isSpecified: true,
       width: 1,
       height: 1,
       description: '1:1 (Square)',
     },
-    minBytes: 20480, // 20 KB exact portal minimum (20 * 1024 bytes)
-    maxBytes: 204800, // 200 KB exact portal maximum (200 * 1024 bytes)
-    minKbDescription: '20 KB (Strict portal minimum)',
-    maxKbDescription: '200 KB (Strict portal maximum)',
-    allowedFormats: ['image/jpeg'],
-    recommendedFormat: 'image/jpeg',
-    constraints: [
-      'File size must be strictly between 20 KB and 200 KB.',
-      'Dimensions must be square: minimum 350 × 350 pixels, maximum 1000 × 1000 pixels.',
-      'Format must be JPEG (.jpg/.jpeg).',
-      'Candidate name and date of photo must be displayed if prescribed by your active exam notification.',
-    ],
-    warnings: [
-      'LIVE WEBCAM CAPTURE NOTICE: Recent UPSC notifications mandate live photograph capture via webcam during the application process. Check your specific active exam notification (e.g., Civil Services, CDS, NDA) to verify whether an uploaded file or live webcam capture is mandated.',
-      'UPSC upload validation will reject any file smaller than 20 KB or larger than 200 KB.',
-    ],
-    portalCaptureNotes: 'Check active exam notification: some UPSC stages use live webcam capture while OTR permits uploaded photos.',
-    requiresUneditedOriginal: true,
+    softwareTransformationPermitted: true,
+    requiresOriginalUnedited: true,
+    isExamSpecificOrVolatile: true,
+    officialSourceUrl: 'https://upsconline.gov.in/upsc/OTRP/candidate/faq.php',
+    verificationDate: '2026-11-16',
+    scopeAndLimitations:
+      'Current UPSC OTR Generic Candidate FAQ specifies: JPEG format, both photograph and signature between 20 KB and 300 KB, and dimensions between 350 × 350 pixels minimum and 1000 × 1000 pixels maximum. Specific active examination notifications may mandate additional conditions or live webcam capture.',
+    warningNotice:
+      'EXAMINATION SPECIFIC NOTICE: The generic OTR FAQ allows 20–300 KB and 350–1000 px. However, certain individual examination notifications (e.g. Civil Services, CDS) mandate candidate name and date printed on the photo, or require live webcam capture. Always verify against your active examination notification.',
     defaultFittingMode: 'center-crop',
-    defaultTargetKb: 80,
+    defaultTargetKb: 100,
+    fileFixRecommendations: [
+      'Center-crop to square (1:1) and resize to at least 350×350 px.',
+      'Target file size between 40 KB and 150 KB to stay safely within the 20–300 KB boundary.',
+    ],
   },
   {
-    id: 'upsc-exam-signature',
-    name: 'UPSC Online Exam Application — Candidate Signature',
-    shortName: 'UPSC Signature',
-    category: 'signature',
+    id: 'upsc-generic-signature',
+    displayName: 'UPSC Online (Generic FAQ) — Candidate Signature',
+    shortName: 'UPSC Generic Signature',
+    country: 'India',
     issuingAuthority: 'Union Public Service Commission (UPSC), India',
-    applicationType: 'UPSC One Time Registration (OTR) / Examination Portal',
-    officialSourceUrl: 'https://upsconline.nic.in',
-    verificationDate: '2026-11-16',
-    minWidth: 350,
-    maxWidth: 1000,
-    minHeight: 350,
-    maxHeight: 1000,
-    exactWidth: 350,
-    exactHeight: 350,
+    applicationName: 'UPSC One Time Registration (OTR) / Online Application — Generic FAQ',
+    category: 'signature',
+    mode: 'transform',
+    allowedInputFormats: ['image/jpeg', 'image/jpg', 'image/png'],
+    allowedOutputFormats: ['image/jpeg'],
+    recommendedOutputFormat: 'image/jpeg',
+    fileSize: {
+      isSpecified: true,
+      minBytes: 20480, // 20 KB exact official floor
+      maxBytes: 307200, // 300 KB exact official ceiling
+      officialDescription: 'Strictly between 20 KB and 300 KB (UPSC OTR Generic FAQ)',
+    },
+    pixelDimensions: {
+      isSpecified: true,
+      minWidth: 350,
+      maxWidth: 1000,
+      minHeight: 350,
+      maxHeight: 1000,
+      exactWidth: 350,
+      exactHeight: 350,
+      officialDescription: 'Minimum 350 × 350 pixels, maximum 1000 × 1000 pixels (Square 1:1)',
+    },
     aspectRatio: {
+      isSpecified: true,
       width: 1,
       height: 1,
       description: '1:1 (Square)',
     },
-    minBytes: 20480, // 20 KB exact portal minimum (20 * 1024 bytes)
-    maxBytes: 102400, // 100 KB exact portal maximum (100 * 1024 bytes)
-    minKbDescription: '20 KB (Strict portal minimum)',
-    maxKbDescription: '100 KB (Strict portal maximum)',
-    allowedFormats: ['image/jpeg'],
-    recommendedFormat: 'image/jpeg',
-    constraints: [
-      'File size must be strictly between 20 KB and 100 KB.',
-      'Dimensions must be square: minimum 350 × 350 pixels, maximum 1000 × 1000 pixels.',
-      'Format must be JPEG (.jpg/.jpeg).',
-      'Sign with black or dark blue ink pen on plain white paper.',
-    ],
-    warnings: [
-      'SIGNATURE PRESERVATION: FileFix does NOT alter, retrace, or thin your signature strokes. Transparent signatures are cleanly placed on a solid white background to prevent dark background rendering in JPEG.',
-      'Uploads outside the 20 KB to 100 KB boundary or with non-square dimensions are blocked by the portal server.',
-    ],
-    requiresUneditedOriginal: false,
+    softwareTransformationPermitted: true,
+    requiresOriginalUnedited: false,
+    isExamSpecificOrVolatile: true,
+    officialSourceUrl: 'https://upsconline.gov.in/upsc/OTRP/candidate/faq.php',
+    verificationDate: '2026-11-16',
+    scopeAndLimitations:
+      'Current UPSC OTR Generic Candidate FAQ specifies: JPEG format, signature file size strictly between 20 KB and 300 KB, dimensions between 350 × 350 px min and 1000 × 1000 px max. Must be signed with black or dark ink on white paper.',
+    warningNotice:
+      'SIGNATURE INTEGRITY: FileFix scales and pads your signature on a white background without altering stroke shapes, thinning lines, or applying artificial binarization.',
     defaultFittingMode: 'pad-white',
-    defaultTargetKb: 50,
+    defaultTargetKb: 80,
+    fileFixRecommendations: [
+      'Use Pad with White mode so signature aspect ratio is completely preserved and never cropped.',
+      'Sign with black ink on clean white paper under uniform lighting.',
+    ],
   },
   {
     id: 'ssc-exam-signature',
-    name: 'SSC Examination Portal — Candidate Signature',
-    shortName: 'SSC Signature',
-    category: 'signature',
+    displayName: 'SSC Examination (Official Notice) — Candidate Signature',
+    shortName: 'SSC Exam Signature',
+    country: 'India',
     issuingAuthority: 'Staff Selection Commission (SSC), India',
-    applicationType: 'SSC Online Application / One Time Registration',
-    officialSourceUrl: 'https://ssc.gov.in',
-    verificationDate: '2026-11-16',
-    minWidth: 140,
-    maxWidth: 280,
-    minHeight: 60,
-    maxHeight: 120,
-    exactWidth: 140,
-    exactHeight: 60,
-    aspectRatio: {
-      width: 7,
-      height: 3,
-      description: '7:3 (140 × 60 px)',
+    applicationName: 'SSC Examination Official Candidate Instructions (2026 Notices)',
+    category: 'signature',
+    mode: 'transform',
+    allowedInputFormats: ['image/jpeg', 'image/jpg', 'image/png'],
+    allowedOutputFormats: ['image/jpeg'],
+    recommendedOutputFormat: 'image/jpeg',
+    fileSize: {
+      isSpecified: true,
+      minBytes: 10240, // 10.0 KB exact official floor
+      maxBytes: 20480, // 20.0 KB exact official ceiling
+      officialDescription: 'Strictly between 10.0 KB and 20.0 KB (Official SSC Examination Notice)',
     },
-    minBytes: 10240, // 10 KB exact portal minimum (10 * 1024 bytes)
-    maxBytes: 20480, // 20 KB exact portal maximum (20 * 1024 bytes)
-    minKbDescription: '10 KB (Strict portal minimum)',
-    maxKbDescription: '20 KB (Strict portal maximum)',
-    allowedFormats: ['image/jpeg'],
-    recommendedFormat: 'image/jpeg',
-    constraints: [
-      'File size must be strictly between 10.0 KB and 20.0 KB.',
-      'Standard pixel dimensions: 140 pixels width × 60 pixels height.',
-      'Format must be JPEG (.jpg/.jpeg).',
-      'Sign with a black or dark blue pen on clean white paper.',
-    ],
-    warnings: [
-      'CRITICAL SSC PHOTO POLICY NOTICE: The Staff Selection Commission (SSC) NO LONGER accepts uploaded photograph files! Candidate photographs must be captured live through the official webcam portal or the "MySSC" Android mobile application. Only candidate SIGNATURES are uploaded as files.',
-      'Portals strictly reject signature files that fall below 10 KB or exceed 20 KB.',
-    ],
-    portalCaptureNotes: 'SSC strictly requires live webcam photo capture; only signatures are uploaded as files.',
-    requiresUneditedOriginal: false,
+    pixelDimensions: {
+      isSpecified: false, // Modern SSC notices specify physical dimension ~6x2 cm, NOT a universal 140x60 px!
+      officialDescription: 'Pixel dimensions not universally specified across all examinations (approx. 708 × 236 px at 300 DPI, or 140 × 60 px on legacy portal forms)',
+    },
+    physicalDimensions: {
+      isSpecified: true,
+      widthCm: 6.0,
+      heightCm: 2.0,
+      officialDescription: 'Approximately 6.0 cm width × 2.0 cm height (some older notices specify 4.0 × 2.0 cm)',
+    },
+    aspectRatio: {
+      isSpecified: true,
+      width: 3,
+      height: 1,
+      description: '3:1 (6.0 cm × 2.0 cm physical ratio)',
+    },
+    softwareTransformationPermitted: true,
+    requiresOriginalUnedited: false,
+    isExamSpecificOrVolatile: true,
+    officialSourceUrl: 'https://ssc.gov.in/',
+    sourcePublicationDate: '2026-01-01',
+    verificationDate: '2026-11-16',
+    scopeAndLimitations:
+      'Official 2026 SSC examination notices specify: signature in JPEG/JPG format, file size strictly between 10.0 KB and 20.0 KB, physical dimensions approximately 6.0 cm width × 2.0 cm height. SSC examination notices do not mandate a single universal 140×60 pixel size.',
+    warningNotice:
+      'CRITICAL SSC PHOTO POLICY NOTICE: SSC NO LONGER accepts uploaded photograph files for candidates! Candidate photographs must be captured live using the official portal webcam or the MySSC mobile app. Only candidate signatures are uploaded as files. Check your specific active SSC examination notification.',
     defaultFittingMode: 'pad-white',
     defaultTargetKb: 15,
+    fileFixRecommendations: [
+      'Use Pad with White mode to fit your signature cleanly within the 10–20 KB constraint without stroke distortion.',
+      'Sign with a black pen on clean white paper.',
+    ],
   },
   {
     id: 'custom-application',
-    name: 'Custom Application Profile',
+    displayName: 'Custom Application Profile — User Configured',
     shortName: 'Custom Profile',
+    country: 'International',
+    issuingAuthority: 'User Defined Portal',
+    applicationName: 'General Form / University / Portal Submission',
     category: 'custom',
-    issuingAuthority: 'User Defined',
-    applicationType: 'General Government / University / Portal Form',
+    mode: 'transform',
+    allowedInputFormats: ['image/jpeg', 'image/png', 'image/webp'],
+    allowedOutputFormats: ['image/jpeg', 'image/png', 'image/webp'],
+    recommendedOutputFormat: 'image/jpeg',
+    fileSize: {
+      isSpecified: false,
+      officialDescription: 'User specified',
+    },
+    pixelDimensions: {
+      isSpecified: false,
+      officialDescription: 'User specified',
+    },
+    aspectRatio: {
+      isSpecified: false,
+      description: 'User specified',
+    },
+    softwareTransformationPermitted: true,
+    requiresOriginalUnedited: false,
+    isExamSpecificOrVolatile: false,
     officialSourceUrl: '',
     verificationDate: '2026-11-16',
-    minWidth: 50,
-    maxWidth: 4000,
-    minHeight: 50,
-    maxHeight: 4000,
-    exactWidth: 600,
-    exactHeight: 600,
-    aspectRatio: {
-      width: 1,
-      height: 1,
-      description: 'Custom Aspect Ratio',
-    },
-    minBytes: 1024,
-    maxBytes: 52428800, // 50 MB
-    minKbDescription: 'Custom minimum',
-    maxKbDescription: 'Custom maximum',
-    allowedFormats: ['image/jpeg', 'image/png', 'image/webp'],
-    recommendedFormat: 'image/jpeg',
-    constraints: [
-      'Configured by user according to specific portal instructions.',
-    ],
-    warnings: [
-      'Verify requirements directly against your official application instructions.',
-    ],
-    requiresUneditedOriginal: false,
+    scopeAndLimitations: 'Configure custom dimensions, aspect ratios, and target file sizes according to your portal instructions.',
     defaultFittingMode: 'center-crop',
     defaultTargetKb: 100,
+    fileFixRecommendations: [
+      'Check your application portal instructions for exact pixel or millimeter limits.',
+    ],
   },
 ];
 
 export function getPresetById(id: string): ApplicationPreset {
   const found = APPLICATION_PRESETS.find((p) => p.id === id);
-  if (!found) {
-    return APPLICATION_PRESETS[0];
-  }
-  return found;
+  return found || APPLICATION_PRESETS[0];
 }
 
 export interface ValidationTarget {
@@ -306,87 +405,230 @@ export function validatePresetCompliance(
 ): ComplianceReport {
   const items: ComplianceCheckItem[] = [];
 
-  const minW = customConfig?.width || preset.minWidth;
-  const maxW = customConfig?.width || preset.maxWidth;
-  const minH = customConfig?.height || preset.minHeight;
-  const maxH = customConfig?.height || preset.maxHeight;
+  // Special Mode: Checker-Only (e.g. U.S. Passport Renewal)
+  const isCheckerOnly = preset.mode === 'checker-only';
 
-  const minB = customConfig?.minKb ? customConfig.minKb * 1024 : preset.minBytes;
-  const maxB = customConfig?.maxKb ? customConfig.maxKb * 1024 : preset.maxBytes;
-
-  // 1. Width Check
-  const widthPassed = target.width >= minW && target.width <= maxW;
-  items.push({
-    name: 'Width (pixels)',
-    passed: widthPassed,
-    actual: `${target.width} px`,
-    expected: minW === maxW ? `${minW} px` : `${minW}–${maxW} px`,
-    critical: true,
-  });
-
-  // 2. Height Check
-  const heightPassed = target.height >= minH && target.height <= maxH;
-  items.push({
-    name: 'Height (pixels)',
-    passed: heightPassed,
-    actual: `${target.height} px`,
-    expected: minH === maxH ? `${minH} px` : `${minH}–${maxH} px`,
-    critical: true,
-  });
-
-  // 3. Aspect Ratio Check
-  if (preset.aspectRatio && preset.aspectRatio.width > 0 && preset.aspectRatio.height > 0) {
-    const expectedRatio = preset.aspectRatio.width / preset.aspectRatio.height;
-    const actualRatio = target.width / target.height;
-    const ratioDelta = Math.abs(actualRatio - expectedRatio);
-    const ratioPassed = ratioDelta < 0.05; // 5% tolerance
-
+  // 1. Pixel Width Check
+  if (preset.pixelDimensions.isSpecified) {
+    const minW = customConfig?.width || preset.pixelDimensions.minWidth || 1;
+    const maxW = customConfig?.width || preset.pixelDimensions.maxWidth || 10000;
+    const passed = target.width >= minW && target.width <= maxW;
     items.push({
-      name: 'Aspect Ratio',
-      passed: ratioPassed,
-      actual: `${(actualRatio).toFixed(2)}:1 (${target.width}×${target.height})`,
-      expected: `${preset.aspectRatio.description} (~${expectedRatio.toFixed(2)}:1)`,
-      critical: false,
+      id: 'width',
+      name: 'Pixel Width',
+      status: passed ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL',
+      statusLabel: passed ? 'Technical check passed' : 'Technical check failed',
+      actual: `${target.width} px`,
+      expected: minW === maxW ? `${minW} px` : `${minW}–${maxW} px`,
+      isOfficialRequirement: true,
+    });
+  } else {
+    items.push({
+      id: 'width',
+      name: 'Pixel Width',
+      status: 'NOT_SPECIFIED',
+      statusLabel: 'Official requirement not specified',
+      actual: `${target.width} px`,
+      expected: preset.pixelDimensions.officialDescription,
+      isOfficialRequirement: false,
+      notes: 'Portal does not publish a mandatory pixel width constraint.',
     });
   }
 
-  // 4. File Size (Bytes) Check
-  const sizePassed = target.sizeBytes >= minB && target.sizeBytes <= maxB;
-  const actualKb = (target.sizeBytes / 1024).toFixed(1);
-  const minKbStr = (minB / 1024).toFixed(1);
-  const maxKbStr = (maxB / 1024).toFixed(1);
+  // 2. Pixel Height Check
+  if (preset.pixelDimensions.isSpecified) {
+    const minH = customConfig?.height || preset.pixelDimensions.minHeight || 1;
+    const maxH = customConfig?.height || preset.pixelDimensions.maxHeight || 10000;
+    const passed = target.height >= minH && target.height <= maxH;
+    items.push({
+      id: 'height',
+      name: 'Pixel Height',
+      status: passed ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL',
+      statusLabel: passed ? 'Technical check passed' : 'Technical check failed',
+      actual: `${target.height} px`,
+      expected: minH === maxH ? `${minH} px` : `${minH}–${maxH} px`,
+      isOfficialRequirement: true,
+    });
+  } else {
+    items.push({
+      id: 'height',
+      name: 'Pixel Height',
+      status: 'NOT_SPECIFIED',
+      statusLabel: 'Official requirement not specified',
+      actual: `${target.height} px`,
+      expected: preset.pixelDimensions.officialDescription,
+      isOfficialRequirement: false,
+      notes: 'Portal does not publish a mandatory pixel height constraint.',
+    });
+  }
 
-  items.push({
-    name: 'File Size (KB)',
-    passed: sizePassed,
-    actual: `${actualKb} KB (${target.sizeBytes.toLocaleString()} bytes)`,
-    expected: `${minKbStr} KB to ${maxKbStr} KB`,
-    critical: true,
-  });
+  // 3. Aspect Ratio Check
+  if (preset.aspectRatio.isSpecified && preset.aspectRatio.width && preset.aspectRatio.height) {
+    const expectedRatio = preset.aspectRatio.width / preset.aspectRatio.height;
+    const actualRatio = target.width / target.height;
+    const delta = Math.abs(actualRatio - expectedRatio);
+    const passed = delta <= 0.05; // 5% tolerance
+    items.push({
+      id: 'aspect-ratio',
+      name: 'Aspect Ratio',
+      status: passed ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL',
+      statusLabel: passed ? 'Technical check passed' : 'Technical check failed',
+      actual: `${actualRatio.toFixed(2)}:1 (${target.width}×${target.height})`,
+      expected: `${preset.aspectRatio.description} (~${expectedRatio.toFixed(2)}:1)`,
+      isOfficialRequirement: true,
+    });
+  } else {
+    items.push({
+      id: 'aspect-ratio',
+      name: 'Aspect Ratio',
+      status: 'NOT_SPECIFIED',
+      statusLabel: 'Official requirement not specified',
+      actual: `${(target.width / target.height).toFixed(2)}:1`,
+      expected: 'No mandatory ratio published',
+      isOfficialRequirement: false,
+    });
+  }
 
-  // 5. File Format Check
-  const formatPassed = preset.allowedFormats.includes(target.format as any);
+  // 4. File Size Check (KB / Bytes)
+  if (preset.fileSize.isSpecified && (preset.fileSize.minBytes !== undefined || preset.fileSize.maxBytes !== undefined)) {
+    const minB = customConfig?.minKb ? customConfig.minKb * 1024 : preset.fileSize.minBytes ?? 0;
+    const maxB = customConfig?.maxKb ? customConfig.maxKb * 1024 : preset.fileSize.maxBytes ?? Infinity;
+    const passed = target.sizeBytes >= minB && target.sizeBytes <= maxB;
+    const actualKb = (target.sizeBytes / 1024).toFixed(1);
+    const minKbStr = (minB / 1024).toFixed(1);
+    const maxKbStr = maxB === Infinity ? 'Unlimited' : (maxB / 1024).toFixed(1);
+
+    items.push({
+      id: 'file-size',
+      name: 'File Size (KB)',
+      status: passed ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL',
+      statusLabel: passed ? 'Technical check passed' : 'Technical check failed',
+      actual: `${actualKb} KB (${target.sizeBytes.toLocaleString()} bytes)`,
+      expected: `${minKbStr} KB to ${maxKbStr} KB`,
+      isOfficialRequirement: true,
+    });
+  } else {
+    items.push({
+      id: 'file-size',
+      name: 'File Size (KB)',
+      status: 'NOT_SPECIFIED',
+      statusLabel: 'Official requirement not specified',
+      actual: `${(target.sizeBytes / 1024).toFixed(1)} KB`,
+      expected: preset.fileSize.officialDescription,
+      isOfficialRequirement: false,
+      notes: 'Digital file size ceiling not published in primary source.',
+    });
+  }
+
+  // 5. Image Format Check
+  const formatPassed = preset.allowedOutputFormats.includes(target.format as any);
   items.push({
-    name: 'Image Format',
-    passed: formatPassed,
+    id: 'format',
+    name: 'Output File Format',
+    status: formatPassed ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL',
+    statusLabel: formatPassed ? 'Technical check passed' : 'Technical check failed',
     actual: target.format.replace('image/', '').toUpperCase(),
-    expected: preset.allowedFormats.map((f) => f.replace('image/', '').toUpperCase()).join(' or '),
-    critical: true,
+    expected: preset.allowedOutputFormats.map((f) => f.replace('image/', '').toUpperCase()).join(' or '),
+    isOfficialRequirement: true,
   });
 
-  const isTechnicallyCompliant = items.every((i) => !i.critical || i.passed);
+  // 6. Unverified Visual / Physical Items (Informational)
+  if (preset.physicalDimensions && preset.physicalDimensions.isSpecified) {
+    items.push({
+      id: 'physical-dims',
+      name: 'Physical Print Dimensions',
+      status: 'UNVERIFIED_VISUAL',
+      statusLabel: 'Visual requirement not automatically verified',
+      actual: 'Pixel file (DPI dependent)',
+      expected: preset.physicalDimensions.officialDescription,
+      isOfficialRequirement: true,
+      notes: 'Physical dimensions apply when printed or scaled to official DPI standards.',
+    });
+  }
 
-  const biometricDisclaimer =
-    'Technical validation confirms file format, pixel dimensions, and byte size. It does NOT guarantee biometric acceptance (facial expression, background lighting, eye level, neutral posture, or paper cleanliness).';
+  if (preset.faceOccupancy && preset.faceOccupancy.isSpecified) {
+    items.push({
+      id: 'face-occupancy',
+      name: 'Face Height Proportion',
+      status: 'UNVERIFIED_VISUAL',
+      statusLabel: 'Visual requirement not automatically verified',
+      actual: 'Face detection not executed in browser',
+      expected: preset.faceOccupancy.description,
+      isOfficialRequirement: true,
+      notes: 'Requires visual inspection: chin-to-crown height must meet official proportion.',
+    });
+  }
 
-  const authorityNotice = preset.requiresUneditedOriginal
-    ? `OFFICIAL REQUIREMENT: ${preset.issuingAuthority} requires original, unedited photographs. Do not use AI enhancements, retouching, or synthetic background filters.`
-    : `Ensure file corresponds accurately to ${preset.issuingAuthority} application rules.`;
+  if (preset.id === 'us-visa-ds160') {
+    items.push({
+      id: 'srgb-color',
+      name: 'Color Space (sRGB 24-bit)',
+      status: 'UNVERIFIED_VISUAL',
+      statusLabel: 'Visual requirement not automatically verified',
+      actual: 'Standard browser canvas export',
+      expected: '24-bit color in sRGB color space',
+      isOfficialRequirement: true,
+      notes: 'ICC color profile not directly inspected by browser canvas.',
+    });
+    items.push({
+      id: 'compression-ratio',
+      name: 'Compression Ratio (<= 20:1)',
+      status: 'UNVERIFIED_VISUAL',
+      statusLabel: 'Visual requirement not automatically verified',
+      actual: 'Optimized JPEG stream',
+      expected: 'Equal to or less than 20:1',
+      isOfficialRequirement: true,
+      notes: 'Uncompressed-to-compressed raw ratio is not measured directly.',
+    });
+  }
+
+  // Determine Overall Verdict
+  let overallVerdict: OverallComplianceVerdict;
+  let verdictTitle: string;
+  let verdictDescription: string;
+
+  const hasTechnicalFailure = items.some(
+    (i) => i.isOfficialRequirement && i.status === 'TECHNICAL_FAIL'
+  );
+
+  if (isCheckerOnly) {
+    overallVerdict = 'CHECKER_ONLY_MODE';
+    verdictTitle = hasTechnicalFailure
+      ? 'Technical checks failed (Inspection Mode)'
+      : 'Technical checks passed (Inspection Mode)';
+    verdictDescription =
+      'U.S. Passport Renewal strictly prohibits software alterations. FileFix only verifies your existing file properties without modifying or generating a transformed submit file.';
+  } else if (hasTechnicalFailure) {
+    overallVerdict = 'TECHNICAL_CHECKS_FAILED';
+    verdictTitle = 'Technical checks failed';
+    verdictDescription =
+      'One or more official technical parameters (dimensions, file size, or format) violate government portal rules.';
+  } else {
+    overallVerdict = 'TECHNICAL_CHECKS_PASSED';
+    verdictTitle = 'Technical checks passed';
+    verdictDescription =
+      'Measured dimensions, file size, and format adhere to official portal constraints. Biometric and visual parameters must be verified manually.';
+  }
+
+  const unverifiedVisualNotice =
+    'Visual requirements not automatically verified: Portal review systems inspect lighting uniformity, background color, eye level, neutral expression, and facial proportions. Technical validation of dimensions and bytes does not guarantee biometric or human acceptance.';
+
+  const uneditedPhotoWarning = preset.requiresOriginalUnedited
+    ? `OFFICIAL REQUIREMENT: ${preset.issuingAuthority} requires an original, unedited photograph. Using digital editing, filters, background replacements, or AI enhancements risks immediate rejection by consular/portal authorities.`
+    : undefined;
+
+  const reVerificationNotice = preset.isExamSpecificOrVolatile
+    ? `Source requires re-verification: Requirements for ${preset.applicationName} may vary across specific notifications or mandate live webcam capture. Always confirm against your active examination notification.`
+    : undefined;
 
   return {
-    isTechnicallyCompliant,
+    overallVerdict,
+    verdictTitle,
+    verdictDescription,
     items,
-    biometricDisclaimer,
-    authorityNotice,
+    unverifiedVisualNotice,
+    uneditedPhotoWarning,
+    reVerificationNotice,
+    fileFixRecommendations: preset.fileFixRecommendations,
   };
 }

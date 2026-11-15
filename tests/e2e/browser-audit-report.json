@@ -19,7 +19,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1809,
+            "latencyMs": 1808,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -88,7 +88,9 @@
           "outputKb": "2.9",
           "hasDisclaimer": true,
           "hasReportBtn": true,
-          "hasDownloadBtn": true
+          "hasDownloadBtn": true,
+          "hasCheckerNotice": true,
+          "checkerPassed": true
         }
       },
       {
@@ -131,7 +133,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1811,
+            "latencyMs": 1813,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -200,14 +202,16 @@
           "outputKb": "2.9",
           "hasDisclaimer": true,
           "hasReportBtn": true,
-          "hasDownloadBtn": true
+          "hasDownloadBtn": true,
+          "hasCheckerNotice": true,
+          "checkerPassed": true
         }
       },
       {
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 111,
+          "totalRequests": 112,
           "localStaticRequests": 97,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
@@ -216,7 +220,7 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 111,
+      "totalRequests": 112,
       "localStaticRequests": 97,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,

@@ -83,7 +83,7 @@ async function createPaddedCanvasBlob(
 }
 
 /**
- * Processes an image to meet an official application preset's constraints.
+ * Processes or inspects an image against an official application preset.
  */
 export async function processApplicationImage(
   options: ApplicationProcessingOptions
@@ -100,11 +100,54 @@ export async function processApplicationImage(
     signal,
   } = options;
 
+  // 1. Checker-Only Mode (e.g. U.S. Passport Renewal): No transformations applied!
+  if (preset.mode === 'checker-only') {
+    onProgress?.('Inspecting technical properties of original photo (Checker Mode)...');
+    const { width, height } = await getImageIntrinsicDimensions(sourceBlob);
+    const compliance = validatePresetCompliance(
+      {
+        width,
+        height,
+        sizeBytes: sourceBlob.size,
+        format: sourceBlob.type || 'image/jpeg',
+      },
+      preset
+    );
+
+    const url = URL.createObjectURL(sourceBlob);
+    return {
+      blob: sourceBlob,
+      url,
+      width,
+      height,
+      sizeBytes: sourceBlob.size,
+      format: (sourceBlob.type as any) || 'image/jpeg',
+      processingTimeMs: 0,
+      targetSizeAchieved: true,
+      preset,
+      compliance,
+      fittingMode,
+    };
+  }
+
+  // 2. Transform Mode
   onProgress?.('Inspecting original image dimensions...');
   const { width: srcWidth, height: srcHeight } = await getImageIntrinsicDimensions(sourceBlob);
 
-  const targetWidth = customWidth || preset.exactWidth || preset.minWidth;
-  const targetHeight = customHeight || preset.exactHeight || preset.minHeight;
+  const targetWidth =
+    customWidth ||
+    preset.pixelDimensions.exactWidth ||
+    preset.pixelDimensions.minWidth ||
+    (preset.aspectRatio.width && preset.aspectRatio.height
+      ? Math.round(600 * (preset.aspectRatio.width / preset.aspectRatio.height))
+      : 600);
+
+  const targetHeight =
+    customHeight ||
+    preset.pixelDimensions.exactHeight ||
+    preset.pixelDimensions.minHeight ||
+    600;
+
   const effectiveTargetKb = targetSizeKb || preset.defaultTargetKb;
 
   let baseResult: ProcessingResult;
@@ -124,7 +167,7 @@ export async function processApplicationImage(
         maintainAspectRatio: true,
       },
       compression: {
-        format: preset.recommendedFormat,
+        format: preset.recommendedOutputFormat,
         quality: 0.85,
         targetSizeKb: effectiveTargetKb || null,
         allowDimensionReductionForTarget,
@@ -148,7 +191,7 @@ export async function processApplicationImage(
         maintainAspectRatio: false,
       },
       compression: {
-        format: preset.recommendedFormat,
+        format: preset.recommendedOutputFormat,
         quality: 0.85,
         targetSizeKb: effectiveTargetKb || null,
         allowDimensionReductionForTarget,

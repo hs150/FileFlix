@@ -1,66 +1,123 @@
 import { SupportedOutputFormat } from '../../image-studio/types';
 
 export type PresetCategory = 'photo' | 'signature' | 'custom';
-
+export type PresetMode = 'transform' | 'checker-only';
 export type FittingMode = 'center-crop' | 'pad-white';
+
+export interface FileSizeBounds {
+  isSpecified: boolean;
+  minBytes?: number;
+  maxBytes?: number;
+  officialDescription: string;
+}
+
+export interface PixelDimensionBounds {
+  isSpecified: boolean;
+  minWidth?: number;
+  maxWidth?: number;
+  minHeight?: number;
+  maxHeight?: number;
+  exactWidth?: number;
+  exactHeight?: number;
+  officialDescription: string;
+}
+
+export interface PhysicalDimensions {
+  isSpecified: boolean;
+  widthMm?: number;
+  heightMm?: number;
+  widthCm?: number;
+  heightCm?: number;
+  faceHeightMinMm?: number;
+  faceHeightMaxMm?: number;
+  officialDescription: string;
+}
+
+export interface AspectRatioSpecification {
+  isSpecified: boolean;
+  width?: number;
+  height?: number;
+  description: string;
+}
+
+export interface FaceOccupancySpecification {
+  isSpecified: boolean;
+  minPercent?: number;
+  maxPercent?: number;
+  description: string;
+}
 
 export interface ApplicationPreset {
   id: string;
-  name: string;
+  displayName: string;
   shortName: string;
-  category: PresetCategory;
+  country: string;
   issuingAuthority: string;
-  applicationType: string;
+  applicationName: string; // Exact form / exam name
+  category: PresetCategory;
+  mode: PresetMode; // 'transform' or 'checker-only'
+
+  // Input & Output Formats
+  allowedInputFormats: string[]; // MIME types
+  allowedOutputFormats: SupportedOutputFormat[];
+  recommendedOutputFormat: SupportedOutputFormat;
+
+  // Actual Official Requirements
+  fileSize: FileSizeBounds;
+  pixelDimensions: PixelDimensionBounds;
+  physicalDimensions?: PhysicalDimensions;
+  aspectRatio: AspectRatioSpecification;
+  faceOccupancy?: FaceOccupancySpecification;
+
+  // Policy & Integrity
+  softwareTransformationPermitted: boolean;
+  requiresOriginalUnedited: boolean;
+  isExamSpecificOrVolatile: boolean;
+
+  // Provenance & Metadata
   officialSourceUrl: string;
-  verificationDate: string; // ISO date format YYYY-MM-DD
-  
-  // Dimensions
-  minWidth: number;
-  maxWidth: number;
-  minHeight: number;
-  maxHeight: number;
-  exactWidth?: number;
-  exactHeight?: number;
-  aspectRatio: {
-    width: number;
-    height: number;
-    description: string;
-  };
+  sourcePublicationDate?: string;
+  verificationDate: string; // YYYY-MM-DD
+  scopeAndLimitations: string;
+  warningNotice?: string;
 
-  // File size boundaries in bytes
-  minBytes: number;
-  maxBytes: number;
-  minKbDescription: string;
-  maxKbDescription: string;
-
-  // Formats
-  allowedFormats: SupportedOutputFormat[];
-  recommendedFormat: SupportedOutputFormat;
-
-  // Guidance & Limitations
-  constraints: string[];
-  warnings: string[];
-  portalCaptureNotes?: string;
-  requiresUneditedOriginal: boolean;
-
-  // Defaults
+  // FileFix Recommendations (distinct from official rules)
   defaultFittingMode: FittingMode;
   defaultTargetKb?: number;
+  fileFixRecommendations: string[];
 }
+
+export type CheckStatus =
+  | 'TECHNICAL_PASS'
+  | 'TECHNICAL_FAIL'
+  | 'NOT_SPECIFIED'
+  | 'UNVERIFIED_VISUAL';
 
 export interface ComplianceCheckItem {
+  id: string;
   name: string;
-  passed: boolean;
+  status: CheckStatus;
+  statusLabel: string; // "Technical check passed", "Technical check failed", "Official requirement not specified", "Visual requirement not automatically verified"
   actual: string;
   expected: string;
-  critical: boolean;
+  isOfficialRequirement: boolean;
+  notes?: string;
 }
 
+export type OverallComplianceVerdict =
+  | 'TECHNICAL_CHECKS_PASSED'
+  | 'TECHNICAL_CHECKS_FAILED'
+  | 'CHECKER_ONLY_MODE';
+
 export interface ComplianceReport {
-  isTechnicallyCompliant: boolean;
+  overallVerdict: OverallComplianceVerdict;
+  verdictTitle: string;
+  verdictDescription: string;
   items: ComplianceCheckItem[];
-  biometricDisclaimer: string;
-  authorityNotice: string;
+  unverifiedVisualNotice: string;
+  uneditedPhotoWarning?: string;
+  reVerificationNotice?: string;
+  fileFixRecommendations: string[];
 }
 
 export interface ApplicationProcessingOptions {

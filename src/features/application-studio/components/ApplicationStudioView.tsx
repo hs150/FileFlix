@@ -7,6 +7,8 @@ import {
   AlertTriangle,
   CheckCircle2,
   XCircle,
+  HelpCircle,
+  Eye,
   ExternalLink,
   Download,
   RotateCcw,
@@ -23,13 +25,12 @@ import { formatBytes } from '../../image-studio/lib/image-math';
 import {
   APPLICATION_PRESETS,
   getPresetById,
-  validatePresetCompliance,
 } from '../lib/presets';
 import {
   ApplicationResult,
   processApplicationImage,
 } from '../lib/application-processor';
-import { FittingMode } from '../types';
+import { FittingMode, CheckStatus } from '../types';
 
 export const ApplicationStudioView: React.FC = () => {
   const [selectedPresetId, setSelectedPresetId] = useState<string>('us-visa-ds160');
@@ -55,9 +56,9 @@ export const ApplicationStudioView: React.FC = () => {
     if (preset.defaultTargetKb) {
       setTargetKb(preset.defaultTargetKb);
     }
-    if (preset.exactWidth && preset.exactHeight) {
-      setCustomWidth(preset.exactWidth);
-      setCustomHeight(preset.exactHeight);
+    if (preset.pixelDimensions.exactWidth && preset.pixelDimensions.exactHeight) {
+      setCustomWidth(preset.pixelDimensions.exactWidth);
+      setCustomHeight(preset.pixelDimensions.exactHeight);
     }
     setResult(null);
     setErrorMessage(null);
@@ -74,7 +75,7 @@ export const ApplicationStudioView: React.FC = () => {
     if (sourceMetadata?.objectUrl) {
       URL.revokeObjectURL(sourceMetadata.objectUrl);
     }
-    if (result?.url) {
+    if (result?.url && result.blob !== sourceFile) {
       URL.revokeObjectURL(result.url);
     }
     setSourceFile(null);
@@ -89,7 +90,11 @@ export const ApplicationStudioView: React.FC = () => {
 
     setIsProcessing(true);
     setErrorMessage(null);
-    setProgressMessage('Initializing application optimizer...');
+    setProgressMessage(
+      activePreset.mode === 'checker-only'
+        ? 'Inspecting technical properties (Checker Mode)...'
+        : 'Initializing application optimizer...'
+    );
 
     try {
       const processed = await processApplicationImage({
@@ -129,26 +134,37 @@ export const ApplicationStudioView: React.FC = () => {
       '==============================================================',
       'FILEFIX APPLICATION TECHNICAL COMPLIANCE REPORT',
       '==============================================================',
-      `Application Profile : ${activePreset.name}`,
+      `Application Profile : ${activePreset.displayName}`,
       `Issuing Authority   : ${activePreset.issuingAuthority}`,
-      `Application Type    : ${activePreset.applicationType}`,
+      `Application Name    : ${activePreset.applicationName}`,
+      `Operational Mode    : ${activePreset.mode === 'checker-only' ? 'Requirements Checker / Instruction Only' : 'Technical Fitting & Compression'}`,
       `Official Source     : ${activePreset.officialSourceUrl || 'Custom Configured'}`,
       `Verification Date   : ${activePreset.verificationDate}`,
       `Generated At        : ${new Date().toISOString()}`,
       '--------------------------------------------------------------',
-      'TECHNICAL VERIFICATION CHECKS:',
+      `VERDICT: ${result.compliance.verdictTitle.toUpperCase()}`,
+      `${result.compliance.verdictDescription}`,
+      '--------------------------------------------------------------',
+      'DETAILED COMPLIANCE ITEM CHECKS:',
       ...result.compliance.items.map(
-        (i) => `[${i.passed ? 'PASS' : 'FAIL'}] ${i.name.padEnd(20)} : Actual: ${i.actual.padEnd(20)} Expected: ${i.expected}`
+        (i) =>
+          `[${i.status}] ${i.name.padEnd(25)} : Actual: ${i.actual.padEnd(25)} Expected: ${i.expected}${i.notes ? ` (${i.notes})` : ''}`
       ),
       '--------------------------------------------------------------',
-      `Overall Compliance  : ${result.compliance.isTechnicallyCompliant ? 'PASS (Technically Compliant)' : 'FAIL (Action Required)'}`,
-      '--------------------------------------------------------------',
       'IMPORTANT NOTICES & DISCLAIMERS:',
-      `1. Biometric Disclaimer: ${result.compliance.biometricDisclaimer}`,
-      `2. Authority Requirement: ${result.compliance.authorityNotice}`,
+      `1. Visual Requirements: ${result.compliance.unverifiedVisualNotice}`,
+      result.compliance.uneditedPhotoWarning
+        ? `2. Unedited Photo Rule: ${result.compliance.uneditedPhotoWarning}`
+        : '',
+      result.compliance.reVerificationNotice
+        ? `3. Re-Verification Notice: ${result.compliance.reVerificationNotice}`
+        : '',
+      '--------------------------------------------------------------',
+      'FILEFIX OPERATIONAL RECOMMENDATIONS:',
+      ...result.compliance.fileFixRecommendations.map((r, idx) => `• ${r}`),
       '==============================================================',
       'Processed 100% locally in browser memory with zero server uploads.',
-    ];
+    ].filter(Boolean);
 
     const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -159,6 +175,39 @@ export const ApplicationStudioView: React.FC = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  const renderStatusBadge = (status: CheckStatus, label: string) => {
+    switch (status) {
+      case 'TECHNICAL_PASS':
+        return (
+          <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[11px] font-semibold flex items-center gap-1 border border-emerald-200">
+            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+            <span>Pass</span>
+          </span>
+        );
+      case 'TECHNICAL_FAIL':
+        return (
+          <span className="text-rose-700 bg-rose-50 px-2 py-0.5 rounded text-[11px] font-semibold flex items-center gap-1 border border-rose-200">
+            <XCircle className="w-3 h-3 text-rose-600" />
+            <span>Fail</span>
+          </span>
+        );
+      case 'NOT_SPECIFIED':
+        return (
+          <span className="text-slate-600 bg-slate-100 px-2 py-0.5 rounded text-[11px] font-semibold flex items-center gap-1 border border-slate-200">
+            <HelpCircle className="w-3 h-3 text-slate-500" />
+            <span>Not Specified</span>
+          </span>
+        );
+      case 'UNVERIFIED_VISUAL':
+        return (
+          <span className="text-amber-800 bg-amber-50 px-2 py-0.5 rounded text-[11px] font-semibold flex items-center gap-1 border border-amber-200">
+            <Eye className="w-3 h-3 text-amber-600" />
+            <span>Unverified Visual</span>
+          </span>
+        );
+    }
   };
 
   return (
@@ -174,7 +223,7 @@ export const ApplicationStudioView: React.FC = () => {
             Application Studio
           </h1>
           <p className="text-sm text-slate-600 mt-1 max-w-2xl">
-            Prepare photographs and signatures to exact official requirements. Verified pixel dimensions, strict KB boundaries, zero server retention.
+            Prepare photographs and signatures against verified official requirements. Validates technical boundaries, separates official rules from visual checks, and preserves original images.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -199,14 +248,26 @@ export const ApplicationStudioView: React.FC = () => {
             className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
           >
             <optgroup label="Passports & Visas">
-              <option value="us-visa-ds160">U.S. Visa Digital Photo (DS-160) — 600×600 px, ≤240 KB</option>
-              <option value="us-passport-renewal">U.S. Passport Online Renewal (OPR) — 600×600 px, 54 KB to 10 MB</option>
-              <option value="schengen-visa-france">Schengen Visa (France-Visas Portal) — 413×531 px (35×45 mm), ≤300 KB</option>
+              <option value="us-visa-ds160">
+                U.S. Visa (Form DS-160) — 600×600 to 1200×1200 px, ≤240 KB
+              </option>
+              <option value="us-passport-renewal">
+                U.S. Passport Online Renewal (OPR) — Inspection & Checker Mode (54 KB–10 MB)
+              </option>
+              <option value="france-schengen-visa">
+                France / Schengen Visa — 35×45 mm ICAO Physical Guidance
+              </option>
             </optgroup>
             <optgroup label="Indian Government Examinations">
-              <option value="upsc-exam-photo">UPSC Online Application — Candidate Photograph (350×350 px, 20–200 KB)</option>
-              <option value="upsc-exam-signature">UPSC Online Application — Candidate Signature (350×350 px, 20–100 KB)</option>
-              <option value="ssc-exam-signature">SSC Online Application — Candidate Signature (140×60 px, 10–20 KB)</option>
+              <option value="upsc-generic-photo">
+                UPSC Online (Generic FAQ) — Photograph (350×350 to 1000×1000 px, 20–300 KB)
+              </option>
+              <option value="upsc-generic-signature">
+                UPSC Online (Generic FAQ) — Signature (350×350 to 1000×1000 px, 20–300 KB)
+              </option>
+              <option value="ssc-exam-signature">
+                SSC Examination (Official Notice) — Signature (10–20 KB, ~6×2 cm)
+              </option>
             </optgroup>
             <optgroup label="Custom Profile">
               <option value="custom-application">Custom Dimensions & KB Limits</option>
@@ -218,14 +279,18 @@ export const ApplicationStudioView: React.FC = () => {
         <div className="bg-slate-50 rounded-xl p-5 border border-slate-200/80 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
             <div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                Issuing Authority & Application
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  {activePreset.country} • {activePreset.issuingAuthority}
+                </span>
+                {activePreset.mode === 'checker-only' && (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300">
+                    Checker-Only Mode
+                  </span>
+                )}
               </div>
               <div className="text-sm font-bold text-slate-900 mt-0.5">
-                {activePreset.issuingAuthority}
-              </div>
-              <div className="text-xs text-slate-600">
-                {activePreset.applicationType}
+                {activePreset.applicationName}
               </div>
             </div>
             {activePreset.officialSourceUrl && (
@@ -235,7 +300,7 @@ export const ApplicationStudioView: React.FC = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-2xs w-fit"
               >
-                <span>Official Instructions</span>
+                <span>Official Primary Source</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             )}
@@ -243,28 +308,40 @@ export const ApplicationStudioView: React.FC = () => {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
             <div>
-              <span className="text-slate-500 block">Target Dimensions</span>
+              <span className="text-slate-500 block">Mandatory Pixel Dimensions</span>
               <span className="font-bold text-slate-900 text-sm">
-                {activePreset.exactWidth && activePreset.exactHeight
-                  ? `${activePreset.exactWidth} × ${activePreset.exactHeight} px`
-                  : `${activePreset.minWidth} × ${activePreset.minHeight} px min`}
+                {activePreset.pixelDimensions.isSpecified
+                  ? activePreset.pixelDimensions.officialDescription
+                  : 'Official requirement not specified'}
               </span>
-              <span className="text-slate-500 block text-[11px] mt-0.5">
-                Aspect {activePreset.aspectRatio.description}
-              </span>
+              {activePreset.aspectRatio.isSpecified && (
+                <span className="text-slate-500 block text-[11px] mt-0.5">
+                  Aspect ratio: {activePreset.aspectRatio.description}
+                </span>
+              )}
             </div>
+
+            <div>
+              <span className="text-slate-500 block">Physical Dimensions</span>
+              <span className="font-bold text-slate-900 text-sm">
+                {activePreset.physicalDimensions?.isSpecified
+                  ? activePreset.physicalDimensions.officialDescription
+                  : 'Not specified'}
+              </span>
+              {activePreset.faceOccupancy?.isSpecified && (
+                <span className="text-slate-500 block text-[11px] mt-0.5">
+                  Face: {activePreset.faceOccupancy.description}
+                </span>
+              )}
+            </div>
+
             <div>
               <span className="text-slate-500 block">Allowed File Size</span>
               <span className="font-bold text-slate-900 text-sm">
-                {activePreset.minKbDescription} to {activePreset.maxKbDescription}
+                {activePreset.fileSize.officialDescription}
               </span>
             </div>
-            <div>
-              <span className="text-slate-500 block">Allowed Formats</span>
-              <span className="font-bold text-slate-900 text-sm">
-                {activePreset.allowedFormats.map((f) => f.replace('image/', '').toUpperCase()).join(', ')}
-              </span>
-            </div>
+
             <div>
               <span className="text-slate-500 block">Rule Verification</span>
               <span className="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block mt-0.5">
@@ -273,91 +350,102 @@ export const ApplicationStudioView: React.FC = () => {
             </div>
           </div>
 
-          {/* Warnings & Portal Capture Notices */}
-          {activePreset.warnings.length > 0 && (
-            <div className="space-y-2 pt-2 border-t border-slate-200/80">
-              {activePreset.warnings.map((warn, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-start gap-2.5 text-xs bg-amber-50/80 text-amber-900 p-3 rounded-lg border border-amber-200"
-                >
-                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <p className="leading-relaxed">{warn}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Configuration Options */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
-          {/* Fitting Mode */}
-          <div className="space-y-2">
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
-              Aspect Ratio Handling
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setFittingMode('center-crop')}
-                className={`p-3 rounded-xl border text-left transition-all ${
-                  fittingMode === 'center-crop'
-                    ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
-                }`}
-              >
-                <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs mb-1">
-                  <Camera className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Center Crop</span>
-                </div>
-                <p className="text-[11px] text-slate-600 leading-normal">
-                  Crops outer edges to fill frame. Best for portraits.
-                </p>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setFittingMode('pad-white')}
-                className={`p-3 rounded-xl border text-left transition-all ${
-                  fittingMode === 'pad-white'
-                    ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
-                }`}
-              >
-                <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs mb-1">
-                  <PenTool className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>Pad with White</span>
-                </div>
-                <p className="text-[11px] text-slate-600 leading-normal">
-                  Fits full image with white margins. Best for signatures.
-                </p>
-              </button>
+          {/* Scope and Official Warning Notices */}
+          <div className="space-y-2 pt-2 border-t border-slate-200/80">
+            {activePreset.warningNotice && (
+              <div className="flex items-start gap-2.5 text-xs bg-amber-50/80 text-amber-900 p-3 rounded-lg border border-amber-200">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <p className="leading-relaxed">{activePreset.warningNotice}</p>
+              </div>
+            )}
+            <div className="text-[11px] text-slate-600 leading-relaxed bg-white p-3 rounded-lg border border-slate-200">
+              <strong className="text-slate-800">Official Scope & Limitations: </strong>
+              {activePreset.scopeAndLimitations}
             </div>
           </div>
+        </div>
 
-          {/* Target File Size */}
-          <div className="space-y-2">
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
-              Target File Size (KB)
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={Math.ceil(activePreset.minBytes / 1024)}
-                max={Math.floor(activePreset.maxBytes / 1024)}
-                value={targetKb}
-                onChange={(e) => setTargetKb(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
-              />
-              <span className="absolute right-4 top-2.5 text-xs font-bold text-slate-400">
-                KB
-              </span>
+        {/* Configuration Controls (Disabled or tailored if Checker-Only) */}
+        {activePreset.mode === 'checker-only' ? (
+          <div className="bg-blue-50/60 p-4 rounded-xl border border-blue-200 text-xs text-blue-900 space-y-1">
+            <div className="font-bold flex items-center gap-1.5">
+              <Info className="w-4 h-4 text-blue-600" />
+              <span>Inspection Mode Active</span>
             </div>
-            <p className="text-[11px] text-slate-500">
-              Allowed range: {activePreset.minKbDescription} to {activePreset.maxKbDescription}
+            <p className="leading-relaxed">
+              Software transformations are disabled for this profile because U.S. Passport Renewal rules strictly prohibit digitally edited photos. FileFix inspects technical file properties without generating an altered submit file.
             </p>
           </div>
-        </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+            {/* Fitting Mode */}
+            <div className="space-y-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                Aspect Ratio Handling
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFittingMode('center-crop')}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    fittingMode === 'center-crop'
+                      ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20'
+                      : 'border-slate-200 hover:border-slate-300 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs mb-1">
+                    <Camera className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Center Crop</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 leading-normal">
+                    Crops outer edges to fill frame. Best for portraits.
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setFittingMode('pad-white')}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    fittingMode === 'pad-white'
+                      ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20'
+                      : 'border-slate-200 hover:border-slate-300 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs mb-1">
+                    <PenTool className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Pad with White</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 leading-normal">
+                    Fits full image with white margins. Best for signatures.
+                  </p>
+                </button>
+              </div>
+            </div>
+
+            {/* Target File Size */}
+            <div className="space-y-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                Target File Size (KB)
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  min={activePreset.fileSize.minBytes ? Math.ceil(activePreset.fileSize.minBytes / 1024) : 1}
+                  max={activePreset.fileSize.maxBytes ? Math.floor(activePreset.fileSize.maxBytes / 1024) : 10000}
+                  value={targetKb}
+                  onChange={(e) => setTargetKb(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
+                />
+                <span className="absolute right-4 top-2.5 text-xs font-bold text-slate-400">
+                  KB
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Official constraint: {activePreset.fileSize.officialDescription}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Custom Dimensions (if custom selected) */}
         {activePreset.id === 'custom-application' && (
@@ -428,7 +516,11 @@ export const ApplicationStudioView: React.FC = () => {
                 ) : (
                   <>
                     <Sliders className="w-3.5 h-3.5" />
-                    <span>Apply Official Preset</span>
+                    <span>
+                      {activePreset.mode === 'checker-only'
+                        ? 'Inspect Photo Compliance'
+                        : 'Apply Official Preset'}
+                    </span>
                   </>
                 )}
               </button>
@@ -448,7 +540,7 @@ export const ApplicationStudioView: React.FC = () => {
             {/* Original Preview */}
             <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
               <div className="flex items-center justify-between text-xs font-bold text-slate-600 uppercase tracking-wider">
-                <span>Original Image</span>
+                <span>Original Image (Preserved)</span>
                 <span className="text-slate-500 font-normal">
                   {sourceMetadata.width} × {sourceMetadata.height} px
                 </span>
@@ -467,10 +559,14 @@ export const ApplicationStudioView: React.FC = () => {
               </div>
             </div>
 
-            {/* Processed Preview */}
+            {/* Processed / Inspected Preview */}
             <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
               <div className="flex items-center justify-between text-xs font-bold text-slate-600 uppercase tracking-wider">
-                <span>Processed Output</span>
+                <span>
+                  {activePreset.mode === 'checker-only'
+                    ? 'Inspected Photo'
+                    : 'Processed Output'}
+                </span>
                 {result && (
                   <span className="text-emerald-600 font-bold">
                     {result.width} × {result.height} px
@@ -488,7 +584,13 @@ export const ApplicationStudioView: React.FC = () => {
                 ) : (
                   <div className="text-center text-xs text-slate-400 space-y-2">
                     <Camera className="w-8 h-8 mx-auto text-slate-300" />
-                    <p>Click &ldquo;Apply Official Preset&rdquo; to process</p>
+                    <p>
+                      Click &ldquo;
+                      {activePreset.mode === 'checker-only'
+                        ? 'Inspect Photo Compliance'
+                        : 'Apply Official Preset'}
+                      &rdquo; to analyze
+                    </p>
                   </div>
                 )}
               </div>
@@ -514,9 +616,13 @@ export const ApplicationStudioView: React.FC = () => {
             <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-6 shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
                 <div className="flex items-center gap-3">
-                  {result.compliance.isTechnicallyCompliant ? (
+                  {result.compliance.overallVerdict === 'TECHNICAL_CHECKS_PASSED' ? (
                     <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
                       <CheckCircle2 className="w-6 h-6" />
+                    </div>
+                  ) : result.compliance.overallVerdict === 'CHECKER_ONLY_MODE' ? (
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                      <Info className="w-6 h-6" />
                     </div>
                   ) : (
                     <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
@@ -525,12 +631,10 @@ export const ApplicationStudioView: React.FC = () => {
                   )}
                   <div>
                     <h3 className="text-base font-bold text-slate-900">
-                      {result.compliance.isTechnicallyCompliant
-                        ? 'Technically Compliant with Official Portal Rules'
-                        : 'Technical Compliance Warning: Values Outside Expected Bounds'}
+                      {result.compliance.verdictTitle}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Validated against {activePreset.issuingAuthority} ({activePreset.applicationType})
+                      {result.compliance.verdictDescription}
                     </p>
                   </div>
                 </div>
@@ -543,62 +647,95 @@ export const ApplicationStudioView: React.FC = () => {
                   >
                     Export Compliance Report (.txt)
                   </button>
-                  <button
-                    type="button"
-                    onClick={handleDownload}
-                    className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-sm transition-all flex items-center gap-1.5"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>Download Image</span>
-                  </button>
+                  {activePreset.mode === 'checker-only' ? (
+                    <a
+                      href={activePreset.officialSourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all flex items-center gap-1.5"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Open Official Portal</span>
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleDownload}
+                      className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-sm transition-all flex items-center gap-1.5"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Download Image</span>
+                    </button>
+                  )}
                 </div>
               </div>
 
               {/* Compliance Item Breakdown */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {result.compliance.items.map((item, idx) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {result.compliance.items.map((item) => (
                   <div
-                    key={idx}
-                    className={`p-3.5 rounded-xl border text-xs ${
-                      item.passed
-                        ? 'bg-emerald-50/50 border-emerald-200'
-                        : 'bg-rose-50/50 border-rose-200'
+                    key={item.id}
+                    className={`p-3.5 rounded-xl border text-xs space-y-1.5 ${
+                      item.status === 'TECHNICAL_PASS'
+                        ? 'bg-emerald-50/40 border-emerald-200'
+                        : item.status === 'TECHNICAL_FAIL'
+                        ? 'bg-rose-50/40 border-rose-200'
+                        : item.status === 'UNVERIFIED_VISUAL'
+                        ? 'bg-amber-50/40 border-amber-200'
+                        : 'bg-slate-50 border-slate-200'
                     }`}
                   >
-                    <div className="flex items-center justify-between font-bold mb-1">
+                    <div className="flex items-center justify-between font-bold">
                       <span className="text-slate-800">{item.name}</span>
-                      {item.passed ? (
-                        <span className="text-emerald-700 flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>PASS</span>
-                        </span>
-                      ) : (
-                        <span className="text-rose-700 flex items-center gap-1">
-                          <XCircle className="w-3.5 h-3.5" />
-                          <span>FAIL</span>
-                        </span>
-                      )}
+                      {renderStatusBadge(item.status, item.statusLabel)}
                     </div>
-                    <div className="text-slate-600 text-[11px]">
-                      <div>Actual: <strong className="text-slate-900">{item.actual}</strong></div>
-                      <div>Required: {item.expected}</div>
+                    <div className="text-slate-600 text-[11px] space-y-0.5">
+                      <div>
+                        Actual: <strong className="text-slate-900">{item.actual}</strong>
+                      </div>
+                      <div>Expected: {item.expected}</div>
+                      {item.notes && (
+                        <div className="text-[10px] text-slate-500 italic mt-0.5">{item.notes}</div>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Biometric Disclaimer & Unedited Original Advisory */}
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-2">
-                <div className="flex items-start gap-2 text-slate-800 font-semibold">
-                  <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                  <span>Official Compliance & Biometric Notice:</span>
+              {/* Warnings, Visual Notices & FileFix Recommendations */}
+              <div className="space-y-3 pt-2">
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-2">
+                  <div className="flex items-start gap-2 text-slate-800 font-semibold">
+                    <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                    <span>Visual Requirements & Biometric Notice:</span>
+                  </div>
+                  <p className="leading-relaxed pl-6">
+                    {result.compliance.unverifiedVisualNotice}
+                  </p>
+                  {result.compliance.uneditedPhotoWarning && (
+                    <p className="leading-relaxed pl-6 font-medium text-amber-900">
+                      {result.compliance.uneditedPhotoWarning}
+                    </p>
+                  )}
+                  {result.compliance.reVerificationNotice && (
+                    <p className="leading-relaxed pl-6 font-medium text-indigo-900">
+                      {result.compliance.reVerificationNotice}
+                    </p>
+                  )}
                 </div>
-                <p className="leading-relaxed pl-6">
-                  {result.compliance.biometricDisclaimer}
-                </p>
-                <p className="leading-relaxed pl-6 font-medium text-amber-900">
-                  {result.compliance.authorityNotice}
-                </p>
+
+                {result.compliance.fileFixRecommendations.length > 0 && (
+                  <div className="bg-white p-4 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                    <div className="font-bold text-slate-800">
+                      FileFix Operational Recommendations (Distinct from Official Rules):
+                    </div>
+                    <ul className="list-disc list-inside text-slate-600 space-y-1 pl-1">
+                      {result.compliance.fileFixRecommendations.map((rec, i) => (
+                        <li key={i}>{rec}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           )}
