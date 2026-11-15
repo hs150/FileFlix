@@ -1,0 +1,92 @@
+[
+  {
+    "browser": "Google Chrome",
+    "version": "Chrome/157.0.8103.51",
+    "tests": [
+      {
+        "name": "Home Page Load & Navigation",
+        "status": "PASS",
+        "details": "FileFix — Fast, Private, Free File Utility"
+      },
+      {
+        "name": "Image Studio (Load, Process, Validate, Reject Spoofed)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "downloadReady": true
+        }
+      },
+      {
+        "name": "PDF Studio (Multi-File Merge & Page Organization)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "totalPagesRecognized": true
+        }
+      },
+      {
+        "name": "Text Extraction Studio (Page Boundaries & TXT Export)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "hasCopyBtn": true,
+          "hasDownloadBtn": true
+        }
+      },
+      {
+        "name": "Dynamic Network Isolation (Zero Remote Uploads)",
+        "status": "PASS",
+        "details": {
+          "totalRequests": 67,
+          "remoteRequestsCount": 0,
+          "payloadLeakingRequestsCount": 0
+        }
+      }
+    ]
+  },
+  {
+    "browser": "Microsoft Edge",
+    "version": "Edg/157.0.4341.60",
+    "tests": [
+      {
+        "name": "Home Page Load & Navigation",
+        "status": "PASS",
+        "details": "FileFix — Fast, Private, Free File Utility"
+      },
+      {
+        "name": "Image Studio (Load, Process, Validate, Reject Spoofed)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "downloadReady": true
+        }
+      },
+      {
+        "name": "PDF Studio (Multi-File Merge & Page Organization)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "totalPagesRecognized": true
+        }
+      },
+      {
+        "name": "Text Extraction Studio (Page Boundaries & TXT Export)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "hasCopyBtn": true,
+          "hasDownloadBtn": true
+        }
+      },
+      {
+        "name": "Dynamic Network Isolation (Zero Remote Uploads)",
+        "status": "PASS",
+        "details": {
+          "totalRequests": 67,
+          "remoteRequestsCount": 0,
+          "payloadLeakingRequestsCount": 0
+        }
+      }
+    ]
+  }
+]

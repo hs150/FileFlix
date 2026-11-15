@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,14 +17,14 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased">
         <header className="border-b border-slate-200 bg-white sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <a href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-blue-600">
+            <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-blue-600">
               <span className="bg-blue-600 text-white rounded-lg p-1.5 shadow-sm text-sm">FF</span>
               <span>FileFix</span>
-            </a>
+            </Link>
             <nav className="flex items-center gap-4 text-sm font-medium text-slate-600">
-              <a href="/image-studio" className="hover:text-blue-600 transition-colors">Image Studio</a>
-              <a href="/pdf-studio" className="hover:text-blue-600 transition-colors">PDF Studio</a>
-              <a href="/extract-text" className="hover:text-blue-600 transition-colors">Extract Text</a>
+              <Link href="/image-studio" className="hover:text-blue-600 transition-colors">Image Studio</Link>
+              <Link href="/pdf-studio" className="hover:text-blue-600 transition-colors">PDF Studio</Link>
+              <Link href="/extract-text" className="hover:text-blue-600 transition-colors">Extract Text</Link>
             </nav>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">

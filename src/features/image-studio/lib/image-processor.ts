@@ -8,7 +8,7 @@ import {
 import { clampCropBox } from './image-math';
 
 /**
- * Encodes a canvas to a Blob with timeout protection
+ * Encodes a canvas to a Blob with error handling
  */
 export function canvasToBlob(
   canvas: HTMLCanvasElement,
@@ -35,7 +35,7 @@ export function canvasToBlob(
 }
 
 /**
- * Loads an image from Blob or File, respecting EXIF orientation where supported.
+ * Loads an image from Blob, respecting EXIF orientation where supported.
  */
 export async function loadImageElement(source: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -59,13 +59,97 @@ export interface ProcessImageOptions {
   crop: CropSettings;
   compression: CompressionSettings;
   onProgress?: (message: string) => void;
+  signal?: AbortSignal;
 }
 
 /**
- * Processes an image completely inside the browser using HTML5 Canvas.
- * Zero network requests are made.
+ * Dispatches image processing to a background Web Worker (OffscreenCanvas) if available,
+ * otherwise executes on the main thread canvas.
  */
 export async function processImageLocally(
+  options: ProcessImageOptions
+): Promise<ProcessingResult> {
+  const { sourceBlob, resize, crop, compression, onProgress, signal } = options;
+
+  // Check if Web Worker and OffscreenCanvas are supported
+  const supportsWorker =
+    typeof window !== 'undefined' &&
+    typeof Worker !== 'undefined' &&
+    typeof OffscreenCanvas !== 'undefined';
+
+  if (supportsWorker) {
+    try {
+      return await processInWorker(options);
+    } catch (workerErr) {
+      console.warn('Web Worker processing failed or unsupported, falling back to main thread canvas:', workerErr);
+      return processOnMainThread(options);
+    }
+  }
+
+  return processOnMainThread(options);
+}
+
+/**
+ * Executes image processing inside a dedicated Web Worker.
+ */
+function processInWorker(options: ProcessImageOptions): Promise<ProcessingResult> {
+  return new Promise((resolve, reject) => {
+    const { sourceBlob, resize, crop, compression, onProgress, signal } = options;
+    const worker = new Worker(new URL('../workers/image.worker.ts', import.meta.url));
+    const jobId = Math.random().toString(36).substring(2, 9);
+
+    if (signal) {
+      signal.addEventListener('abort', () => {
+        worker.terminate();
+        reject(new Error('Image processing aborted by user.'));
+      });
+    }
+
+    worker.onmessage = (e: MessageEvent) => {
+      const data = e.data;
+      if (data.id !== jobId) return;
+
+      if (data.type === 'PROGRESS') {
+        onProgress?.(data.message);
+      } else if (data.type === 'SUCCESS') {
+        worker.terminate();
+        const url = URL.createObjectURL(data.blob);
+        resolve({
+          blob: data.blob,
+          url,
+          width: data.width,
+          height: data.height,
+          sizeBytes: data.sizeBytes,
+          format: data.format,
+          processingTimeMs: data.processingTimeMs,
+          targetSizeAchieved: data.targetSizeAchieved,
+          targetSizeExplanation: data.targetSizeExplanation,
+        });
+      } else if (data.type === 'ERROR') {
+        worker.terminate();
+        reject(new Error(data.error));
+      }
+    };
+
+    worker.onerror = (err) => {
+      worker.terminate();
+      reject(new Error(err.message || 'Worker runtime error.'));
+    };
+
+    worker.postMessage({
+      id: jobId,
+      sourceBlob,
+      resize,
+      crop,
+      compression,
+    });
+  });
+}
+
+/**
+ * Fallback processing on the main thread canvas.
+ */
+async function processOnMainThread(
   options: ProcessImageOptions
 ): Promise<ProcessingResult> {
   const startTime = performance.now();
@@ -112,7 +196,6 @@ export async function processImageLocally(
     }
   }
 
-  // Ensure minimum 1x1 dimensions
   finalWidth = Math.max(1, finalWidth);
   finalHeight = Math.max(1, finalHeight);
 
@@ -127,11 +210,9 @@ export async function processImageLocally(
     throw new Error('Failed to acquire 2D rendering context for Canvas.');
   }
 
-  // High quality interpolation
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
-  // Handle transparency for non-alpha formats like JPEG
   if (compression.format === 'image/jpeg') {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, finalWidth, finalHeight);
@@ -139,7 +220,6 @@ export async function processImageLocally(
     ctx.clearRect(0, 0, finalWidth, finalHeight);
   }
 
-  // Draw transformed slice
   ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, finalWidth, finalHeight);
 
   // 4. Encode & Optimize
@@ -152,7 +232,6 @@ export async function processImageLocally(
     const targetBytes = compression.targetSizeKb * 1024;
 
     if (compression.format === 'image/png') {
-      // PNG is lossless in browser canvas; quality parameter is ignored
       finalBlob = await canvasToBlob(canvas, compression.format, 1.0);
       if (finalBlob.size > targetBytes) {
         targetAchieved = false;
@@ -161,7 +240,6 @@ export async function processImageLocally(
         targetAchieved = true;
       }
     } else {
-      // Binary search over quality for JPEG / WebP
       let low = 0.05;
       let high = 0.98;
       let bestBlob = await canvasToBlob(canvas, compression.format, high);
@@ -170,16 +248,14 @@ export async function processImageLocally(
         finalBlob = bestBlob;
         targetAchieved = true;
       } else {
-        // Iterate up to 7 steps
         for (let step = 0; step < 7; step++) {
           const mid = (low + high) / 2;
           const candidateBlob = await canvasToBlob(canvas, compression.format, mid);
-
           if (candidateBlob.size <= targetBytes) {
             bestBlob = candidateBlob;
-            low = mid; // Try higher quality
+            low = mid;
           } else {
-            high = mid; // Needs lower quality
+            high = mid;
           }
         }
 
@@ -187,13 +263,11 @@ export async function processImageLocally(
           finalBlob = bestBlob;
           targetAchieved = true;
         } else {
-          // Still above target at lowest quality
           const lowestQualityBlob = await canvasToBlob(canvas, compression.format, low);
           if (lowestQualityBlob.size <= targetBytes) {
             finalBlob = lowestQualityBlob;
             targetAchieved = true;
           } else if (compression.allowDimensionReductionForTarget) {
-            // Downscale dimensions iteratively
             onProgress?.('Downscaling dimensions to achieve target size...');
             let scaleCanvas = canvas;
             let currentBlob = lowestQualityBlob;
@@ -238,12 +312,10 @@ export async function processImageLocally(
       }
     }
   } else {
-    // Normal encoding at specified quality
     onProgress?.(`Encoding to ${compression.format} at ${Math.round(compression.quality * 100)}% quality...`);
     finalBlob = await canvasToBlob(canvas, compression.format, compression.quality);
   }
 
-  // Cleanup canvas memory
   canvas.width = 0;
   canvas.height = 0;
 
