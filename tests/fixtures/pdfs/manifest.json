@@ -1,0 +1,30 @@
+[
+  {
+    "filename": "single-page.pdf",
+    "pages": 1,
+    "bytes": 1005,
+    "sha256": "ee55f538e0db4c70b7b695cb43696620980eb0ba2317c53c077d4b6d10ba1f23",
+    "description": "Valid single-page PDF with extractable text"
+  },
+  {
+    "filename": "three-pages.pdf",
+    "pages": 3,
+    "bytes": 1592,
+    "sha256": "53a68724bca73efb2e025cda70f28c843066224cfbf5426b57e0c800be5e4ede",
+    "description": "Valid 3-page PDF for split, reorder, and extraction tests"
+  },
+  {
+    "filename": "rotated-page.pdf",
+    "pages": 1,
+    "bytes": 582,
+    "sha256": "0063a36ab5ce8c249aef8394936894612fc5f7ef734da2d157174e7ec551bfb7",
+    "description": "Valid PDF with initial 90-degree page rotation"
+  },
+  {
+    "filename": "corrupt.pdf",
+    "pages": 0,
+    "bytes": 65,
+    "sha256": "943ea43e6fc6372b86ca5f1f8d4c8af35ceed4972c2beaafd0708f8875c50c39",
+    "description": "Corrupt PDF with invalid internal structure"
+  }
+]
