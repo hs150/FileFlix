@@ -112,7 +112,7 @@ export async function mergePDFs(
     );
   }
 
-  const blob = new Blob([outputBytes], { type: 'application/pdf' });
+  const blob = new Blob([outputBytes.buffer as ArrayBuffer], { type: 'application/pdf' });
   const url = URL.createObjectURL(blob);
   const processingTimeMs = Math.round(performance.now() - startTime);
 
@@ -168,7 +168,7 @@ export async function transformPDFPages(
     );
   }
 
-  const blob = new Blob([outputBytes], { type: 'application/pdf' });
+  const blob = new Blob([outputBytes.buffer as ArrayBuffer], { type: 'application/pdf' });
   const url = URL.createObjectURL(blob);
   const processingTimeMs = Math.round(performance.now() - startTime);
 
