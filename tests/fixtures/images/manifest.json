@@ -1,0 +1,38 @@
+[
+  {
+    "filename": "test-solid-red.png",
+    "bytes": 264,
+    "sha256": "f69e634553f65f1a902448d6d30cf078766500d4ad860dff49e93ef778fd6764",
+    "description": "Valid PNG solid red 120x80"
+  },
+  {
+    "filename": "test-alpha-blue.png",
+    "bytes": 228,
+    "sha256": "4a0afa9451ad972074f9de89499c5041f82ede1d4579f965e0112da64b0fe2d2",
+    "description": "Valid PNG with transparency 64x64"
+  },
+  {
+    "filename": "test-large-green.png",
+    "bytes": 3239,
+    "sha256": "a88015f3890c857c45830e0c9116ddf22f2784465f49b481c8c914a735db2727",
+    "description": "Valid larger PNG 800x600"
+  },
+  {
+    "filename": "test-minimal.jpg",
+    "bytes": 149,
+    "sha256": "f840e7a9783f168dc9647efce4324068092cf440e667c9cfac4948d2619146a3",
+    "description": "Valid minimal 1x1 JPEG"
+  },
+  {
+    "filename": "test-corrupt.png",
+    "bytes": 40,
+    "sha256": "8f9d1cac4ceebb5630a9796ee280604cf7331beaf212f81c299742d94491a165",
+    "description": "Corrupt PNG data"
+  },
+  {
+    "filename": "test-spoofed.jpg",
+    "bytes": 58,
+    "sha256": "f4768e101c0ed8b3be9d2d3fada1e6c54e281073c8bb8bcc1f6c6e170c2c9320",
+    "description": "Spoofed extension text file"
+  }
+]

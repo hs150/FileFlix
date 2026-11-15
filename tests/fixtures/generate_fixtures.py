@@ -1,0 +1,81 @@
+import os
+import struct
+import zlib
+import hashlib
+import json
+
+FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "images")
+os.makedirs(FIXTURES_DIR, exist_ok=True)
+
+def create_png(width, height, color=(255, 0, 0, 255)):
+    """Generate an uncompressed raw PNG using standard library zlib."""
+    # PNG Signature
+    png_sig = b"\x89PNG\r\n\x1a\n"
+    
+    # IHDR chunk
+    # Width, Height, Bit depth (8), Color type (6 = RGBA), Compression (0), Filter (0), Interlace (0)
+    ihdr_data = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)
+    ihdr_crc = zlib.crc32(b"IHDR" + ihdr_data)
+    ihdr_chunk = struct.pack(">I", len(ihdr_data)) + b"IHDR" + ihdr_data + struct.pack(">I", ihdr_crc)
+    
+    # Raw scanlines: 1 filter byte (0 = None) + RGBA per pixel
+    r, g, b, a = color
+    pixel = struct.pack("BBBB", r, g, b, a)
+    row = b"\x00" + (pixel * width)
+    raw_data = row * height
+    
+    # IDAT chunk
+    compressed_data = zlib.compress(raw_data)
+    idat_crc = zlib.crc32(b"IDAT" + compressed_data)
+    idat_chunk = struct.pack(">I", len(compressed_data)) + b"IDAT" + compressed_data + struct.pack(">I", idat_crc)
+    
+    # IEND chunk
+    iend_crc = zlib.crc32(b"IEND")
+    iend_chunk = struct.pack(">I", 0) + b"IEND" + struct.pack(">I", iend_crc)
+    
+    return png_sig + ihdr_chunk + idat_chunk + iend_chunk
+
+# Minimal valid 1x1 JPEG byte sequence
+JPEG_BYTES = bytes([
+    0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01, 0x01, 0x01, 0x00, 0x60,
+    0x00, 0x60, 0x00, 0x00, 0xFF, 0xDB, 0x00, 0x43, 0x00, 0x08, 0x06, 0x06, 0x07, 0x06, 0x05, 0x08,
+    0x07, 0x07, 0x07, 0x09, 0x09, 0x08, 0x0A, 0x0C, 0x14, 0x0D, 0x0C, 0x0B, 0x0B, 0x0C, 0x19, 0x12,
+    0x13, 0x0F, 0x14, 0x1D, 0x1A, 0x1F, 0x1E, 0x1D, 0x1A, 0x1C, 0x1C, 0x20, 0x24, 0x2E, 0x27, 0x20,
+    0x22, 0x2C, 0x23, 0x1C, 0x1C, 0x28, 0x37, 0x29, 0x2C, 0x30, 0x31, 0x34, 0x34, 0x34, 0x1F, 0x27,
+    0x39, 0x3D, 0x38, 0x32, 0x3C, 0x2E, 0x33, 0x34, 0x32, 0xFF, 0xC0, 0x00, 0x0B, 0x08, 0x00, 0x01,
+    0x00, 0x01, 0x01, 0x01, 0x11, 0x00, 0xFF, 0xC4, 0x00, 0x1F, 0x00, 0x00, 0x01, 0x05, 0x01, 0x01,
+    0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x03, 0x04,
+    0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0xFF, 0xDA, 0x00, 0x08, 0x01, 0x01, 0x00, 0x00, 0x3F,
+    0x00, 0xBF, 0x80, 0xFF, 0xD9
+])
+
+# Create fixtures
+fixtures = [
+    ("test-solid-red.png", create_png(120, 80, (255, 0, 0, 255)), "Valid PNG solid red 120x80"),
+    ("test-alpha-blue.png", create_png(64, 64, (0, 100, 255, 128)), "Valid PNG with transparency 64x64"),
+    ("test-large-green.png", create_png(800, 600, (34, 197, 94, 255)), "Valid larger PNG 800x600"),
+    ("test-minimal.jpg", JPEG_BYTES, "Valid minimal 1x1 JPEG"),
+    ("test-corrupt.png", b"\x89PNG\r\n\x1a\n\x00\x00corrupt_payload_data_not_valid", "Corrupt PNG data"),
+    ("test-spoofed.jpg", b"This is a text file maliciously renamed to .jpg extension.", "Spoofed extension text file")
+]
+
+manifest = []
+for name, data, desc in fixtures:
+    path = os.path.join(FIXTURES_DIR, name)
+    with open(path, "wb") as f:
+        f.write(data)
+    
+    sha256 = hashlib.sha256(data).hexdigest()
+    manifest.append({
+        "filename": name,
+        "bytes": len(data),
+        "sha256": sha256,
+        "description": desc
+    })
+    print(f"Created: {name} ({len(data)} bytes, sha256: {sha256[:12]}...)")
+
+manifest_path = os.path.join(FIXTURES_DIR, "manifest.json")
+with open(manifest_path, "w") as f:
+    json.dump(manifest, f, indent=2)
+
+print("Fixture generation complete. Manifest saved to manifest.json")
