@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Image as ImageIcon, FileText, FileSearch, ShieldCheck, Zap, Lock, FileCheck } from "lucide-react";
+import { Image as ImageIcon, FileText, FileSearch, ShieldCheck, Zap, Lock, FileCheck, ArrowLeftRight } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -20,7 +20,29 @@ export default function HomePage() {
       </section>
 
       {/* Primary Tool Cards */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Convert Files */}
+        <Link
+          href="/convert-files"
+          className="group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-blue-600 hover:shadow-lg transition-all duration-200"
+        >
+          <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <ArrowLeftRight className="w-6 h-6" />
+          </div>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+              Convert Files
+            </h2>
+            <span className="px-2 py-0.5 text-xs font-semibold rounded bg-blue-100 text-blue-700">Hub Live</span>
+          </div>
+          <p className="text-sm text-slate-600 mb-4">
+            Transform JPEG, PNG, WebP images and PDF documents locally. Single or batch image-to-PDF, PDF-to-image ZIP export.
+          </p>
+          <div className="text-xs text-blue-600 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            Open File Converter &rarr;
+          </div>
+        </Link>
+
         {/* Application Studio */}
         <Link
           href="/application-studio"

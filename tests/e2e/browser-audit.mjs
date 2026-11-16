@@ -840,9 +840,160 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     });
 
     // ----------------------------------------------------
-    // TEST 6: Dynamic Network Isolation Audit (Zero Remote Leaks)
+    // TEST 6: File Conversion Hub Operations (/convert-files)
     // ----------------------------------------------------
-    console.log(`\n--- Test 6: Dynamic Network Isolation Audit ---`);
+    console.log(`\n--- Test 6: File Conversion Hub Workflows ---`);
+    await cdp.send('Page.navigate', { url: `${SERVER_URL}/convert-files` });
+    await wait(2000);
+
+    const convertFilesResult = await cdp.send('Runtime.evaluate', {
+      expression: `
+        (async () => {
+          function b64ToFile(b64, name, mime) {
+            const chars = atob(b64);
+            const arr = new Uint8Array(chars.length);
+            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+            return new File([arr], name, { type: mime });
+          }
+
+          // 1. Verify page elements & capability registry table
+          const pageTitle = document.body.innerText;
+          const hasHubHeader = pageTitle.includes('Multi-Format File Conversion Hub');
+          const hasRegistryTable = pageTitle.includes('Conversion Capability Registry');
+
+          // 2. Upload PNG and convert to JPEG
+          const redPngFile = b64ToFile("${redPngBase64}", "test-solid-red.png", "image/png");
+          const input = document.querySelector('input[type="file"]');
+          if (!input) return { success: false, error: 'File input not found' };
+
+          const dt = new DataTransfer();
+          dt.items.add(redPngFile);
+          input.files = dt.files;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 800));
+
+          const select = document.querySelector('select');
+          if (!select) return { success: false, error: 'Target format select dropdown not found' };
+
+          // Available options should include image/jpeg
+          const options = Array.from(select.querySelectorAll('option')).map(o => o.value);
+          const hasJpegOption = options.includes('image/jpeg');
+          const hasPdfOption = options.includes('application/pdf');
+
+          // Select JPEG
+          select.value = 'image/jpeg';
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 400));
+
+          // Click Execute Conversion
+          const buttons = Array.from(document.querySelectorAll('button'));
+          const executeBtn = buttons.find(b => b.innerText.includes('Execute Conversion'));
+          if (!executeBtn) return { success: false, error: 'Execute Conversion button not found' };
+          executeBtn.click();
+
+          // Wait for conversion
+          let pngToJpgDone = false;
+          for (let i = 0; i < 20; i++) {
+            await new Promise(r => setTimeout(r, 400));
+            if (document.body.innerText.includes('Conversion Complete')) {
+              pngToJpgDone = true;
+              break;
+            }
+          }
+
+          // Inspect output blob
+          const downloadLink = document.querySelector('a[download$=".jpg"]');
+          let isJpegHeader = false;
+          let jpgSize = 0;
+          if (downloadLink && downloadLink.href) {
+            try {
+              const res = await fetch(downloadLink.href);
+              const buf = await res.arrayBuffer();
+              jpgSize = buf.byteLength;
+              const u8 = new Uint8Array(buf);
+              isJpegHeader = u8[0] === 0xff && u8[1] === 0xd8 && u8[2] === 0xff;
+            } catch (e) {
+              console.error('Fetch converted jpg failed:', e);
+            }
+          }
+
+          // 3. Reset and test JPEG to PDF conversion
+          const refreshedButtons = Array.from(document.querySelectorAll('button'));
+          const resetBtn = refreshedButtons.find(b => b.innerText.includes('Reset'));
+          if (resetBtn) resetBtn.click();
+          await new Promise(r => setTimeout(r, 600));
+
+          // Upload JPEG
+          const minimalJpgFile = b64ToFile("${exifJpgBase64}", "test-exif.jpg", "image/jpeg");
+          const input2 = document.querySelector('input[type="file"]');
+          const dt2 = new DataTransfer();
+          dt2.items.add(minimalJpgFile);
+          input2.files = dt2.files;
+          input2.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 800));
+
+          const select2 = document.querySelector('select');
+          select2.value = 'application/pdf';
+          select2.dispatchEvent(new Event('change', { bubbles: true }));
+          await new Promise(r => setTimeout(r, 400));
+
+          const execBtn2 = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Execute Conversion'));
+          if (execBtn2) execBtn2.click();
+
+          let jpgToPdfDone = false;
+          for (let i = 0; i < 20; i++) {
+            await new Promise(r => setTimeout(r, 400));
+            if (document.body.innerText.includes('Conversion Complete')) {
+              jpgToPdfDone = true;
+              break;
+            }
+          }
+
+          const pdfDownloadLink = document.querySelector('a[download$=".pdf"]');
+          let isPdfHeader = false;
+          let pdfSize = 0;
+          if (pdfDownloadLink && pdfDownloadLink.href) {
+            try {
+              const res = await fetch(pdfDownloadLink.href);
+              const buf = await res.arrayBuffer();
+              pdfSize = buf.byteLength;
+              const u8 = new Uint8Array(buf);
+              isPdfHeader = u8[0] === 0x25 && u8[1] === 0x50 && u8[2] === 0x44 && u8[3] === 0x46;
+            } catch (e) {
+              console.error('Fetch converted pdf failed:', e);
+            }
+          }
+
+          return {
+            success: hasHubHeader && hasRegistryTable && pngToJpgDone && isJpegHeader && jpgToPdfDone && isPdfHeader,
+            hasHubHeader,
+            hasRegistryTable,
+            hasJpegOption,
+            hasPdfOption,
+            pngToJpgDone,
+            isJpegHeader,
+            jpgSize,
+            jpgToPdfDone,
+            isPdfHeader,
+            pdfSize,
+          };
+        })()
+      `,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    console.log(`Conversion Hub Workflow:`, convertFilesResult.result.value);
+
+    auditResults.tests.push({
+      name: 'Conversion Hub (Format Detection, Options, PNG-to-JPEG White Fill, JPEG-to-PDF, Magic Byte Verification)',
+      status: convertFilesResult.result.value.success ? 'PASS' : 'FAIL',
+      details: convertFilesResult.result.value,
+    });
+
+    // ----------------------------------------------------
+    // TEST 7: Dynamic Network Isolation Audit (Zero Remote Leaks)
+    // ----------------------------------------------------
+    console.log(`\n--- Test 7: Dynamic Network Isolation Audit ---`);
     const remoteRequests = recordedRequests.filter((r) => {
       const url = r.url;
       // Only examine network HTTP/HTTPS requests

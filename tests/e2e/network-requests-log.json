@@ -1,33 +1,7 @@
 [
   {
     "browser": "Google Chrome",
-    "timestamp": 1794786999191,
-    "url": "chrome://resources/mojo/mojo/public/mojom/base/unguessable_token.mojom-converters.js",
-    "method": "GET",
-    "hasPostData": false,
-    "postData": null,
-    "headers": {
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
-      "Origin": "chrome://new-tab-page",
-      "Referer": ""
-    }
-  },
-  {
-    "browser": "Google Chrome",
-    "timestamp": 1794786999193,
-    "url": "chrome://resources/mojo/mojo/public/mojom/base/unguessable_token_converter.js",
-    "method": "GET",
-    "hasPostData": false,
-    "postData": null,
-    "headers": {
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
-      "Origin": "chrome://new-tab-page",
-      "Referer": ""
-    }
-  },
-  {
-    "browser": "Google Chrome",
-    "timestamp": 1794786999300,
+    "timestamp": 1794788219000,
     "url": "http://127.0.0.1:3099/",
     "method": "GET",
     "hasPostData": false,
@@ -42,8 +16,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794786999437,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788219026,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -57,7 +31,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794786999439,
+    "timestamp": 1794788219026,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -72,7 +46,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794786999440,
+    "timestamp": 1794788219026,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -87,7 +61,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794786999441,
+    "timestamp": 1794788219026,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -102,7 +76,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794786999442,
+    "timestamp": 1794788219026,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -117,7 +91,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794786999445,
+    "timestamp": 1794788219027,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -132,7 +106,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794786999449,
+    "timestamp": 1794788219027,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -147,7 +121,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000371,
+    "timestamp": 1794788219177,
     "url": "http://127.0.0.1:3099/favicon.ico",
     "method": "GET",
     "hasPostData": false,
@@ -162,7 +136,26 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000454,
+    "timestamp": 1794788219207,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=1p-R_iEY6bj0jY31",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788219207,
     "url": "http://127.0.0.1:3099/image-studio?_rsc=1p-R_iEY6bj0jY31",
     "method": "GET",
     "hasPostData": false,
@@ -181,7 +174,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000456,
+    "timestamp": 1794788219207,
     "url": "http://127.0.0.1:3099/application-studio?_rsc=1p-R_iEY6bj0jY31",
     "method": "GET",
     "hasPostData": false,
@@ -200,7 +193,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000457,
+    "timestamp": 1794788219207,
     "url": "http://127.0.0.1:3099/pdf-studio?_rsc=1p-R_iEY6bj0jY31",
     "method": "GET",
     "hasPostData": false,
@@ -219,7 +212,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000458,
+    "timestamp": 1794788219208,
     "url": "http://127.0.0.1:3099/extract-text?_rsc=1p-R_iEY6bj0jY31",
     "method": "GET",
     "hasPostData": false,
@@ -238,7 +231,37 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000774,
+    "timestamp": 1794788219266,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788219267,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788219268,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -253,7 +276,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000775,
+    "timestamp": 1794788219269,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -268,8 +291,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000777,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788219270,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -283,8 +306,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000833,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788219271,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -298,22 +321,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787000834,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
-    "method": "GET",
-    "hasPostData": false,
-    "postData": null,
-    "headers": {
-      "sec-ch-ua-platform": "\"Windows\"",
-      "Referer": "http://127.0.0.1:3099/",
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
-      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
-      "sec-ch-ua-mobile": "?0"
-    }
-  },
-  {
-    "browser": "Google Chrome",
-    "timestamp": 1794787000850,
+    "timestamp": 1794788219274,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -328,7 +336,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001438,
+    "timestamp": 1794788221039,
     "url": "http://127.0.0.1:3099/image-studio",
     "method": "GET",
     "hasPostData": false,
@@ -343,8 +351,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001515,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788221065,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -354,7 +362,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001525,
+    "timestamp": 1794788221067,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -365,7 +373,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001531,
+    "timestamp": 1794788221068,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -376,7 +384,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001548,
+    "timestamp": 1794788221069,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -387,7 +395,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001564,
+    "timestamp": 1794788221070,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -398,7 +406,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001577,
+    "timestamp": 1794788221072,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -409,7 +417,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001590,
+    "timestamp": 1794788221073,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -420,7 +428,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001594,
+    "timestamp": 1794788221075,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -431,7 +439,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001599,
+    "timestamp": 1794788221075,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -442,7 +450,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001926,
+    "timestamp": 1794788221114,
     "url": "http://127.0.0.1:3099/?_rsc=wPtELChM0vGf8aam",
     "method": "GET",
     "hasPostData": false,
@@ -461,7 +469,26 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001927,
+    "timestamp": 1794788221114,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=wPtELChM0vGf8aam",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/image-studio",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22image-studio%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/image-studio",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788221115,
     "url": "http://127.0.0.1:3099/application-studio?_rsc=wPtELChM0vGf8aam",
     "method": "GET",
     "hasPostData": false,
@@ -480,7 +507,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001928,
+    "timestamp": 1794788221115,
     "url": "http://127.0.0.1:3099/pdf-studio?_rsc=wPtELChM0vGf8aam",
     "method": "GET",
     "hasPostData": false,
@@ -499,7 +526,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787001928,
+    "timestamp": 1794788221115,
     "url": "http://127.0.0.1:3099/extract-text?_rsc=wPtELChM0vGf8aam",
     "method": "GET",
     "hasPostData": false,
@@ -518,8 +545,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787002204,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788221167,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -529,8 +556,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787002223,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788221168,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -540,8 +567,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787002229,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
+    "timestamp": 1794788221169,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -551,7 +578,18 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787002238,
+    "timestamp": 1794788221172,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/image-studio"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788221178,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -562,8 +600,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787003492,
-    "url": "blob:http://127.0.0.1:3099/c3f60bee-2cfe-4def-8f74-c5017a2d16af",
+    "timestamp": 1794788223073,
+    "url": "blob:http://127.0.0.1:3099/c26514df-1120-4bea-b1ca-3fec7b43ece6",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -574,7 +612,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787004721,
+    "timestamp": 1794788224278,
     "url": "http://127.0.0.1:3099/_next/static/chunks/332.cf0d413e41ce1398.js",
     "method": "GET",
     "hasPostData": false,
@@ -585,8 +623,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787004798,
-    "url": "blob:http://127.0.0.1:3099/65476bf5-840d-4c45-bc17-cf20bd5eb373",
+    "timestamp": 1794788224303,
+    "url": "blob:http://127.0.0.1:3099/aa1f754f-1757-48b8-9eff-64db8acf432a",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -597,8 +635,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787006550,
-    "url": "blob:http://127.0.0.1:3099/65476bf5-840d-4c45-bc17-cf20bd5eb373",
+    "timestamp": 1794788226088,
+    "url": "blob:http://127.0.0.1:3099/aa1f754f-1757-48b8-9eff-64db8acf432a",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -609,8 +647,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787007348,
-    "url": "blob:http://127.0.0.1:3099/87c53545-4143-42e0-ab8d-0222561937cc",
+    "timestamp": 1794788226696,
+    "url": "blob:http://127.0.0.1:3099/4facfe37-0cf3-4b60-9b39-cd51ebbe8a54",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -621,7 +659,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787008848,
+    "timestamp": 1794788228310,
     "url": "http://127.0.0.1:3099/_next/static/chunks/332.cf0d413e41ce1398.js",
     "method": "GET",
     "hasPostData": false,
@@ -632,8 +670,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787009204,
-    "url": "blob:http://127.0.0.1:3099/4203363e-05f7-4165-8330-afa7e4c95082",
+    "timestamp": 1794788228321,
+    "url": "blob:http://127.0.0.1:3099/404551eb-20dd-48a6-a10c-88e305287db8",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -644,8 +682,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787010341,
-    "url": "blob:http://127.0.0.1:3099/4203363e-05f7-4165-8330-afa7e4c95082",
+    "timestamp": 1794788229810,
+    "url": "blob:http://127.0.0.1:3099/404551eb-20dd-48a6-a10c-88e305287db8",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -656,8 +694,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787010978,
-    "url": "blob:http://127.0.0.1:3099/d76d1c8b-6d31-4d26-a846-82c0e03e8585",
+    "timestamp": 1794788230420,
+    "url": "blob:http://127.0.0.1:3099/0a623ca1-eb38-4d81-adc1-8573ad38114a",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -668,8 +706,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787012812,
-    "url": "blob:http://127.0.0.1:3099/5fbff5b8-a3b7-49d0-8ed0-661f45f73666",
+    "timestamp": 1794788232226,
+    "url": "blob:http://127.0.0.1:3099/e01e4713-7acf-4b16-a74e-457927a28cb1",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -680,7 +718,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787014325,
+    "timestamp": 1794788233740,
     "url": "http://127.0.0.1:3099/_next/static/chunks/332.cf0d413e41ce1398.js",
     "method": "GET",
     "hasPostData": false,
@@ -691,8 +729,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787014464,
-    "url": "blob:http://127.0.0.1:3099/2818d0c9-7fef-4e17-badc-678714697021",
+    "timestamp": 1794788233759,
+    "url": "blob:http://127.0.0.1:3099/183f3310-aa12-49c0-98df-039cc4d3273c",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -703,8 +741,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787016340,
-    "url": "blob:http://127.0.0.1:3099/2818d0c9-7fef-4e17-badc-678714697021",
+    "timestamp": 1794788235754,
+    "url": "blob:http://127.0.0.1:3099/183f3310-aa12-49c0-98df-039cc4d3273c",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -715,7 +753,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017700,
+    "timestamp": 1794788237079,
     "url": "http://127.0.0.1:3099/pdf-studio",
     "method": "GET",
     "hasPostData": false,
@@ -730,8 +768,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017789,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788237099,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -741,7 +779,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017809,
+    "timestamp": 1794788237100,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -752,7 +790,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017823,
+    "timestamp": 1794788237102,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -763,7 +801,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017828,
+    "timestamp": 1794788237104,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -774,7 +812,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017842,
+    "timestamp": 1794788237105,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -785,7 +823,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017858,
+    "timestamp": 1794788237106,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -796,7 +834,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017887,
+    "timestamp": 1794788237106,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -807,8 +845,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017894,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788237107,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -818,8 +856,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017910,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
+    "timestamp": 1794788237108,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -829,7 +867,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017928,
+    "timestamp": 1794788237123,
     "url": "http://127.0.0.1:3099/?_rsc=IKwbyBVuAKHvFDOw",
     "method": "GET",
     "hasPostData": false,
@@ -848,7 +886,26 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017928,
+    "timestamp": 1794788237123,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=IKwbyBVuAKHvFDOw",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/pdf-studio",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22pdf-studio%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/pdf-studio",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788237123,
     "url": "http://127.0.0.1:3099/image-studio?_rsc=IKwbyBVuAKHvFDOw",
     "method": "GET",
     "hasPostData": false,
@@ -867,7 +924,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017929,
+    "timestamp": 1794788237123,
     "url": "http://127.0.0.1:3099/application-studio?_rsc=IKwbyBVuAKHvFDOw",
     "method": "GET",
     "hasPostData": false,
@@ -886,7 +943,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017929,
+    "timestamp": 1794788237124,
     "url": "http://127.0.0.1:3099/extract-text?_rsc=IKwbyBVuAKHvFDOw",
     "method": "GET",
     "hasPostData": false,
@@ -905,7 +962,18 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017986,
+    "timestamp": 1794788237149,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/pdf-studio"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788237152,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -916,7 +984,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787017995,
+    "timestamp": 1794788237155,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -927,8 +995,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787018002,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788237157,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -938,7 +1006,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787018006,
+    "timestamp": 1794788237159,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -949,7 +1017,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028789,
+    "timestamp": 1794788248086,
     "url": "http://127.0.0.1:3099/extract-text",
     "method": "GET",
     "hasPostData": false,
@@ -964,8 +1032,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028819,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788248109,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -975,7 +1043,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028821,
+    "timestamp": 1794788248110,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -986,7 +1054,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028823,
+    "timestamp": 1794788248112,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -997,7 +1065,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028825,
+    "timestamp": 1794788248118,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -1008,7 +1076,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028826,
+    "timestamp": 1794788248120,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -1019,7 +1087,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028829,
+    "timestamp": 1794788248121,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -1030,7 +1098,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028830,
+    "timestamp": 1794788248124,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -1041,7 +1109,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028831,
+    "timestamp": 1794788248127,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -1052,7 +1120,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028837,
+    "timestamp": 1794788248130,
     "url": "http://127.0.0.1:3099/?_rsc=PN45Ay0hEfWR4FB0",
     "method": "GET",
     "hasPostData": false,
@@ -1071,7 +1139,26 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028837,
+    "timestamp": 1794788248130,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=PN45Ay0hEfWR4FB0",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/extract-text",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22extract-text%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/extract-text",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788248130,
     "url": "http://127.0.0.1:3099/image-studio?_rsc=PN45Ay0hEfWR4FB0",
     "method": "GET",
     "hasPostData": false,
@@ -1090,7 +1177,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028837,
+    "timestamp": 1794788248131,
     "url": "http://127.0.0.1:3099/application-studio?_rsc=PN45Ay0hEfWR4FB0",
     "method": "GET",
     "hasPostData": false,
@@ -1109,7 +1196,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028838,
+    "timestamp": 1794788248131,
     "url": "http://127.0.0.1:3099/pdf-studio?_rsc=PN45Ay0hEfWR4FB0",
     "method": "GET",
     "hasPostData": false,
@@ -1128,7 +1215,29 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028859,
+    "timestamp": 1794788248152,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/extract-text"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788248154,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/extract-text"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788248157,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -1139,7 +1248,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028860,
+    "timestamp": 1794788248158,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -1150,8 +1259,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028862,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788248160,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1161,8 +1270,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028863,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788248162,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1172,18 +1281,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787028864,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
-    "method": "GET",
-    "hasPostData": false,
-    "postData": null,
-    "headers": {
-      "Referer": "http://127.0.0.1:3099/extract-text"
-    }
-  },
-  {
-    "browser": "Google Chrome",
-    "timestamp": 1794787030815,
+    "timestamp": 1794788250113,
     "url": "http://127.0.0.1:3099/_next/static/chunks/9b0008ae.fbfc1fbd7008cf82.js",
     "method": "GET",
     "hasPostData": false,
@@ -1198,7 +1296,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787030815,
+    "timestamp": 1794788250114,
     "url": "http://127.0.0.1:3099/_next/static/chunks/376.978318a47fc25c90.js",
     "method": "GET",
     "hasPostData": false,
@@ -1213,8 +1311,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787030864,
-    "url": "blob:http://127.0.0.1:3099/e2fa7cb1-f633-411f-a89e-f552400c19f2",
+    "timestamp": 1794788250164,
+    "url": "blob:http://127.0.0.1:3099/d505fac1-4ab2-49ff-8608-675f207c113a",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1224,7 +1322,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031850,
+    "timestamp": 1794788252154,
     "url": "http://127.0.0.1:3099/application-studio",
     "method": "GET",
     "hasPostData": false,
@@ -1239,8 +1337,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031869,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788252177,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1250,7 +1348,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031870,
+    "timestamp": 1794788252181,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -1261,7 +1359,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031871,
+    "timestamp": 1794788252183,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -1272,7 +1370,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031872,
+    "timestamp": 1794788252184,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -1283,7 +1381,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031872,
+    "timestamp": 1794788252185,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -1294,7 +1392,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031873,
+    "timestamp": 1794788252186,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -1305,7 +1403,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031874,
+    "timestamp": 1794788252187,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -1316,7 +1414,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031874,
+    "timestamp": 1794788252188,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -1327,8 +1425,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031875,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788252190,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1338,7 +1436,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031894,
+    "timestamp": 1794788252203,
     "url": "http://127.0.0.1:3099/?_rsc=udiMaTZlh-qNX4i6",
     "method": "GET",
     "hasPostData": false,
@@ -1357,7 +1455,26 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031894,
+    "timestamp": 1794788252203,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=udiMaTZlh-qNX4i6",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/application-studio",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22application-studio%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/application-studio",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788252204,
     "url": "http://127.0.0.1:3099/image-studio?_rsc=udiMaTZlh-qNX4i6",
     "method": "GET",
     "hasPostData": false,
@@ -1376,7 +1493,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031894,
+    "timestamp": 1794788252204,
     "url": "http://127.0.0.1:3099/pdf-studio?_rsc=udiMaTZlh-qNX4i6",
     "method": "GET",
     "hasPostData": false,
@@ -1395,7 +1512,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031894,
+    "timestamp": 1794788252204,
     "url": "http://127.0.0.1:3099/extract-text?_rsc=udiMaTZlh-qNX4i6",
     "method": "GET",
     "hasPostData": false,
@@ -1414,7 +1531,29 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031911,
+    "timestamp": 1794788252223,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/application-studio"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788252225,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/application-studio"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788252227,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -1425,8 +1564,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031914,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788252229,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1436,18 +1575,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787031914,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
-    "method": "GET",
-    "hasPostData": false,
-    "postData": null,
-    "headers": {
-      "Referer": "http://127.0.0.1:3099/application-studio"
-    }
-  },
-  {
-    "browser": "Google Chrome",
-    "timestamp": 1794787031915,
+    "timestamp": 1794788252230,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -1458,8 +1586,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787034282,
-    "url": "blob:http://127.0.0.1:3099/d34f1aa7-24b1-4ae1-916f-855577a714f1",
+    "timestamp": 1794788254592,
+    "url": "blob:http://127.0.0.1:3099/46ff114d-51ab-4c78-9d92-bb7df1c8a5f3",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1470,7 +1598,7 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787035298,
+    "timestamp": 1794788255590,
     "url": "http://127.0.0.1:3099/_next/static/chunks/332.cf0d413e41ce1398.js",
     "method": "GET",
     "hasPostData": false,
@@ -1481,8 +1609,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787035346,
-    "url": "blob:http://127.0.0.1:3099/3db55d2b-4feb-40ac-b101-9f29cecfcf03",
+    "timestamp": 1794788255637,
+    "url": "blob:http://127.0.0.1:3099/3f2b9b74-21f7-41da-a679-c8dba425a028",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1493,8 +1621,8 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787035811,
-    "url": "blob:http://127.0.0.1:3099/3db55d2b-4feb-40ac-b101-9f29cecfcf03",
+    "timestamp": 1794788256091,
+    "url": "blob:http://127.0.0.1:3099/3f2b9b74-21f7-41da-a679-c8dba425a028",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1505,19 +1633,307 @@
   },
   {
     "browser": "Google Chrome",
-    "timestamp": 1794787036324,
-    "url": "blob:http://127.0.0.1:3099/4e3e643a-b472-419f-9ca9-108455481cae",
+    "timestamp": 1794788256606,
+    "url": "blob:http://127.0.0.1:3099/c6e253af-fb2f-4d2e-be27-ca581d56c019",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
     "headers": {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
       "Referer": "http://127.0.0.1:3099/application-studio"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257807,
+    "url": "http://127.0.0.1:3099/convert-files",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": "\"Windows\""
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257823,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257824,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257825,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257826,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257826,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257827,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257827,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257828,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257828,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257849,
+    "url": "http://127.0.0.1:3099/?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257849,
+    "url": "http://127.0.0.1:3099/image-studio?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257850,
+    "url": "http://127.0.0.1:3099/application-studio?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257850,
+    "url": "http://127.0.0.1:3099/pdf-studio?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257850,
+    "url": "http://127.0.0.1:3099/extract-text?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257873,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257874,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257875,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257876,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788257877,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788261444,
+    "url": "blob:http://127.0.0.1:3099/a7540cd7-664d-4b65-96b1-161f01e07859",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Google Chrome",
+    "timestamp": 1794788263681,
+    "url": "blob:http://127.0.0.1:3099/ad888768-3cc6-4592-a3a3-8fb2dbf87bd2",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+      "Referer": "http://127.0.0.1:3099/convert-files"
     }
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787039969,
+    "timestamp": 1794788266524,
     "url": "http://127.0.0.1:3099/",
     "method": "GET",
     "hasPostData": false,
@@ -1532,8 +1948,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040063,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788266609,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1547,7 +1963,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040063,
+    "timestamp": 1794788266610,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -1562,7 +1978,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040063,
+    "timestamp": 1794788266610,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -1577,7 +1993,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040063,
+    "timestamp": 1794788266610,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -1592,7 +2008,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040064,
+    "timestamp": 1794788266610,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -1607,7 +2023,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040064,
+    "timestamp": 1794788266610,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -1622,7 +2038,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040064,
+    "timestamp": 1794788266611,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -1637,7 +2053,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040156,
+    "timestamp": 1794788266783,
     "url": "http://127.0.0.1:3099/favicon.ico",
     "method": "GET",
     "hasPostData": false,
@@ -1652,7 +2068,26 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040157,
+    "timestamp": 1794788266798,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=1p-R_iEY6bj0jY31",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788266798,
     "url": "http://127.0.0.1:3099/image-studio?_rsc=1p-R_iEY6bj0jY31",
     "method": "GET",
     "hasPostData": false,
@@ -1671,7 +2106,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040157,
+    "timestamp": 1794788266798,
     "url": "http://127.0.0.1:3099/application-studio?_rsc=1p-R_iEY6bj0jY31",
     "method": "GET",
     "hasPostData": false,
@@ -1690,7 +2125,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040157,
+    "timestamp": 1794788266798,
     "url": "http://127.0.0.1:3099/pdf-studio?_rsc=1p-R_iEY6bj0jY31",
     "method": "GET",
     "hasPostData": false,
@@ -1709,7 +2144,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040157,
+    "timestamp": 1794788266798,
     "url": "http://127.0.0.1:3099/extract-text?_rsc=1p-R_iEY6bj0jY31",
     "method": "GET",
     "hasPostData": false,
@@ -1728,7 +2163,37 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040179,
+    "timestamp": 1794788266831,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788266831,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788266833,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -1743,7 +2208,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040179,
+    "timestamp": 1794788266833,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -1758,8 +2223,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040180,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788266835,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1773,8 +2238,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040181,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788266837,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1788,22 +2253,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787040181,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
-    "method": "GET",
-    "hasPostData": false,
-    "postData": null,
-    "headers": {
-      "sec-ch-ua-platform": "\"Windows\"",
-      "Referer": "http://127.0.0.1:3099/",
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
-      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
-      "sec-ch-ua-mobile": "?0"
-    }
-  },
-  {
-    "browser": "Microsoft Edge",
-    "timestamp": 1794787040183,
+    "timestamp": 1794788266838,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -1818,7 +2268,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042025,
+    "timestamp": 1794788268611,
     "url": "http://127.0.0.1:3099/image-studio",
     "method": "GET",
     "hasPostData": false,
@@ -1833,8 +2283,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042106,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788268653,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -1844,7 +2294,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042117,
+    "timestamp": 1794788268655,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -1855,7 +2305,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042128,
+    "timestamp": 1794788268656,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -1866,7 +2316,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042139,
+    "timestamp": 1794788268658,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -1877,7 +2327,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042145,
+    "timestamp": 1794788268660,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -1888,7 +2338,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042151,
+    "timestamp": 1794788268661,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -1899,7 +2349,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042161,
+    "timestamp": 1794788268663,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -1910,7 +2360,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042166,
+    "timestamp": 1794788268664,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -1921,7 +2371,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042187,
+    "timestamp": 1794788268665,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -1932,7 +2382,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042306,
+    "timestamp": 1794788268724,
     "url": "http://127.0.0.1:3099/?_rsc=wPtELChM0vGf8aam",
     "method": "GET",
     "hasPostData": false,
@@ -1951,7 +2401,26 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042307,
+    "timestamp": 1794788268724,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=wPtELChM0vGf8aam",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/image-studio",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22image-studio%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/image-studio",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788268724,
     "url": "http://127.0.0.1:3099/application-studio?_rsc=wPtELChM0vGf8aam",
     "method": "GET",
     "hasPostData": false,
@@ -1970,7 +2439,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042308,
+    "timestamp": 1794788268724,
     "url": "http://127.0.0.1:3099/pdf-studio?_rsc=wPtELChM0vGf8aam",
     "method": "GET",
     "hasPostData": false,
@@ -1989,7 +2458,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042309,
+    "timestamp": 1794788268725,
     "url": "http://127.0.0.1:3099/extract-text?_rsc=wPtELChM0vGf8aam",
     "method": "GET",
     "hasPostData": false,
@@ -2008,8 +2477,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042451,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788268742,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2019,8 +2488,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042458,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788268743,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2030,8 +2499,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042513,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
+    "timestamp": 1794788268745,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2041,7 +2510,18 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787042538,
+    "timestamp": 1794788268746,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/image-studio"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788268751,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -2052,8 +2532,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787044105,
-    "url": "blob:http://127.0.0.1:3099/98df4c9d-3517-4d1c-959a-466ce492a25d",
+    "timestamp": 1794788270642,
+    "url": "blob:http://127.0.0.1:3099/9ca27fd0-5898-45b2-b21d-4d1997895b59",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2064,7 +2544,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787045320,
+    "timestamp": 1794788271848,
     "url": "http://127.0.0.1:3099/_next/static/chunks/332.cf0d413e41ce1398.js",
     "method": "GET",
     "hasPostData": false,
@@ -2075,8 +2555,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787045408,
-    "url": "blob:http://127.0.0.1:3099/ed031f87-8876-4675-9c7d-846757a7e0d8",
+    "timestamp": 1794788271877,
+    "url": "blob:http://127.0.0.1:3099/9b0ce551-6ce3-4842-be6d-7b117b54aa28",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2087,8 +2567,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787047126,
-    "url": "blob:http://127.0.0.1:3099/ed031f87-8876-4675-9c7d-846757a7e0d8",
+    "timestamp": 1794788273648,
+    "url": "blob:http://127.0.0.1:3099/9b0ce551-6ce3-4842-be6d-7b117b54aa28",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2099,8 +2579,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787047743,
-    "url": "blob:http://127.0.0.1:3099/2e11b885-8c05-4773-84a1-98359e5cdfd3",
+    "timestamp": 1794788274264,
+    "url": "blob:http://127.0.0.1:3099/c6292a76-5769-4650-807d-c32dd4e208bb",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2111,7 +2591,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787049379,
+    "timestamp": 1794788275864,
     "url": "http://127.0.0.1:3099/_next/static/chunks/332.cf0d413e41ce1398.js",
     "method": "GET",
     "hasPostData": false,
@@ -2122,8 +2602,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787049402,
-    "url": "blob:http://127.0.0.1:3099/f8e80049-9af0-41bc-99bc-f381d0ccb9d7",
+    "timestamp": 1794788275874,
+    "url": "blob:http://127.0.0.1:3099/2ec374dd-e4a5-435d-be2f-3e6bfd94beb2",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2134,8 +2614,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787050891,
-    "url": "blob:http://127.0.0.1:3099/f8e80049-9af0-41bc-99bc-f381d0ccb9d7",
+    "timestamp": 1794788277367,
+    "url": "blob:http://127.0.0.1:3099/2ec374dd-e4a5-435d-be2f-3e6bfd94beb2",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2146,8 +2626,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787051505,
-    "url": "blob:http://127.0.0.1:3099/45047f95-89b6-4a39-b23a-193ae62268c1",
+    "timestamp": 1794788277980,
+    "url": "blob:http://127.0.0.1:3099/ec44c001-8c6c-4f7c-8b50-0b1f8c04014b",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2158,8 +2638,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787053327,
-    "url": "blob:http://127.0.0.1:3099/38080bb6-6ba0-49e3-888e-c36b92674300",
+    "timestamp": 1794788279809,
+    "url": "blob:http://127.0.0.1:3099/28f76ad7-2ae1-4e94-935c-feb790a99519",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2170,7 +2650,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787054842,
+    "timestamp": 1794788281318,
     "url": "http://127.0.0.1:3099/_next/static/chunks/332.cf0d413e41ce1398.js",
     "method": "GET",
     "hasPostData": false,
@@ -2181,8 +2661,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787054889,
-    "url": "blob:http://127.0.0.1:3099/f785a610-583c-4131-8be1-a0765686f1ce",
+    "timestamp": 1794788281340,
+    "url": "blob:http://127.0.0.1:3099/4fd086d7-8425-4b1c-8679-7e3da44b1abb",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2193,8 +2673,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787056854,
-    "url": "blob:http://127.0.0.1:3099/f785a610-583c-4131-8be1-a0765686f1ce",
+    "timestamp": 1794788283318,
+    "url": "blob:http://127.0.0.1:3099/4fd086d7-8425-4b1c-8679-7e3da44b1abb",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2205,7 +2685,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058206,
+    "timestamp": 1794788284643,
     "url": "http://127.0.0.1:3099/pdf-studio",
     "method": "GET",
     "hasPostData": false,
@@ -2220,8 +2700,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058250,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788284665,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2231,7 +2711,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058251,
+    "timestamp": 1794788284665,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -2242,7 +2722,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058252,
+    "timestamp": 1794788284666,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -2253,7 +2733,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058254,
+    "timestamp": 1794788284667,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -2264,7 +2744,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058255,
+    "timestamp": 1794788284668,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -2275,7 +2755,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058256,
+    "timestamp": 1794788284669,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -2286,7 +2766,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058257,
+    "timestamp": 1794788284670,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -2297,8 +2777,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058258,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788284670,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2308,8 +2788,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058259,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
+    "timestamp": 1794788284671,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2319,7 +2799,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058278,
+    "timestamp": 1794788284688,
     "url": "http://127.0.0.1:3099/?_rsc=IKwbyBVuAKHvFDOw",
     "method": "GET",
     "hasPostData": false,
@@ -2338,7 +2818,26 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058278,
+    "timestamp": 1794788284688,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=IKwbyBVuAKHvFDOw",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/pdf-studio",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22pdf-studio%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/pdf-studio",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788284689,
     "url": "http://127.0.0.1:3099/image-studio?_rsc=IKwbyBVuAKHvFDOw",
     "method": "GET",
     "hasPostData": false,
@@ -2357,7 +2856,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058279,
+    "timestamp": 1794788284689,
     "url": "http://127.0.0.1:3099/application-studio?_rsc=IKwbyBVuAKHvFDOw",
     "method": "GET",
     "hasPostData": false,
@@ -2376,7 +2875,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058279,
+    "timestamp": 1794788284689,
     "url": "http://127.0.0.1:3099/extract-text?_rsc=IKwbyBVuAKHvFDOw",
     "method": "GET",
     "hasPostData": false,
@@ -2395,7 +2894,18 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058302,
+    "timestamp": 1794788284708,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/pdf-studio"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788284710,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -2406,7 +2916,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058303,
+    "timestamp": 1794788284711,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -2417,8 +2927,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058304,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788284715,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2428,7 +2938,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787058305,
+    "timestamp": 1794788284716,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -2439,7 +2949,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069262,
+    "timestamp": 1794788295649,
     "url": "http://127.0.0.1:3099/extract-text",
     "method": "GET",
     "hasPostData": false,
@@ -2454,8 +2964,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069301,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788295676,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2465,7 +2975,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069303,
+    "timestamp": 1794788295677,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -2476,7 +2986,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069305,
+    "timestamp": 1794788295678,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -2487,7 +2997,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069306,
+    "timestamp": 1794788295679,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -2498,7 +3008,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069308,
+    "timestamp": 1794788295680,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -2509,7 +3019,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069310,
+    "timestamp": 1794788295681,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -2520,7 +3030,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069312,
+    "timestamp": 1794788295681,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -2531,7 +3041,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069313,
+    "timestamp": 1794788295682,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -2542,7 +3052,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069335,
+    "timestamp": 1794788295693,
     "url": "http://127.0.0.1:3099/?_rsc=PN45Ay0hEfWR4FB0",
     "method": "GET",
     "hasPostData": false,
@@ -2561,7 +3071,26 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069335,
+    "timestamp": 1794788295693,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=PN45Ay0hEfWR4FB0",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/extract-text",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22extract-text%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/extract-text",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788295693,
     "url": "http://127.0.0.1:3099/image-studio?_rsc=PN45Ay0hEfWR4FB0",
     "method": "GET",
     "hasPostData": false,
@@ -2580,7 +3109,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069336,
+    "timestamp": 1794788295694,
     "url": "http://127.0.0.1:3099/application-studio?_rsc=PN45Ay0hEfWR4FB0",
     "method": "GET",
     "hasPostData": false,
@@ -2599,7 +3128,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069336,
+    "timestamp": 1794788295694,
     "url": "http://127.0.0.1:3099/pdf-studio?_rsc=PN45Ay0hEfWR4FB0",
     "method": "GET",
     "hasPostData": false,
@@ -2618,7 +3147,29 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069343,
+    "timestamp": 1794788295713,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/extract-text"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788295715,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/extract-text"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788295718,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -2629,7 +3180,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069344,
+    "timestamp": 1794788295719,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -2640,8 +3191,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069346,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788295720,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2651,8 +3202,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069348,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788295721,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2662,18 +3213,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787069349,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
-    "method": "GET",
-    "hasPostData": false,
-    "postData": null,
-    "headers": {
-      "Referer": "http://127.0.0.1:3099/extract-text"
-    }
-  },
-  {
-    "browser": "Microsoft Edge",
-    "timestamp": 1794787071292,
+    "timestamp": 1794788297680,
     "url": "http://127.0.0.1:3099/_next/static/chunks/9b0008ae.fbfc1fbd7008cf82.js",
     "method": "GET",
     "hasPostData": false,
@@ -2688,7 +3228,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787071292,
+    "timestamp": 1794788297680,
     "url": "http://127.0.0.1:3099/_next/static/chunks/376.978318a47fc25c90.js",
     "method": "GET",
     "hasPostData": false,
@@ -2703,8 +3243,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787071349,
-    "url": "blob:http://127.0.0.1:3099/971adea1-f370-4115-96ef-aeab237db635",
+    "timestamp": 1794788297736,
+    "url": "blob:http://127.0.0.1:3099/3c3a5563-1108-4eb8-9ca0-63f02631ba0b",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2714,7 +3254,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072826,
+    "timestamp": 1794788299216,
     "url": "http://127.0.0.1:3099/application-studio",
     "method": "GET",
     "hasPostData": false,
@@ -2729,8 +3269,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072855,
-    "url": "http://127.0.0.1:3099/_next/static/css/370c329b82913dde.css",
+    "timestamp": 1794788299243,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2740,7 +3280,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072856,
+    "timestamp": 1794788299244,
     "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
     "method": "GET",
     "hasPostData": false,
@@ -2751,7 +3291,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072857,
+    "timestamp": 1794788299246,
     "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
     "method": "GET",
     "hasPostData": false,
@@ -2762,7 +3302,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072858,
+    "timestamp": 1794788299247,
     "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
     "method": "GET",
     "hasPostData": false,
@@ -2773,7 +3313,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072859,
+    "timestamp": 1794788299248,
     "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
     "method": "GET",
     "hasPostData": false,
@@ -2784,7 +3324,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072859,
+    "timestamp": 1794788299249,
     "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
     "method": "GET",
     "hasPostData": false,
@@ -2795,7 +3335,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072860,
+    "timestamp": 1794788299250,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
     "method": "GET",
     "hasPostData": false,
@@ -2806,7 +3346,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072861,
+    "timestamp": 1794788299250,
     "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
     "method": "GET",
     "hasPostData": false,
@@ -2817,8 +3357,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072861,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-8f140fb146ee6341.js",
+    "timestamp": 1794788299251,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2828,7 +3368,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072877,
+    "timestamp": 1794788299264,
     "url": "http://127.0.0.1:3099/?_rsc=udiMaTZlh-qNX4i6",
     "method": "GET",
     "hasPostData": false,
@@ -2847,7 +3387,26 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072877,
+    "timestamp": 1794788299264,
+    "url": "http://127.0.0.1:3099/convert-files?_rsc=udiMaTZlh-qNX4i6",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/application-studio",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22application-studio%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/application-studio",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788299264,
     "url": "http://127.0.0.1:3099/image-studio?_rsc=udiMaTZlh-qNX4i6",
     "method": "GET",
     "hasPostData": false,
@@ -2866,7 +3425,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072878,
+    "timestamp": 1794788299264,
     "url": "http://127.0.0.1:3099/pdf-studio?_rsc=udiMaTZlh-qNX4i6",
     "method": "GET",
     "hasPostData": false,
@@ -2885,7 +3444,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072878,
+    "timestamp": 1794788299264,
     "url": "http://127.0.0.1:3099/extract-text?_rsc=udiMaTZlh-qNX4i6",
     "method": "GET",
     "hasPostData": false,
@@ -2904,7 +3463,29 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072891,
+    "timestamp": 1794788299283,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/application-studio"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788299285,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/application-studio"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788299287,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
     "method": "GET",
     "hasPostData": false,
@@ -2915,8 +3496,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072892,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/348-ec72158957a6762a.js",
+    "timestamp": 1794788299289,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2926,18 +3507,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787072892,
-    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-3419dc713c4c5508.js",
-    "method": "GET",
-    "hasPostData": false,
-    "postData": null,
-    "headers": {
-      "Referer": "http://127.0.0.1:3099/application-studio"
-    }
-  },
-  {
-    "browser": "Microsoft Edge",
-    "timestamp": 1794787072894,
+    "timestamp": 1794788299291,
     "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
     "method": "GET",
     "hasPostData": false,
@@ -2948,8 +3518,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787075242,
-    "url": "blob:http://127.0.0.1:3099/cd108a22-328b-4b11-bf21-757271b80994",
+    "timestamp": 1794788301644,
+    "url": "blob:http://127.0.0.1:3099/4572172c-e43a-408a-ad2f-18e94f593a6a",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2960,7 +3530,7 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787076248,
+    "timestamp": 1794788302662,
     "url": "http://127.0.0.1:3099/_next/static/chunks/332.cf0d413e41ce1398.js",
     "method": "GET",
     "hasPostData": false,
@@ -2971,8 +3541,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787076307,
-    "url": "blob:http://127.0.0.1:3099/b75bc21c-7903-4278-ae6a-86740d558e14",
+    "timestamp": 1794788302706,
+    "url": "blob:http://127.0.0.1:3099/9a70323d-47be-443f-aeae-619af50bc7c2",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2983,8 +3553,8 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787076747,
-    "url": "blob:http://127.0.0.1:3099/b75bc21c-7903-4278-ae6a-86740d558e14",
+    "timestamp": 1794788303163,
+    "url": "blob:http://127.0.0.1:3099/9a70323d-47be-443f-aeae-619af50bc7c2",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
@@ -2995,14 +3565,302 @@
   },
   {
     "browser": "Microsoft Edge",
-    "timestamp": 1794787077254,
-    "url": "blob:http://127.0.0.1:3099/17424e1e-5bc7-48ea-ad6c-380fba4b60fd",
+    "timestamp": 1794788303678,
+    "url": "blob:http://127.0.0.1:3099/399c2097-458f-4374-93de-6838a7f30419",
     "method": "GET",
     "hasPostData": false,
     "postData": null,
     "headers": {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
       "Referer": "http://127.0.0.1:3099/application-studio"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304903,
+    "url": "http://127.0.0.1:3099/convert-files",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Upgrade-Insecure-Requests": "1",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": "\"Windows\""
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304928,
+    "url": "http://127.0.0.1:3099/_next/static/css/4138875434914cb6.css",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304930,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/webpack-8bfa7c35b79682ff.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304932,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304933,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/255-73938ce8a8eac1ad.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304934,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/main-app-84a2b071d1f2fcdb.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304935,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/619-ba102abea3e3d0e4.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304936,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/page-2164da706728ec3c.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304937,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/23-1dab5e1b0b9410c6.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304937,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/convert-files/page-839af930e7dad2b5.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304957,
+    "url": "http://127.0.0.1:3099/?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304957,
+    "url": "http://127.0.0.1:3099/image-studio?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304957,
+    "url": "http://127.0.0.1:3099/application-studio?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304957,
+    "url": "http://127.0.0.1:3099/pdf-studio?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304957,
+    "url": "http://127.0.0.1:3099/extract-text?_rsc=xHeeTO6llxTU45nF",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Windows\"",
+      "Referer": "http://127.0.0.1:3099/convert-files",
+      "sec-ch-ua": "\"Not-A.Brand\";v=\"99\", \"Microsoft Edge\";v=\"157\", \"Chromium\";v=\"157\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22convert-files%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/convert-files",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304970,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/713-b013c9981fc42042.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304972,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/image-studio/page-15308e592a87b3ac.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304973,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/application-studio/page-bf06588c9ecad79e.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304974,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/pdf-studio/page-cf28006261e0ccaa.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788304975,
+    "url": "http://127.0.0.1:3099/_next/static/chunks/app/extract-text/page-462a9d5b51653249.js",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788308545,
+    "url": "blob:http://127.0.0.1:3099/2e29260b-abc5-4b7a-bc73-8fdea35d7d18",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
+      "Referer": "http://127.0.0.1:3099/convert-files"
+    }
+  },
+  {
+    "browser": "Microsoft Edge",
+    "timestamp": 1794788310772,
+    "url": "blob:http://127.0.0.1:3099/35c56135-a01b-4806-95c5-e23ce5643d1f",
+    "method": "GET",
+    "hasPostData": false,
+    "postData": null,
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
+      "Referer": "http://127.0.0.1:3099/convert-files"
     }
   }
 ]

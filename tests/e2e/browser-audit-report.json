@@ -19,7 +19,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1811,
+            "latencyMs": 1810,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -95,11 +95,28 @@
         }
       },
       {
+        "name": "Conversion Hub (Format Detection, Options, PNG-to-JPEG White Fill, JPEG-to-PDF, Magic Byte Verification)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "hasHubHeader": true,
+          "hasRegistryTable": true,
+          "hasJpegOption": true,
+          "hasPdfOption": true,
+          "pngToJpgDone": true,
+          "isJpegHeader": true,
+          "jpgSize": 822,
+          "jpgToPdfDone": true,
+          "isPdfHeader": true,
+          "pdfSize": 1121
+        }
+      },
+      {
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 114,
-          "localStaticRequests": 97,
+          "totalRequests": 144,
+          "localStaticRequests": 127,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
@@ -107,8 +124,8 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 114,
-      "localStaticRequests": 97,
+      "totalRequests": 144,
+      "localStaticRequests": 127,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
       "payloadLeakingRequestsCount": 0
@@ -134,7 +151,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1809,
+            "latencyMs": 1802,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -210,11 +227,28 @@
         }
       },
       {
+        "name": "Conversion Hub (Format Detection, Options, PNG-to-JPEG White Fill, JPEG-to-PDF, Magic Byte Verification)",
+        "status": "PASS",
+        "details": {
+          "success": true,
+          "hasHubHeader": true,
+          "hasRegistryTable": true,
+          "hasJpegOption": true,
+          "hasPdfOption": true,
+          "pngToJpgDone": true,
+          "isJpegHeader": true,
+          "jpgSize": 822,
+          "jpgToPdfDone": true,
+          "isPdfHeader": true,
+          "pdfSize": 1121
+        }
+      },
+      {
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 112,
-          "localStaticRequests": 97,
+          "totalRequests": 144,
+          "localStaticRequests": 127,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
@@ -222,8 +256,8 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 112,
-      "localStaticRequests": 97,
+      "totalRequests": 144,
+      "localStaticRequests": 127,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
       "payloadLeakingRequestsCount": 0

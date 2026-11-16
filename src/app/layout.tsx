@@ -22,6 +22,7 @@ export default function RootLayout({
               <span>FileFix</span>
             </Link>
             <nav className="flex items-center gap-4 text-sm font-medium text-slate-600">
+              <Link href="/convert-files" className="hover:text-blue-600 transition-colors">Convert Files</Link>
               <Link href="/image-studio" className="hover:text-blue-600 transition-colors">Image Studio</Link>
               <Link href="/application-studio" className="hover:text-blue-600 transition-colors">Application Studio</Link>
               <Link href="/pdf-studio" className="hover:text-blue-600 transition-colors">PDF Studio</Link>
