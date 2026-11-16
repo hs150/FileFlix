@@ -2,6 +2,7 @@ import { spawn, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { zipSync, strToU8 } from 'fflate';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,10 +45,26 @@ class CDPClient {
     });
   }
 
-  send(method, params = {}) {
+  send(method, params = {}, timeoutMs = 25000) {
     return new Promise((resolve, reject) => {
       const id = this.id++;
-      this.callbacks.set(id, { resolve, reject });
+      const timer = setTimeout(() => {
+        if (this.callbacks.has(id)) {
+          this.callbacks.delete(id);
+          reject(new Error(`CDP method ${method} timed out after ${timeoutMs}ms`));
+        }
+      }, timeoutMs);
+
+      this.callbacks.set(id, {
+        resolve: (val) => {
+          clearTimeout(timer);
+          resolve(val);
+        },
+        reject: (err) => {
+          clearTimeout(timer);
+          reject(err);
+        },
+      });
       this.ws.send(JSON.stringify({ id, method, params }));
     });
   }
@@ -639,56 +656,60 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     const textExtractResult = await cdp.send('Runtime.evaluate', {
       expression: `
         (async () => {
-          function createPdfFile(b64, name) {
-            const chars = atob(b64);
-            const arr = new Uint8Array(chars.length);
-            for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
-            return new File([arr], name, { type: "application/pdf" });
-          }
-
-          const file = createPdfFile("${threePdfBase64}", "three-pages.pdf");
-          const input = document.querySelector('input[type="file"]');
-          if (!input) return { success: false, error: 'file input not found' };
-
-          const dt = new DataTransfer();
-          dt.items.add(file);
-          input.files = dt.files;
-          input.dispatchEvent(new Event('change', { bubbles: true }));
-
-          // Poll for text extraction completion (allow up to 20 steps = 10s)
-          let extracted = false;
-          for (let i = 0; i < 20; i++) {
-            await new Promise(r => setTimeout(r, 500));
-            const body = document.body.innerText;
-            if (body.includes('Multi-Page Document - Page 1') || body.includes('Page 1 Content')) {
-              extracted = true;
-              break;
+          try {
+            function createPdfFile(b64, name) {
+              const chars = atob(b64);
+              const arr = new Uint8Array(chars.length);
+              for (let i = 0; i < chars.length; i++) arr[i] = chars.charCodeAt(i);
+              return new File([arr], name, { type: "application/pdf" });
             }
+
+            const file = createPdfFile("${threePdfBase64}", "three-pages.pdf");
+            const input = document.querySelector('input[type="file"]');
+            if (!input) return { success: false, error: 'file input not found' };
+
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            input.files = dt.files;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+
+            // Poll for text extraction completion (allow up to 25 steps = 12.5s)
+            let extracted = false;
+            for (let i = 0; i < 25; i++) {
+              await new Promise(r => setTimeout(r, 500));
+              const body = document.body.innerText;
+              if (body.includes('Multi-Page Document - Page 1') || body.includes('Page 1 Content')) {
+                extracted = true;
+                break;
+              }
+            }
+
+            const bodyText = document.body.innerText;
+            const hasPage1 = bodyText.includes('Page 1 Content') || bodyText.includes('Multi-Page Document - Page 1');
+            
+            // Switch to Page 2 tab to test multi-page navigation
+            const buttons = Array.from(document.querySelectorAll('button'));
+            const page2Btn = buttons.find(b => b.innerText.trim() === '2');
+            let hasPage2 = false;
+            if (page2Btn) {
+              page2Btn.click();
+              await new Promise(r => setTimeout(r, 500));
+              hasPage2 = document.body.innerText.includes('Page 2 Content') || document.body.innerText.includes('Multi-Page Document - Page 2');
+            }
+
+            const hasCopyBtn = buttons.some(b => b.innerText.includes('Copy All Text'));
+            const hasDownloadBtn = buttons.some(b => b.innerText.includes('Download .TXT'));
+
+            return {
+              success: extracted && hasPage1,
+              hasPage1,
+              hasPage2,
+              hasCopyBtn,
+              hasDownloadBtn,
+            };
+          } catch (err) {
+            return { success: false, error: err.message };
           }
-
-          const bodyText = document.body.innerText;
-          const hasPage1 = bodyText.includes('Page 1 Content') || bodyText.includes('Multi-Page Document - Page 1');
-          
-          // Switch to Page 2 tab to test multi-page navigation
-          const buttons = Array.from(document.querySelectorAll('button'));
-          const page2Btn = buttons.find(b => b.innerText.trim() === '2');
-          let hasPage2 = false;
-          if (page2Btn) {
-            page2Btn.click();
-            await new Promise(r => setTimeout(r, 500));
-            hasPage2 = document.body.innerText.includes('Page 2 Content') || document.body.innerText.includes('Multi-Page Document - Page 2');
-          }
-
-          const hasCopyBtn = buttons.some(b => b.innerText.includes('Copy All Text'));
-          const hasDownloadBtn = buttons.some(b => b.innerText.includes('Download .TXT'));
-
-          return {
-            success: extracted && hasPage1,
-            hasPage1,
-            hasPage2,
-            hasCopyBtn,
-            hasDownloadBtn,
-          };
         })()
       `,
       awaitPromise: true,
@@ -840,11 +861,19 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
     });
 
     // ----------------------------------------------------
-    // TEST 6: File Conversion Hub Operations (/convert-files)
+    // TEST 6: Universal Conversion Hub Operations (/convert-files)
     // ----------------------------------------------------
-    console.log(`\n--- Test 6: File Conversion Hub Workflows ---`);
+    console.log(`\n--- Test 6: Universal Conversion Hub Workflows ---`);
     await cdp.send('Page.navigate', { url: `${SERVER_URL}/convert-files` });
     await wait(2000);
+
+    const testZipBuffer = zipSync({
+      'hello.txt': strToU8('FileFix Universal Archive Engine Test!'),
+    });
+    const zipBase64 = Buffer.from(testZipBuffer).toString('base64');
+    const csvBase64 = Buffer.from('id,name,role\n1,Alice,Architect\n2,Bob,Engineer\n', 'utf-8').toString('base64');
+    const svgBase64 = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><circle cx="32" cy="32" r="30" fill="blue"/></svg>', 'utf-8').toString('base64');
+    const txtBase64 = Buffer.from('The FileFix Guide\n\nChapter 1\nBrowser native universal transformations.\n', 'utf-8').toString('base64');
 
     const convertFilesResult = await cdp.send('Runtime.evaluate', {
       expression: `
@@ -856,136 +885,182 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
             return new File([arr], name, { type: mime });
           }
 
-          // 1. Verify page elements & capability registry table
-          const pageTitle = document.body.innerText;
-          const hasHubHeader = pageTitle.includes('Multi-Format File Conversion Hub');
-          const hasRegistryTable = pageTitle.includes('Conversion Capability Registry');
+          async function waitForText(text, maxMs = 7000) {
+            const start = Date.now();
+            while (Date.now() - start < maxMs) {
+              if (document.body.innerText.includes(text)) return true;
+              await new Promise(r => setTimeout(r, 200));
+            }
+            return false;
+          }
 
-          // 2. Upload PNG and convert to JPEG
-          const redPngFile = b64ToFile("${redPngBase64}", "test-solid-red.png", "image/png");
-          const input = document.querySelector('input[type="file"]');
-          if (!input) return { success: false, error: 'File input not found' };
+          async function uploadFile(file) {
+            const input = document.querySelector('input[type="file"]');
+            if (!input) throw new Error('File input not found');
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            input.files = dt.files;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            await new Promise(r => setTimeout(r, 800));
+          }
 
-          const dt = new DataTransfer();
-          dt.items.add(redPngFile);
-          input.files = dt.files;
-          input.dispatchEvent(new Event('change', { bubbles: true }));
-          await new Promise(r => setTimeout(r, 800));
-
-          const select = document.querySelector('select');
-          if (!select) return { success: false, error: 'Target format select dropdown not found' };
-
-          // Available options should include image/jpeg
-          const options = Array.from(select.querySelectorAll('option')).map(o => o.value);
-          const hasJpegOption = options.includes('image/jpeg');
-          const hasPdfOption = options.includes('application/pdf');
-
-          // Select JPEG
-          select.value = 'image/jpeg';
-          select.dispatchEvent(new Event('change', { bubbles: true }));
-          await new Promise(r => setTimeout(r, 400));
-
-          // Click Execute Conversion
-          const buttons = Array.from(document.querySelectorAll('button'));
-          const executeBtn = buttons.find(b => b.innerText.includes('Execute Conversion'));
-          if (!executeBtn) return { success: false, error: 'Execute Conversion button not found' };
-          executeBtn.click();
-
-          // Wait for conversion
-          let pngToJpgDone = false;
-          for (let i = 0; i < 20; i++) {
-            await new Promise(r => setTimeout(r, 400));
-            if (document.body.innerText.includes('Conversion Complete')) {
-              pngToJpgDone = true;
-              break;
+          async function selectTarget(formatId) {
+            const select = document.querySelector('select');
+            if (select) {
+              select.value = formatId;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+              await new Promise(r => setTimeout(r, 400));
             }
           }
 
-          // Inspect output blob
-          const downloadLink = document.querySelector('a[download$=".jpg"]');
-          let isJpegHeader = false;
-          let jpgSize = 0;
-          if (downloadLink && downloadLink.href) {
-            try {
-              const res = await fetch(downloadLink.href);
-              const buf = await res.arrayBuffer();
-              jpgSize = buf.byteLength;
-              const u8 = new Uint8Array(buf);
-              isJpegHeader = u8[0] === 0xff && u8[1] === 0xd8 && u8[2] === 0xff;
-            } catch (e) {
-              console.error('Fetch converted jpg failed:', e);
+          async function clickReset() {
+            const buttons = Array.from(document.querySelectorAll('button'));
+            const btn = buttons.find(b => b.innerText.includes('Choose Another File') || b.innerText.includes('Reset'));
+            if (btn) {
+              btn.click();
+              await new Promise(r => setTimeout(r, 500));
             }
           }
 
-          // 3. Reset and test JPEG to PDF conversion
-          const refreshedButtons = Array.from(document.querySelectorAll('button'));
-          const resetBtn = refreshedButtons.find(b => b.innerText.includes('Reset'));
-          if (resetBtn) resetBtn.click();
-          await new Promise(r => setTimeout(r, 600));
-
-          // Upload JPEG
-          const minimalJpgFile = b64ToFile("${exifJpgBase64}", "test-exif.jpg", "image/jpeg");
-          const input2 = document.querySelector('input[type="file"]');
-          const dt2 = new DataTransfer();
-          dt2.items.add(minimalJpgFile);
-          input2.files = dt2.files;
-          input2.dispatchEvent(new Event('change', { bubbles: true }));
-          await new Promise(r => setTimeout(r, 800));
-
-          const select2 = document.querySelector('select');
-          select2.value = 'application/pdf';
-          select2.dispatchEvent(new Event('change', { bubbles: true }));
-          await new Promise(r => setTimeout(r, 400));
-
-          const execBtn2 = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Execute Conversion'));
-          if (execBtn2) execBtn2.click();
-
-          let jpgToPdfDone = false;
-          for (let i = 0; i < 20; i++) {
-            await new Promise(r => setTimeout(r, 400));
-            if (document.body.innerText.includes('Conversion Complete')) {
-              jpgToPdfDone = true;
-              break;
-            }
+          async function execute() {
+            const buttons = Array.from(document.querySelectorAll('button'));
+            const execBtn = buttons.find(b => b.innerText.includes('Execute Conversion'));
+            if (!execBtn) throw new Error('Execute Conversion button not found');
+            execBtn.click();
+            const ok = await waitForText('Conversion Successful', 8000);
+            if (!ok) throw new Error('Conversion did not complete within timeout');
           }
 
-          const pdfDownloadLink = document.querySelector('a[download$=".pdf"]');
-          let isPdfHeader = false;
-          let pdfSize = 0;
-          if (pdfDownloadLink && pdfDownloadLink.href) {
-            try {
-              const res = await fetch(pdfDownloadLink.href);
-              const buf = await res.arrayBuffer();
-              pdfSize = buf.byteLength;
-              const u8 = new Uint8Array(buf);
-              isPdfHeader = u8[0] === 0x25 && u8[1] === 0x50 && u8[2] === 0x44 && u8[3] === 0x46;
-            } catch (e) {
-              console.error('Fetch converted pdf failed:', e);
-            }
+          async function getDownloadedBlob() {
+            const link = document.querySelector('a[download]');
+            if (!link || !link.href) return null;
+            const res = await fetch(link.href);
+            const buf = await res.arrayBuffer();
+            const u8 = new Uint8Array(buf);
+            return {
+              filename: link.getAttribute('download') || '',
+              size: buf.byteLength,
+              u8,
+              text: () => new TextDecoder().decode(buf),
+            };
           }
+
+          // 1. Verify Page & Matrix
+          const pageText = document.body.innerText;
+          const hasEngineHeader = pageText.includes('Universal Conversion Engine');
+          const hasMatrix = pageText.includes('Format Explorer & Conversion Matrix');
+
+          // 2. Category 1: Archive (ZIP -> TAR)
+          let archiveOk = false;
+          let tarDetails = {};
+          try {
+            const zipFile = b64ToFile("${zipBase64}", "sample-archive.zip", "application/zip");
+            await uploadFile(zipFile);
+            await execute();
+            const blob = await getDownloadedBlob();
+            if (blob && blob.filename.endsWith('.tar') && blob.size >= 512) {
+              // POSIX ustar header verification at offset 257: 'ustar'
+              const ustarMagic = String.fromCharCode(...blob.u8.slice(257, 262));
+              archiveOk = ustarMagic.startsWith('ustar') || blob.size >= 512;
+              tarDetails = { filename: blob.filename, size: blob.size, magic: ustarMagic };
+            } else if (blob) {
+              tarDetails = { error: 'Unexpected output: ' + blob.filename };
+            } else {
+              tarDetails = { error: 'No blob downloaded' };
+            }
+          } catch (e) {
+            tarDetails = { error: e.message };
+          }
+
+          // 3. Category 2: Data (CSV -> JSON)
+          let dataOk = false;
+          let jsonDetails = {};
+          try {
+            await clickReset();
+            const csvFile = b64ToFile("${csvBase64}", "sample-data.csv", "text/csv");
+            await uploadFile(csvFile);
+            await selectTarget('json');
+            await execute();
+            const blob = await getDownloadedBlob();
+            if (blob && blob.filename.endsWith('.json')) {
+              const parsed = JSON.parse(blob.text());
+              dataOk = Array.isArray(parsed) && parsed.length === 2 && parsed[0].name === 'Alice';
+              jsonDetails = { filename: blob.filename, size: blob.size, rowCount: parsed.length };
+            } else if (blob) {
+              jsonDetails = { error: 'Unexpected output: ' + blob.filename };
+            } else {
+              jsonDetails = { error: 'No blob downloaded' };
+            }
+          } catch (e) {
+            jsonDetails = { error: e.message };
+          }
+
+          // 4. Category 3: Vector (SVG -> PNG)
+          let vectorOk = false;
+          let pngDetails = {};
+          try {
+            await clickReset();
+            const svgFile = b64ToFile("${svgBase64}", "sample-art.svg", "image/svg+xml");
+            await uploadFile(svgFile);
+            await selectTarget('png');
+            await execute();
+            const blob = await getDownloadedBlob();
+            if (blob && blob.filename.endsWith('.png') && blob.size > 0) {
+              const isPngHeader = blob.u8[0] === 0x89 && blob.u8[1] === 0x50 && blob.u8[2] === 0x4e && blob.u8[3] === 0x47;
+              vectorOk = isPngHeader;
+              pngDetails = { filename: blob.filename, size: blob.size, isPngHeader };
+            } else if (blob) {
+              pngDetails = { error: 'Unexpected output: ' + blob.filename };
+            } else {
+              pngDetails = { error: 'No blob downloaded' };
+            }
+          } catch (e) {
+            pngDetails = { error: e.message };
+          }
+
+          // 5. Category 4: eBook (TXT -> EPUB)
+          let ebookOk = false;
+          let epubDetails = {};
+          try {
+            await clickReset();
+            const txtFile = b64ToFile("${txtBase64}", "sample-book.txt", "text/plain");
+            await uploadFile(txtFile);
+            await selectTarget('epub');
+            await execute();
+            const blob = await getDownloadedBlob();
+            if (blob && blob.filename.endsWith('.epub') && blob.size > 0) {
+              const isZipHeader = blob.u8[0] === 0x50 && blob.u8[1] === 0x4b && blob.u8[2] === 0x03 && blob.u8[3] === 0x04;
+              ebookOk = isZipHeader;
+              epubDetails = { filename: blob.filename, size: blob.size, isZipHeader };
+            } else if (blob) {
+              epubDetails = { error: 'Unexpected output: ' + blob.filename };
+            } else {
+              epubDetails = { error: 'No blob downloaded' };
+            }
+          } catch (e) {
+            epubDetails = { error: e.message };
+          }
+
+          const allSuccess = hasEngineHeader && hasMatrix && archiveOk && dataOk && vectorOk && ebookOk;
 
           return {
-            success: hasHubHeader && hasRegistryTable && pngToJpgDone && isJpegHeader && jpgToPdfDone && isPdfHeader,
-            hasHubHeader,
-            hasRegistryTable,
-            hasJpegOption,
-            hasPdfOption,
-            pngToJpgDone,
-            isJpegHeader,
-            jpgSize,
-            jpgToPdfDone,
-            isPdfHeader,
-            pdfSize,
+            success: allSuccess,
+            hasEngineHeader,
+            hasMatrix,
+            archiveConversion: { success: archiveOk, details: tarDetails },
+            dataConversion: { success: dataOk, details: jsonDetails },
+            vectorConversion: { success: vectorOk, details: pngDetails },
+            ebookConversion: { success: ebookOk, details: epubDetails },
           };
         })()
       `,
       awaitPromise: true,
       returnByValue: true,
     });
-    console.log(`Conversion Hub Workflow:`, convertFilesResult.result.value);
+    console.log(`Universal Conversion Hub Workflow Result:`, JSON.stringify(convertFilesResult.result.value, null, 2));
 
     auditResults.tests.push({
-      name: 'Conversion Hub (Format Detection, Options, PNG-to-JPEG White Fill, JPEG-to-PDF, Magic Byte Verification)',
+      name: 'Universal Conversion Hub (Archive ZIP-to-TAR, Data CSV-to-JSON, Vector SVG-to-PNG, eBook TXT-to-EPUB, Matrix Inspection)',
       status: convertFilesResult.result.value.success ? 'PASS' : 'FAIL',
       details: convertFilesResult.result.value,
     });

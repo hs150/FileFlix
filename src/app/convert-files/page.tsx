@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import ConvertFilesView from '@/features/converter/components/ConvertFilesView';
+import ConverterWorkspace from '@/features/conversion-engine/components/ConverterWorkspace';
 
 export const metadata: Metadata = {
-  title: 'Convert Files — 100% In-Browser Multi-Format File Converter | FileFix',
+  title: 'Universal File Converter — 100% In-Browser File Conversion Engine | FileFix',
   description:
-    'Convert JPEG, PNG, WebP, and PDF documents completely locally in your browser memory. Zero file uploads, zero server retention, zero tracking.',
+    'Convert Archives, Spreadsheets, Data files, Vector Graphics, eBooks, Images, and PDFs completely locally inside your browser memory. Zero file uploads, zero server tracking.',
 };
 
 export default function ConvertFilesPage() {
-  return <ConvertFilesView />;
+  return <ConverterWorkspace />;
 }

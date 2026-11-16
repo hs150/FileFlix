@@ -9,7 +9,7 @@
 
 Unlike traditional file conversion utilities that upload private documents to remote cloud servers, **FileFix performs 100% of its computation directly inside the user's browser sandbox**:
 - **Zero Server Uploads**: No file bytes, document streams, or extracted text ever leave your device.
-- **Client-Side Validation**: Magic-byte content signature validation verifies authentic file headers, preventing extension spoofing.
+- **Client-Side Validation**: Multi-stage magic-byte and syntax validation verifies authentic file headers, preventing extension spoofing.
 - **Resource Discipline**: Automatic in-memory buffer cleanup and `URL.revokeObjectURL` handlers prevent memory leaks during repeated usage.
 - **No Paywalls or Accounts**: Direct access to high-intent tools without authentication or subscription gates.
 
@@ -17,13 +17,28 @@ Unlike traditional file conversion utilities that upload private documents to re
 
 ## 🛠 Implemented Studios & Utilities
 
-### 1. Multi-Format File Conversion Hub (`/convert-files`) — Live
-* **Conversion Capability Registry**: Centralized, verified registry defining input/output MIME, engines, lossiness, transparency handling, and limits. Never claims universal any-to-any; never merely renames file extensions.
-* **Image Conversions**: Bidirectional conversions between JPEG, PNG, and WebP via Canvas 2D and Web Workers.
-* **Transparency Flattening**: Solid white background fill (`#ffffff`) when converting transparent PNG/WebP images to JPEG, with explicit user warnings.
-* **Images to PDF**: Single and batch multi-image to PDF generation (`pdf-lib`) supporting A4, Letter, and Fit-to-Image dimensions, portrait/landscape orientation, and configurable margins.
-* **PDF to Images**: High-resolution page rendering to JPEG/PNG (`pdfjs-dist`) at 1x or 2x scale, with page selection and individual or bundled ZIP archive export.
-* **Zero-Dependency ZIP Packaging**: Pure TypeScript PKWARE Store-method ZIP archive generator (`src/lib/zip/zip-writer.ts`) with IEEE 802.3 CRC-32 checksums.
+### 1. Universal File Conversion Hub (`/convert-files`) — Live
+A unified, extensible client-side conversion engine governed by a single capability registry with multi-stage format detection and container disambiguation (distinguishing ZIP, EPUB, XLSX, and CBZ containers).
+* **Category 1: Archive Converters (P0 Implemented)**:
+  * Bidirectional transformations between **ZIP**, **TAR**, **GZIP**, and **TAR.GZ**.
+  * Pure TypeScript POSIX ustar TAR creation and extraction engine.
+  * Comprehensive security guards: Zip Slip path traversal defense (`../`, absolute paths, Windows reserved device names `CON`, `NUL`, `PRN`) and decompression bomb limits (`MAX_ENTRIES = 1000`, `MAX_TOTAL_EXPANDED_BYTES = 100 MB`, `MAX_COMPRESSION_RATIO = 100:1`).
+* **Category 2: Data & Spreadsheet Converters (P0 Implemented)**:
+  * Bidirectional conversions between **CSV**, **TSV**, **JSON**, **JSONL (NDJSON)**, **XML**, **YAML**, and **XLSX**.
+  * RFC 4180 parsing with delimiter autodetection (`,`, `\t`, `;`, `|`).
+  * **Formula Injection Defense**: Neutralizes DDE command execution in Excel/Sheets by prepending an apostrophe `'` to cell values starting with `=`, `+`, `-`, `@`, `\t`, or `\r`.
+  * Pure browser OpenXML (.xlsx) generation and extraction via `fflate`.
+  * XML parsing with XXE defense (blocks `<!DOCTYPE ... SYSTEM>`, external entities).
+* **Category 3: Vector Graphics Converters (P0 Implemented)**:
+  * Transformations: **SVG $\rightarrow$ PNG / JPEG / WebP / ICO / PDF**, and **PNG / JPEG $\rightarrow$ ICO**.
+  * **SVG Security Sanitizer**: Strips `<script>`, inline event handlers (`onload`, `onclick`), `javascript:` URIs, remote network URLs in `href`/`xlink:href`, and `<foreignObject>`.
+  * **Windows ICO Binary Encoder**: Produces authentic `00 00 01 00` ICONDIR headers, 16-byte ICONDIRENTRY directory tables, and PNG-compressed icon resources across standard resolutions (16 to 256 px).
+* **Category 4: eBook & Comic Converters (P0 Implemented)**:
+  * Transformations: **TXT / HTML $\rightarrow$ EPUB**, **EPUB $\rightarrow$ TXT**, and **CBZ $\rightarrow$ PDF**.
+  * **W3C EPUB 3.3 Compliant Package Generator**: Uncompressed `mimetype` at byte offset 0 (`STORED`), `META-INF/container.xml`, `content.opf`, `nav.xhtml`, `chapter1.xhtml`, and `styles.css`.
+  * **EPUB Spine Extractor**: Sequentially extracts linear text in reading order.
+  * **Honest DRM Disclosure**: Rejects encrypted files (`META-INF/encryption.xml`) with a transparent copyright advisory.
+  * **Comic Book Packager**: Unpacks comic page images in natural order and compiles them into a clean multi-page PDF via `pdf-lib`.
 
 ### 2. Application Studio (`/application-studio`) — Live
 * **Official Government Presets (v2.0.0)**:
@@ -96,9 +111,14 @@ npm start
 
 ## 🧪 Automated Test Coverage
 
-The project includes **70 automated tests across 11 test suites**:
-* `tests/unit/network-isolation.test.ts`: Verifies zero outbound network calls exist in the Image Studio and Conversion pipelines.
-* `tests/unit/conversion-registry.test.ts`: Verifies registry metadata, verified vs planned statuses, MIME mapping, and lookup utilities.
+The project includes **97 automated tests across 16 test suites**:
+* `tests/unit/universal-conversion-engine.test.ts`: Verifies capability registry lookups, format discovery, and unified execution.
+* `tests/integration/archive-conversions.test.ts`: Tests ZIP $\leftrightarrow$ TAR, TAR.GZ extraction, and Zip Slip path traversal defenses.
+* `tests/integration/data-conversions.test.ts`: Tests CSV $\leftrightarrow$ JSON, formula injection escaping, YAML, XML XXE rejection, and OpenXML XLSX generation.
+* `tests/integration/vector-conversions.test.ts`: Tests SVG sanitization, XSS blocking, and authentic Windows ICO binary encoding.
+* `tests/integration/ebook-conversions.test.ts`: Tests W3C EPUB 3.3 packaging, chapter extraction, DRM detection, and CBZ comic packager.
+* `tests/unit/network-isolation.test.ts`: Verifies zero outbound network calls in Image Studio, Converter, and Universal Conversion pipelines.
+* `tests/unit/conversion-registry.test.ts`: Verifies registry metadata, format statuses, MIME mappings, and lookup utilities.
 * `tests/unit/zip-writer.test.ts`: Verifies IEEE 802.3 CRC-32 checksums, standard ZIP header magic bytes (`50 4B 03 04`), EOCD records, and multi-file archive generation.
 * `tests/unit/application-presets.test.ts`: Verifies DS-160 exact square rules, U.S. Passport Renewal checker constraints, and SSC CGL vs CHSL dimensional ratios.
 * `tests/unit/file-validation.test.ts`: Tests magic-byte header detection for JPEG, PNG, WebP, GIF, PDF, and rejects spoofed files.
@@ -117,10 +137,14 @@ All runtime dependencies are verified under permissive open-source licenses:
 * `next` (15.5.29) — MIT
 * `react` / `react-dom` (19.0.0) — MIT
 * `tailwindcss` (3.4.17) — MIT
-* `pdf-lib` (1.17.1) — MIT
+* `fflate` (0.8.2) — MIT
+* `js-yaml` (4.1.0) — MIT
+* `pdf-lib` (1.17.9) — MIT
 * `pdfjs-dist` (4.10.38) — Apache-2.0
 * `lucide-react` (0.475.0) — ISC
 * `vitest` (4.1.12) — MIT
+
+- **`npm audit` Status**: **0 vulnerabilities**.
 
 ---
 

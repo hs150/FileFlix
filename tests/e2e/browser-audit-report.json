@@ -19,7 +19,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1810,
+            "latencyMs": 1812,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -95,28 +95,52 @@
         }
       },
       {
-        "name": "Conversion Hub (Format Detection, Options, PNG-to-JPEG White Fill, JPEG-to-PDF, Magic Byte Verification)",
+        "name": "Universal Conversion Hub (Archive ZIP-to-TAR, Data CSV-to-JSON, Vector SVG-to-PNG, eBook TXT-to-EPUB, Matrix Inspection)",
         "status": "PASS",
         "details": {
           "success": true,
-          "hasHubHeader": true,
-          "hasRegistryTable": true,
-          "hasJpegOption": true,
-          "hasPdfOption": true,
-          "pngToJpgDone": true,
-          "isJpegHeader": true,
-          "jpgSize": 822,
-          "jpgToPdfDone": true,
-          "isPdfHeader": true,
-          "pdfSize": 1121
+          "hasEngineHeader": true,
+          "hasMatrix": true,
+          "archiveConversion": {
+            "success": true,
+            "details": {
+              "filename": "sample-archive.tar",
+              "size": 2048,
+              "magic": "ustar"
+            }
+          },
+          "dataConversion": {
+            "success": true,
+            "details": {
+              "filename": "sample-data.json",
+              "size": 133,
+              "rowCount": 2
+            }
+          },
+          "vectorConversion": {
+            "success": true,
+            "details": {
+              "filename": "sample-art.png",
+              "size": 15420,
+              "isPngHeader": true
+            }
+          },
+          "ebookConversion": {
+            "success": true,
+            "details": {
+              "filename": "sample-book.epub",
+              "size": 2021,
+              "isZipHeader": true
+            }
+          }
         }
       },
       {
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 144,
-          "localStaticRequests": 127,
+          "totalRequests": 163,
+          "localStaticRequests": 133,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
@@ -124,8 +148,8 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 144,
-      "localStaticRequests": 127,
+      "totalRequests": 163,
+      "localStaticRequests": 133,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
       "payloadLeakingRequestsCount": 0
@@ -151,7 +175,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1802,
+            "latencyMs": 1811,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -227,28 +251,52 @@
         }
       },
       {
-        "name": "Conversion Hub (Format Detection, Options, PNG-to-JPEG White Fill, JPEG-to-PDF, Magic Byte Verification)",
+        "name": "Universal Conversion Hub (Archive ZIP-to-TAR, Data CSV-to-JSON, Vector SVG-to-PNG, eBook TXT-to-EPUB, Matrix Inspection)",
         "status": "PASS",
         "details": {
           "success": true,
-          "hasHubHeader": true,
-          "hasRegistryTable": true,
-          "hasJpegOption": true,
-          "hasPdfOption": true,
-          "pngToJpgDone": true,
-          "isJpegHeader": true,
-          "jpgSize": 822,
-          "jpgToPdfDone": true,
-          "isPdfHeader": true,
-          "pdfSize": 1121
+          "hasEngineHeader": true,
+          "hasMatrix": true,
+          "archiveConversion": {
+            "success": true,
+            "details": {
+              "filename": "sample-archive.tar",
+              "size": 2048,
+              "magic": "ustar"
+            }
+          },
+          "dataConversion": {
+            "success": true,
+            "details": {
+              "filename": "sample-data.json",
+              "size": 133,
+              "rowCount": 2
+            }
+          },
+          "vectorConversion": {
+            "success": true,
+            "details": {
+              "filename": "sample-art.png",
+              "size": 15420,
+              "isPngHeader": true
+            }
+          },
+          "ebookConversion": {
+            "success": true,
+            "details": {
+              "filename": "sample-book.epub",
+              "size": 2021,
+              "isZipHeader": true
+            }
+          }
         }
       },
       {
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 144,
-          "localStaticRequests": 127,
+          "totalRequests": 153,
+          "localStaticRequests": 133,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
@@ -256,8 +304,8 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 144,
-      "localStaticRequests": 127,
+      "totalRequests": 153,
+      "localStaticRequests": 133,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
       "payloadLeakingRequestsCount": 0
