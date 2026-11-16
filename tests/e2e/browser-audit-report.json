@@ -19,7 +19,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1808,
+            "latencyMs": 1811,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -80,7 +80,8 @@
           "hasSchengen": true,
           "hasUpscPhoto": true,
           "hasUpscSig": true,
-          "hasSscSig": true,
+          "hasSscCglSig": true,
+          "hasSscChslSig": true,
           "processed": true,
           "isCompliant": true,
           "isJpeg": true,
@@ -97,7 +98,7 @@
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 113,
+          "totalRequests": 114,
           "localStaticRequests": 97,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
@@ -106,7 +107,7 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 113,
+      "totalRequests": 114,
       "localStaticRequests": 97,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
@@ -133,7 +134,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1813,
+            "latencyMs": 1809,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -194,7 +195,8 @@
           "hasSchengen": true,
           "hasUpscPhoto": true,
           "hasUpscSig": true,
-          "hasSscSig": true,
+          "hasSscCglSig": true,
+          "hasSscChslSig": true,
           "processed": true,
           "isCompliant": true,
           "isJpeg": true,

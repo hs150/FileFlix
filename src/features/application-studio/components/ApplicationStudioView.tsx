@@ -265,8 +265,11 @@ export const ApplicationStudioView: React.FC = () => {
               <option value="upsc-generic-signature">
                 UPSC Online (Generic FAQ) — Signature (350×350 to 1000×1000 px, 20–300 KB)
               </option>
-              <option value="ssc-exam-signature">
-                SSC Examination (Official Notice) — Signature (10–20 KB, ~6×2 cm)
+              <option value="ssc-cgl-2026-signature">
+                SSC CGL 2026 Examination Notice — Signature (10–20 KB, ~4×2 cm)
+              </option>
+              <option value="ssc-chsl-2026-signature">
+                SSC CHSL 2026 Examination Notice — Signature (10–20 KB, ~6×2 cm)
               </option>
             </optgroup>
             <optgroup label="Custom Profile">
@@ -373,7 +376,7 @@ export const ApplicationStudioView: React.FC = () => {
               <span>Inspection Mode Active</span>
             </div>
             <p className="leading-relaxed">
-              Software transformations are disabled for this profile because U.S. Passport Renewal rules strictly prohibit digitally edited photos. FileFix inspects technical file properties without generating an altered submit file.
+              Software transformations are disabled for this profile. {activePreset.id === 'us-passport-renewal' ? 'U.S. Passport Renewal rules strictly prohibit digitally edited photos.' : `${activePreset.displayName} specifies physical requirements, while digital constraints depend on external consular portals.`} FileFix inspects technical file properties without generating an altered submit file.
             </p>
           </div>
         ) : (

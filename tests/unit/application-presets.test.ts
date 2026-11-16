@@ -13,7 +13,7 @@ import {
 describe('Application Studio Presets & Validation Architecture (v2.0)', () => {
   it('has a valid version and complete preset catalog', () => {
     expect(APPLICATION_PRESETS_VERSION).toBe('2.0.0');
-    expect(APPLICATION_PRESETS.length).toBeGreaterThanOrEqual(6);
+    expect(APPLICATION_PRESETS.length).toBeGreaterThanOrEqual(7);
 
     for (const preset of APPLICATION_PRESETS) {
       expect(preset.id).toBeTruthy();
@@ -40,7 +40,8 @@ describe('Application Studio Presets & Validation Architecture (v2.0)', () => {
       expect(p.pixelDimensions.maxWidth).toBe(1200);
       expect(p.pixelDimensions.minHeight).toBe(600);
       expect(p.pixelDimensions.maxHeight).toBe(1200);
-      expect(p.aspectRatio.description).toBe('1:1 (Square)');
+      expect(p.aspectRatio.exactSquareRequired).toBe(true);
+      expect(p.aspectRatio.tolerance).toBe(0);
       expect(p.fileSize.isSpecified).toBe(true);
       expect(p.fileSize.maxBytes).toBe(240 * 1024); // 240 KB
       expect(p.allowedOutputFormats).toEqual(['image/jpeg']);
@@ -51,7 +52,7 @@ describe('Application Studio Presets & Validation Architecture (v2.0)', () => {
       );
     });
 
-    it('verifies U.S. Passport Renewal (OPR) checker-only mode and anti-alteration policy', () => {
+    it('verifies U.S. Passport Renewal (OPR) checker-only mode, unspecified pixels, and anti-alteration policy', () => {
       const p = getPresetById('us-passport-renewal');
       expect(p.category).toBe('photo');
       expect(p.mode).toBe('checker-only');
@@ -59,17 +60,20 @@ describe('Application Studio Presets & Validation Architecture (v2.0)', () => {
       expect(p.requiresOriginalUnedited).toBe(true);
       expect(p.fileSize.minBytes).toBe(54 * 1024); // 54 KB exact official floor
       expect(p.fileSize.maxBytes).toBe(10 * 1024 * 1024); // 10 MB exact official ceiling
-      expect(p.pixelDimensions.minWidth).toBe(600);
-      expect(p.pixelDimensions.maxWidth).toBe(1200);
+      expect(p.pixelDimensions.isSpecified).toBe(false); // Does NOT invent pixel requirements
+      expect(p.allowedInputFormats).toContain('image/jpeg');
+      expect(p.allowedInputFormats).toContain('image/png');
       expect(p.officialSourceUrl).toBe(
         'https://travel.state.gov/en/passports/renew-replace/online/upload-digital-photo.html'
       );
       expect(p.warningNotice).toContain('INSTRUCTION & REQUIREMENTS CHECKER MODE');
     });
 
-    it('verifies France / Schengen Visa physical guidance and unspecified digital bounds', () => {
+    it('verifies France / Schengen Visa physical guidance, checker mode, and unspecified digital bounds', () => {
       const p = getPresetById('france-schengen-visa');
       expect(p.category).toBe('photo');
+      expect(p.mode).toBe('checker-only');
+      expect(p.softwareTransformationPermitted).toBe(false);
       // Must NOT claim universal pixel dimensions or 300 KB when central FAQ does not specify them
       expect(p.pixelDimensions.isSpecified).toBe(false);
       expect(p.fileSize.isSpecified).toBe(false);
@@ -99,17 +103,34 @@ describe('Application Studio Presets & Validation Architecture (v2.0)', () => {
       expect(sig.defaultFittingMode).toBe('pad-white');
     });
 
-    it('verifies SSC Examination signature bounds (10–20 KB, ~6x2 cm) without universal pixel claims', () => {
-      const p = getPresetById('ssc-exam-signature');
-      expect(p.category).toBe('signature');
-      expect(p.fileSize.minBytes).toBe(10 * 1024); // 10.0 KB
-      expect(p.fileSize.maxBytes).toBe(20 * 1024); // 20.0 KB
-      expect(p.pixelDimensions.isSpecified).toBe(false); // Does NOT claim universal 140x60 px
-      expect(p.physicalDimensions?.isSpecified).toBe(true);
-      expect(p.physicalDimensions?.widthCm).toBe(6.0);
-      expect(p.physicalDimensions?.heightCm).toBe(2.0);
-      expect(p.defaultFittingMode).toBe('pad-white');
-      expect(p.warningNotice).toContain('SSC NO LONGER accepts uploaded photograph files');
+    it('verifies SSC CGL and CHSL have separate dimensional profiles and missing notices are not guessed', () => {
+      // 1. SSC CGL 2026: ~4.0 x 2.0 cm (~2:1)
+      const cgl = getPresetById('ssc-cgl-2026-signature');
+      expect(cgl.category).toBe('signature');
+      expect(cgl.fileSize.minBytes).toBe(10 * 1024); // 10.0 KB
+      expect(cgl.fileSize.maxBytes).toBe(20 * 1024); // 20.0 KB
+      expect(cgl.physicalDimensions?.widthCm).toBe(4.0);
+      expect(cgl.physicalDimensions?.heightCm).toBe(2.0);
+      expect(cgl.aspectRatio.width).toBe(2);
+      expect(cgl.aspectRatio.height).toBe(1);
+      expect(cgl.pixelDimensions.isSpecified).toBe(false);
+      expect(cgl.warningNotice).toContain('SSC CGL 2026 requires candidate photographs to be captured live');
+
+      // 2. SSC CHSL 2026: ~6.0 x 2.0 cm (~3:1)
+      const chsl = getPresetById('ssc-chsl-2026-signature');
+      expect(chsl.category).toBe('signature');
+      expect(chsl.fileSize.minBytes).toBe(10 * 1024); // 10.0 KB
+      expect(chsl.fileSize.maxBytes).toBe(20 * 1024); // 20.0 KB
+      expect(chsl.physicalDimensions?.widthCm).toBe(6.0);
+      expect(chsl.physicalDimensions?.heightCm).toBe(2.0);
+      expect(chsl.aspectRatio.width).toBe(3);
+      expect(chsl.aspectRatio.height).toBe(1);
+      expect(chsl.pixelDimensions.isSpecified).toBe(false);
+      expect(chsl.warningNotice).toContain('SSC CHSL 2026 requires candidate photographs to be captured live');
+
+      // 3. Unverified examinations must NOT be published / guessed
+      expect(APPLICATION_PRESETS.find((p) => p.id === 'ssc-mts-signature')).toBeUndefined();
+      expect(APPLICATION_PRESETS.find((p) => p.id === 'ssc-gd-signature')).toBeUndefined();
     });
   });
 
@@ -138,6 +159,36 @@ describe('Application Studio Presets & Validation Architecture (v2.0)', () => {
       expect(report.uneditedPhotoWarning).toContain('requires an original, unedited photograph');
     });
 
+    it('DS-160 rejects non-square images even when the ratio differs by less than 5%', () => {
+      const preset = getPresetById('us-visa-ds160');
+
+      // 602x600 px: delta = |602/600 - 1| = 0.0033 (0.33%), which is well below generic 5% tolerance
+      const reportSlight = validatePresetCompliance(
+        { width: 602, height: 600, sizeBytes: 150 * 1024, format: 'image/jpeg' },
+        preset
+      );
+      expect(reportSlight.overallVerdict).toBe('TECHNICAL_CHECKS_FAILED');
+      const aspectSlight = reportSlight.items.find((i) => i.id === 'aspect-ratio');
+      expect(aspectSlight?.status).toBe('TECHNICAL_FAIL');
+      expect(aspectSlight?.notes).toContain('Width must exactly equal height');
+
+      // 1000x980 px: delta = |1000/980 - 1| = 0.0204 (2.04%), also below 5%
+      const reportModerate = validatePresetCompliance(
+        { width: 1000, height: 980, sizeBytes: 180 * 1024, format: 'image/jpeg' },
+        preset
+      );
+      expect(reportModerate.overallVerdict).toBe('TECHNICAL_CHECKS_FAILED');
+      const aspectModerate = reportModerate.items.find((i) => i.id === 'aspect-ratio');
+      expect(aspectModerate?.status).toBe('TECHNICAL_FAIL');
+
+      // Exact square (600x600 px) passes
+      const reportExact = validatePresetCompliance(
+        { width: 600, height: 600, sizeBytes: 150 * 1024, format: 'image/jpeg' },
+        preset
+      );
+      expect(reportExact.items.find((i) => i.id === 'aspect-ratio')?.status).toBe('TECHNICAL_PASS');
+    });
+
     it('produces TECHNICAL_CHECKS_FAILED when official boundaries are violated', () => {
       const preset = getPresetById('upsc-generic-photo');
       // 15 KB is below UPSC 20 KB floor
@@ -152,12 +203,14 @@ describe('Application Studio Presets & Validation Architecture (v2.0)', () => {
       expect(sizeCheck?.status).toBe('TECHNICAL_FAIL');
     });
 
-    it('handles NOT_SPECIFIED items correctly when official rules do not mandate pixels or KB', () => {
+    it('France-Visas operates in checker mode and does not report unspecified digital bounds as passed', () => {
       const preset = getPresetById('france-schengen-visa');
       const report = validatePresetCompliance(
         { width: 413, height: 531, sizeBytes: 80 * 1024, format: 'image/jpeg' },
         preset
       );
+
+      expect(report.overallVerdict).toBe('CHECKER_ONLY_MODE');
 
       const widthCheck = report.items.find((i) => i.id === 'width');
       expect(widthCheck?.status).toBe('NOT_SPECIFIED');
@@ -166,20 +219,41 @@ describe('Application Studio Presets & Validation Architecture (v2.0)', () => {
       const sizeCheck = report.items.find((i) => i.id === 'file-size');
       expect(sizeCheck?.status).toBe('NOT_SPECIFIED');
 
-      // But aspect ratio (7:9) is verified!
+      // Ensure unspecified digital bounds are NOT marked as TECHNICAL_PASS
+      expect(widthCheck?.status === 'TECHNICAL_PASS').toBe(false);
+      expect(sizeCheck?.status === 'TECHNICAL_PASS').toBe(false);
+
+      // But physical aspect ratio (7:9) is verified!
       const aspectCheck = report.items.find((i) => i.id === 'aspect-ratio');
       expect(aspectCheck?.status).toBe('TECHNICAL_PASS');
     });
 
-    it('correctly enters CHECKER_ONLY_MODE for U.S. Passport Renewal', () => {
+    it('U.S. Passport Renewal does not invent pixel requirements and cannot export a modified submission image', () => {
       const preset = getPresetById('us-passport-renewal');
+
+      // Disallows software transformation
+      expect(preset.mode).toBe('checker-only');
+      expect(preset.softwareTransformationPermitted).toBe(false);
+      expect(preset.pixelDimensions.isSpecified).toBe(false);
+
       const report = validatePresetCompliance(
-        { width: 800, height: 800, sizeBytes: 300 * 1024, format: 'image/jpeg' },
+        { width: 850, height: 1100, sizeBytes: 300 * 1024, format: 'image/jpeg' },
         preset
       );
 
       expect(report.overallVerdict).toBe('CHECKER_ONLY_MODE');
       expect(report.verdictDescription).toContain('U.S. Passport Renewal strictly prohibits software alterations');
+
+      // Pixel checks must report NOT_SPECIFIED (not invented bounds)
+      const widthCheck = report.items.find((i) => i.id === 'width');
+      expect(widthCheck?.status).toBe('NOT_SPECIFIED');
+
+      const heightCheck = report.items.find((i) => i.id === 'height');
+      expect(heightCheck?.status).toBe('NOT_SPECIFIED');
+
+      // File size (300 KB) is within 54 KB to 10 MB and passes
+      const sizeCheck = report.items.find((i) => i.id === 'file-size');
+      expect(sizeCheck?.status).toBe('TECHNICAL_PASS');
     });
 
     it('flags prohibited formats as TECHNICAL_FAIL', () => {

@@ -38,6 +38,8 @@ export interface AspectRatioSpecification {
   width?: number;
   height?: number;
   description: string;
+  exactSquareRequired?: boolean; // Requires target.width === target.height with zero tolerance
+  tolerance?: number; // Optional tolerance override, default 0.05 (5%)
 }
 
 export interface FaceOccupancySpecification {

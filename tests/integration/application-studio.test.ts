@@ -96,11 +96,13 @@ describe('Application Studio Integration & Boundary Enforcement (v2.0)', () => {
   describe('France / Schengen Visa — Physical Guidance & Unspecified Bounds', () => {
     const preset = getPresetById('france-schengen-visa');
 
-    it('reports pixel dimensions and file size as NOT_SPECIFIED while verifying aspect ratio', () => {
+    it('reports pixel dimensions and file size as NOT_SPECIFIED while operating in checker mode', () => {
       const report = validatePresetCompliance(
         { width: 413, height: 531, sizeBytes: 120 * 1024, format: 'image/jpeg' },
         preset
       );
+
+      expect(report.overallVerdict).toBe('CHECKER_ONLY_MODE');
 
       const widthCheck = report.items.find((i) => i.id === 'width');
       expect(widthCheck?.status).toBe('NOT_SPECIFIED');
@@ -168,9 +170,34 @@ describe('Application Studio Integration & Boundary Enforcement (v2.0)', () => {
     });
   });
 
-  describe('SSC Examination Signature Bounds', () => {
-    it('strictly enforces 10.0 KB to 20.0 KB file size bounds', () => {
-      const preset = getPresetById('ssc-exam-signature');
+  describe('SSC Examination-Specific Signature Bounds (CGL vs CHSL)', () => {
+    it('strictly enforces 10.0 KB to 20.0 KB file size bounds on SSC CGL 2026 (~2:1)', () => {
+      const preset = getPresetById('ssc-cgl-2026-signature');
+
+      // 9.9 KB fails
+      const failLow = validatePresetCompliance(
+        { width: 472, height: 236, sizeBytes: Math.floor(9.9 * 1024), format: 'image/jpeg' },
+        preset
+      );
+      expect(failLow.overallVerdict).toBe('TECHNICAL_CHECKS_FAILED');
+
+      // 15 KB passes
+      const pass15 = validatePresetCompliance(
+        { width: 472, height: 236, sizeBytes: 15 * 1024, format: 'image/jpeg' },
+        preset
+      );
+      expect(pass15.overallVerdict).toBe('TECHNICAL_CHECKS_PASSED');
+
+      // 20.1 KB fails
+      const failHigh = validatePresetCompliance(
+        { width: 472, height: 236, sizeBytes: Math.ceil(20.1 * 1024), format: 'image/jpeg' },
+        preset
+      );
+      expect(failHigh.overallVerdict).toBe('TECHNICAL_CHECKS_FAILED');
+    });
+
+    it('strictly enforces 10.0 KB to 20.0 KB file size bounds on SSC CHSL 2026 (~3:1)', () => {
+      const preset = getPresetById('ssc-chsl-2026-signature');
 
       // 9.9 KB fails
       const failLow = validatePresetCompliance(
@@ -194,19 +221,24 @@ describe('Application Studio Integration & Boundary Enforcement (v2.0)', () => {
       expect(failHigh.overallVerdict).toBe('TECHNICAL_CHECKS_FAILED');
     });
 
-    it('reports pixel dimensions as NOT_SPECIFIED while enforcing physical dimensions', () => {
-      const preset = getPresetById('ssc-exam-signature');
-      const report = validatePresetCompliance(
-        { width: 300, height: 100, sizeBytes: 15 * 1024, format: 'image/jpeg' },
-        preset
+    it('reports pixel dimensions as NOT_SPECIFIED for both SSC CGL and CHSL while checking physical ratio', () => {
+      const cgl = getPresetById('ssc-cgl-2026-signature');
+      const cglReport = validatePresetCompliance(
+        { width: 400, height: 200, sizeBytes: 15 * 1024, format: 'image/jpeg' },
+        cgl
       );
+      expect(cglReport.items.find((i) => i.id === 'width')?.status).toBe('NOT_SPECIFIED');
+      expect(cglReport.items.find((i) => i.id === 'aspect-ratio')?.status).toBe('TECHNICAL_PASS');
+      expect(cglReport.items.find((i) => i.id === 'physical-dims')?.expected).toContain('4.0 cm');
 
-      const widthCheck = report.items.find((i) => i.id === 'width');
-      expect(widthCheck?.status).toBe('NOT_SPECIFIED');
-
-      const physCheck = report.items.find((i) => i.id === 'physical-dims');
-      expect(physCheck?.status).toBe('UNVERIFIED_VISUAL');
-      expect(physCheck?.expected).toContain('6.0 cm');
+      const chsl = getPresetById('ssc-chsl-2026-signature');
+      const chslReport = validatePresetCompliance(
+        { width: 600, height: 200, sizeBytes: 15 * 1024, format: 'image/jpeg' },
+        chsl
+      );
+      expect(chslReport.items.find((i) => i.id === 'width')?.status).toBe('NOT_SPECIFIED');
+      expect(chslReport.items.find((i) => i.id === 'aspect-ratio')?.status).toBe('TECHNICAL_PASS');
+      expect(chslReport.items.find((i) => i.id === 'physical-dims')?.expected).toContain('6.0 cm');
     });
   });
 });

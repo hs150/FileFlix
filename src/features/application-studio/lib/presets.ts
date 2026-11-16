@@ -48,7 +48,9 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
       isSpecified: true,
       width: 1,
       height: 1,
-      description: '1:1 (Square)',
+      description: '1:1 Exact Square (width === height, zero tolerance)',
+      exactSquareRequired: true,
+      tolerance: 0,
     },
     faceOccupancy: {
       isSpecified: true,
@@ -84,8 +86,8 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
     applicationName: 'Online Passport Renewal (OPR) Digital Photo Upload',
     category: 'photo',
     mode: 'checker-only', // Explicitly checker/instruction mode per government rules!
-    allowedInputFormats: ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'],
-    allowedOutputFormats: ['image/jpeg'],
+    allowedInputFormats: ['image/jpeg', 'image/jpg', 'image/png'],
+    allowedOutputFormats: ['image/jpeg', 'image/png'],
     recommendedOutputFormat: 'image/jpeg',
     fileSize: {
       isSpecified: true,
@@ -94,20 +96,12 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
       officialDescription: 'Between 54 KB and 10 MB (strict official floor and ceiling)',
     },
     pixelDimensions: {
-      isSpecified: true,
-      minWidth: 600,
-      maxWidth: 1200,
-      minHeight: 600,
-      maxHeight: 1200,
-      exactWidth: 600,
-      exactHeight: 600,
-      officialDescription: 'Minimum 600 × 600 pixels, maximum 1200 × 1200 pixels (Square 1:1)',
+      isSpecified: false,
+      officialDescription: 'Official requirement not specified in online renewal guidance (portal tool crops and resizes)',
     },
     aspectRatio: {
-      isSpecified: true,
-      width: 1,
-      height: 1,
-      description: '1:1 (Square)',
+      isSpecified: false,
+      description: 'Not required prior to upload (official government portal tool performs cropping)',
     },
     physicalDimensions: {
       isSpecified: true,
@@ -148,7 +142,7 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
     issuingAuthority: "France-Visas / Ministère de l'Intérieur (ICAO Doc 9303 Compliant)",
     applicationName: 'France-Visas Online Portal & Consular Visa Application',
     category: 'photo',
-    mode: 'transform',
+    mode: 'checker-only', // Switched to checker/instruction mode per official physical-only guidance
     allowedInputFormats: ['image/jpeg', 'image/jpg'],
     allowedOutputFormats: ['image/jpeg'],
     recommendedOutputFormat: 'image/jpeg',
@@ -172,7 +166,7 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
       isSpecified: true,
       width: 7,
       height: 9,
-      description: '7:9 (35 mm width × 45 mm height)',
+      description: '7:9 physical aspect ratio (35 mm width × 45 mm height)',
     },
     faceOccupancy: {
       isSpecified: true,
@@ -180,21 +174,21 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
       maxPercent: 80,
       description: 'Face must occupy between 70% and 80% of the photograph height (32 to 36 mm)',
     },
-    softwareTransformationPermitted: true,
+    softwareTransformationPermitted: false,
     requiresOriginalUnedited: true,
     isExamSpecificOrVolatile: true,
     officialSourceUrl: 'https://www.france-visas.gouv.fr/en/faq',
     verificationDate: '2026-11-16',
     scopeAndLimitations:
-      'Official France-Visas FAQ specifies physical photo standards: 35–40 mm width, 45 mm height, face height 32–36 mm (70–80% of image), light grey or light blue background (plain white backgrounds are often rejected by French consulates). Exact digital pixel dimensions and KB limits are not universally defined in the central FAQ and depend on the external visa service portal (e.g. TLScontact, VFS Global, or direct consulate upload).',
+      'Official France-Visas FAQ specifies physical photo standards: 35–40 mm width, 45 mm height, face height 32–36 mm (70–80% of image), light grey or light blue background (plain white backgrounds are often rejected by French consulates). Universal digital pixel dimensions and file size limits are not standardized in the central FAQ and depend on the external visa service portal (e.g. TLScontact, VFS Global). Custom DPI (e.g. 300 DPI -> 413×531 px; 600 DPI -> 826×1062 px) is a user-selected print-output setting, not an official digital-upload mandate.',
     warningNotice:
-      'PORTAL VARIATION NOTICE: Digital upload file size and pixel constraints are not published in the central France-Visas FAQ. FileFix applies standard 35×45 mm aspect ratio (7:9); verify portal-specific limits on your active submission portal.',
+      'INSTRUCTION & CHECKER MODE: France-Visas central FAQ standardizes physical photo dimensions (35×45 mm, 70–80% face height), but does NOT specify universal digital pixel dimensions or file size limits. FileFix operates in checker/instruction mode without inventing digital constraints; verify portal-specific limits on your active submission portal.',
     defaultFittingMode: 'center-crop',
     defaultTargetKb: 200,
     fileFixRecommendations: [
-      'Use 7:9 aspect ratio matching 35 × 45 mm.',
       'Ensure background is light grey or light blue (not pure white and not patterned).',
       'Ensure the face occupies 70% to 80% of the frame without head tilting or hair covering the face.',
+      'If printing, use 300 DPI (413×531 px) or 600 DPI (826×1062 px) as a user print-output setting on photo paper.',
     ],
   },
   {
@@ -298,12 +292,12 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
     ],
   },
   {
-    id: 'ssc-exam-signature',
-    displayName: 'SSC Examination (Official Notice) — Candidate Signature',
-    shortName: 'SSC Exam Signature',
+    id: 'ssc-cgl-2026-signature',
+    displayName: 'SSC CGL 2026 Examination Notice — Candidate Signature',
+    shortName: 'SSC CGL 2026 Signature',
     country: 'India',
     issuingAuthority: 'Staff Selection Commission (SSC), India',
-    applicationName: 'SSC Examination Official Candidate Instructions (2026 Notices)',
+    applicationName: 'Combined Graduate Level Examination (CGL) 2026 Official Notice',
     category: 'signature',
     mode: 'transform',
     allowedInputFormats: ['image/jpeg', 'image/jpg', 'image/png'],
@@ -313,23 +307,23 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
       isSpecified: true,
       minBytes: 10240, // 10.0 KB exact official floor
       maxBytes: 20480, // 20.0 KB exact official ceiling
-      officialDescription: 'Strictly between 10.0 KB and 20.0 KB (Official SSC Examination Notice)',
+      officialDescription: 'Strictly between 10.0 KB and 20.0 KB (SSC CGL 2026 Notice)',
     },
     pixelDimensions: {
-      isSpecified: false, // Modern SSC notices specify physical dimension ~6x2 cm, NOT a universal 140x60 px!
-      officialDescription: 'Pixel dimensions not universally specified across all examinations (approx. 708 × 236 px at 300 DPI, or 140 × 60 px on legacy portal forms)',
+      isSpecified: false, // Notice specifies cm, not mandatory pixels!
+      officialDescription: 'Pixel dimensions not specified in official notice (approx. 472 × 236 px at 300 DPI mathematical estimate)',
     },
     physicalDimensions: {
       isSpecified: true,
-      widthCm: 6.0,
+      widthCm: 4.0,
       heightCm: 2.0,
-      officialDescription: 'Approximately 6.0 cm width × 2.0 cm height (some older notices specify 4.0 × 2.0 cm)',
+      officialDescription: 'Approximately 4.0 cm width × 2.0 cm height (~2:1 physical ratio)',
     },
     aspectRatio: {
       isSpecified: true,
-      width: 3,
+      width: 2,
       height: 1,
-      description: '3:1 (6.0 cm × 2.0 cm physical ratio)',
+      description: '2:1 (~4.0 cm × 2.0 cm physical ratio)',
     },
     softwareTransformationPermitted: true,
     requiresOriginalUnedited: false,
@@ -338,14 +332,67 @@ export const APPLICATION_PRESETS: ApplicationPreset[] = [
     sourcePublicationDate: '2026-01-01',
     verificationDate: '2026-11-16',
     scopeAndLimitations:
-      'Official 2026 SSC examination notices specify: signature in JPEG/JPG format, file size strictly between 10.0 KB and 20.0 KB, physical dimensions approximately 6.0 cm width × 2.0 cm height. SSC examination notices do not mandate a single universal 140×60 pixel size.',
+      'Official SSC CGL 2026 examination notice specifies: candidate signature in JPEG/JPG format, file size strictly between 10.0 KB and 20.0 KB, physical dimensions approximately 4.0 cm width × 2.0 cm height (~2:1 ratio). Digital pixel dimensions are not officially mandated; 472 × 236 px is a mathematical estimate at 300 DPI.',
     warningNotice:
-      'CRITICAL SSC PHOTO POLICY NOTICE: SSC NO LONGER accepts uploaded photograph files for candidates! Candidate photographs must be captured live using the official portal webcam or the MySSC mobile app. Only candidate signatures are uploaded as files. Check your specific active SSC examination notification.',
+      'CRITICAL SSC LIVE PHOTO MANDATE: SSC CGL 2026 requires candidate photographs to be captured live using the official portal webcam or MySSC mobile app. Uploaded photo files are NOT accepted for candidates. Only candidate signatures are uploaded as files (10–20 KB, approx. 4.0 × 2.0 cm).',
     defaultFittingMode: 'pad-white',
     defaultTargetKb: 15,
     fileFixRecommendations: [
-      'Use Pad with White mode to fit your signature cleanly within the 10–20 KB constraint without stroke distortion.',
-      'Sign with a black pen on clean white paper.',
+      'Use Pad with White mode to scale signature onto a ~2:1 white canvas without cropping.',
+      'Sign with black ink on clean white paper under uniform lighting.',
+      'Target 15 KB to sit safely within the 10.0–20.0 KB official boundary.',
+    ],
+  },
+  {
+    id: 'ssc-chsl-2026-signature',
+    displayName: 'SSC CHSL 2026 Examination Notice — Candidate Signature',
+    shortName: 'SSC CHSL 2026 Signature',
+    country: 'India',
+    issuingAuthority: 'Staff Selection Commission (SSC), India',
+    applicationName: 'Combined Higher Secondary (10+2) Level Examination (CHSL) 2026 Notice',
+    category: 'signature',
+    mode: 'transform',
+    allowedInputFormats: ['image/jpeg', 'image/jpg', 'image/png'],
+    allowedOutputFormats: ['image/jpeg'],
+    recommendedOutputFormat: 'image/jpeg',
+    fileSize: {
+      isSpecified: true,
+      minBytes: 10240, // 10.0 KB exact official floor
+      maxBytes: 20480, // 20.0 KB exact official ceiling
+      officialDescription: 'Strictly between 10.0 KB and 20.0 KB (SSC CHSL 2026 Notice)',
+    },
+    pixelDimensions: {
+      isSpecified: false, // Notice specifies cm, not mandatory pixels!
+      officialDescription: 'Pixel dimensions not specified in official notice (approx. 708 × 236 px at 300 DPI mathematical estimate)',
+    },
+    physicalDimensions: {
+      isSpecified: true,
+      widthCm: 6.0,
+      heightCm: 2.0,
+      officialDescription: 'Approximately 6.0 cm width × 2.0 cm height (~3:1 physical ratio)',
+    },
+    aspectRatio: {
+      isSpecified: true,
+      width: 3,
+      height: 1,
+      description: '3:1 (~6.0 cm × 2.0 cm physical ratio)',
+    },
+    softwareTransformationPermitted: true,
+    requiresOriginalUnedited: false,
+    isExamSpecificOrVolatile: true,
+    officialSourceUrl: 'https://ssc.gov.in/',
+    sourcePublicationDate: '2026-01-01',
+    verificationDate: '2026-11-16',
+    scopeAndLimitations:
+      'Official SSC CHSL 2026 examination notice specifies: candidate signature in JPEG/JPG format, file size strictly between 10.0 KB and 20.0 KB, physical dimensions approximately 6.0 cm width × 2.0 cm height (~3:1 ratio). Digital pixel dimensions are not officially mandated; 708 × 236 px is a mathematical estimate at 300 DPI.',
+    warningNotice:
+      'CRITICAL SSC LIVE PHOTO MANDATE: SSC CHSL 2026 requires candidate photographs to be captured live using the official portal webcam or MySSC mobile app. Uploaded photo files are NOT accepted for candidates. Only candidate signatures are uploaded as files (10–20 KB, approx. 6.0 × 2.0 cm).',
+    defaultFittingMode: 'pad-white',
+    defaultTargetKb: 15,
+    fileFixRecommendations: [
+      'Use Pad with White mode to scale signature onto a ~3:1 white canvas without cropping.',
+      'Sign with black ink on clean white paper under uniform lighting.',
+      'Target 15 KB to sit safely within the 10.0–20.0 KB official boundary.',
     ],
   },
   {
@@ -464,18 +511,32 @@ export function validatePresetCompliance(
 
   // 3. Aspect Ratio Check
   if (preset.aspectRatio.isSpecified && preset.aspectRatio.width && preset.aspectRatio.height) {
-    const expectedRatio = preset.aspectRatio.width / preset.aspectRatio.height;
+    let passed = false;
     const actualRatio = target.width / target.height;
-    const delta = Math.abs(actualRatio - expectedRatio);
-    const passed = delta <= 0.05; // 5% tolerance
+    const expectedRatio = preset.aspectRatio.width / preset.aspectRatio.height;
+
+    if (preset.aspectRatio.exactSquareRequired) {
+      passed = target.width === target.height;
+    } else {
+      const tolerance = preset.aspectRatio.tolerance ?? 0.05; // Default 5% tolerance
+      const delta = Math.abs(actualRatio - expectedRatio);
+      passed = delta <= tolerance;
+    }
+
     items.push({
       id: 'aspect-ratio',
       name: 'Aspect Ratio',
       status: passed ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL',
       statusLabel: passed ? 'Technical check passed' : 'Technical check failed',
       actual: `${actualRatio.toFixed(2)}:1 (${target.width}×${target.height})`,
-      expected: `${preset.aspectRatio.description} (~${expectedRatio.toFixed(2)}:1)`,
+      expected: preset.aspectRatio.exactSquareRequired
+        ? 'Exact 1:1 Square (width === height, zero tolerance)'
+        : `${preset.aspectRatio.description} (~${expectedRatio.toFixed(2)}:1)`,
       isOfficialRequirement: true,
+      notes:
+        preset.aspectRatio.exactSquareRequired && target.width !== target.height
+          ? 'Official rules mandate an exact square image. Width must exactly equal height.'
+          : undefined,
     });
   } else {
     items.push({
@@ -484,7 +545,7 @@ export function validatePresetCompliance(
       status: 'NOT_SPECIFIED',
       statusLabel: 'Official requirement not specified',
       actual: `${(target.width / target.height).toFixed(2)}:1`,
-      expected: 'No mandatory ratio published',
+      expected: preset.aspectRatio.description || 'No mandatory ratio published',
       isOfficialRequirement: false,
     });
   }
@@ -521,14 +582,16 @@ export function validatePresetCompliance(
   }
 
   // 5. Image Format Check
-  const formatPassed = preset.allowedOutputFormats.includes(target.format as any);
+  const allowed = isCheckerOnly ? preset.allowedInputFormats : preset.allowedOutputFormats;
+  const normalizedTarget = target.format === 'image/jpg' ? 'image/jpeg' : target.format;
+  const formatPassed = allowed.some((f) => (f === 'image/jpg' ? 'image/jpeg' : f) === normalizedTarget);
   items.push({
     id: 'format',
-    name: 'Output File Format',
+    name: isCheckerOnly ? 'Original Image Format' : 'Output File Format',
     status: formatPassed ? 'TECHNICAL_PASS' : 'TECHNICAL_FAIL',
     statusLabel: formatPassed ? 'Technical check passed' : 'Technical check failed',
     actual: target.format.replace('image/', '').toUpperCase(),
-    expected: preset.allowedOutputFormats.map((f) => f.replace('image/', '').toUpperCase()).join(' or '),
+    expected: allowed.map((f) => f.replace('image/', '').toUpperCase()).join(' or '),
     isOfficialRequirement: true,
   });
 
@@ -597,7 +660,9 @@ export function validatePresetCompliance(
       ? 'Technical checks failed (Inspection Mode)'
       : 'Technical checks passed (Inspection Mode)';
     verdictDescription =
-      'U.S. Passport Renewal strictly prohibits software alterations. FileFix only verifies your existing file properties without modifying or generating a transformed submit file.';
+      preset.id === 'us-passport-renewal'
+        ? 'U.S. Passport Renewal strictly prohibits software alterations. FileFix only verifies your existing file properties without modifying or generating a transformed submit file.'
+        : `${preset.displayName} is evaluated in instruction and inspection mode. FileFix verifies baseline technical properties without generating an altered submit file.`;
   } else if (hasTechnicalFailure) {
     overallVerdict = 'TECHNICAL_CHECKS_FAILED';
     verdictTitle = 'Technical checks failed';

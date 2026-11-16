@@ -730,7 +730,8 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
           const hasSchengen = options.includes('france-schengen-visa');
           const hasUpscPhoto = options.includes('upsc-generic-photo');
           const hasUpscSig = options.includes('upsc-generic-signature');
-          const hasSscSig = options.includes('ssc-exam-signature');
+          const hasSscCglSig = options.includes('ssc-cgl-2026-signature');
+          const hasSscChslSig = options.includes('ssc-chsl-2026-signature');
 
           // 2. Select US Visa Preset (600x600 px, <=240 KB, JPEG)
           select.value = 'us-visa-ds160';
@@ -806,13 +807,14 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
           }
 
           return {
-            success: processed && isCompliant && isJpeg && outputBytes <= 240 * 1024 && hasCheckerNotice && checkerPassed,
+            success: processed && isCompliant && isJpeg && outputBytes <= 240 * 1024 && hasCheckerNotice && checkerPassed && hasSscCglSig && hasSscChslSig,
             hasUsVisa,
             hasUsPassport,
             hasSchengen,
             hasUpscPhoto,
             hasUpscSig,
-            hasSscSig,
+            hasSscCglSig,
+            hasSscChslSig,
             processed,
             isCompliant,
             isJpeg,
