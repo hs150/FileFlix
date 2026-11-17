@@ -60,10 +60,15 @@ A unified, extensible client-side conversion engine governed by a single capabil
 
 ### 4. PDF Studio (`/pdf-studio`) — Live
 * **Merge PDFs**: Combine multiple PDF documents in user-specified order with live drag/arrow reordering.
-* **Organize, Rotate & Split**:
-  * Rotate individual pages or all pages in 90° increments.
-  * Extract or split selected page subsets with visual checkboxes.
-  * Reorder page sequences.
+* **Visual Page Thumbnails & Organize Mode**:
+  * **Actual Page Previews**: Low-resolution, sharp visual canvas thumbnails rendered client-side via `pdfjs-dist` with aspect ratio preservation (portrait and landscape).
+  * **Concurrency-Limited Queue**: Strict 2-worker concurrency limiter (`maxConcurrent = 2`) with in-memory caching to eliminate CPU spikes and canvas memory leaks.
+  * **Lazy-Loading & Shimmer Skeletons**: `IntersectionObserver` defers rendering off-screen pages until scrolled near the viewport, with priority escalation for visible cards.
+  * **Buffer Detachment Protection**: Safe buffer cloning prevents web worker transfers from detaching the primary document array buffer.
+  * **Full Local Hosting**: Bundles `pdf.worker.min.mjs` directly in static assets (`/public`), guaranteeing zero remote requests and full offline operation.
+  * **Page Reordering & Deletion**: Move pages earlier/later in the sequence or delete unwanted pages with instant UI updates.
+  * **Live Rotation**: Instant ±90° visual rotation feedback synchronized with binary stream orientation on export.
+  * **Page Extraction & Split**: Select or deselect specific pages with individual or bulk checkboxes (`Select All` / `Deselect All`).
 * **Security & Verification**: Detects and respects encrypted/password-protected PDFs with honest security disclosures. Every exported PDF is re-parsed and validated in memory before download.
 
 ### 5. Text Extraction Studio (`/extract-text`) — Live
@@ -111,7 +116,8 @@ npm start
 
 ## 🧪 Automated Test Coverage
 
-The project includes **97 automated tests across 16 test suites**:
+The project includes **106 automated tests across 17 test suites**:
+* `tests/integration/pdf-thumbnails.test.ts`: Verifies PDF.js thumbnail generation, aspect-ratio preservation, priority queueing, max concurrency enforcement ($\le 2$), cancellation on unmount, buffer detachment defense, corrupt PDF error recovery, and end-to-end page order/rotation export fidelity.
 * `tests/unit/universal-conversion-engine.test.ts`: Verifies capability registry lookups, format discovery, and unified execution.
 * `tests/integration/archive-conversions.test.ts`: Tests ZIP $\leftrightarrow$ TAR, TAR.GZ extraction, and Zip Slip path traversal defenses.
 * `tests/integration/data-conversions.test.ts`: Tests CSV $\leftrightarrow$ JSON, formula injection escaping, YAML, XML XXE rejection, and OpenXML XLSX generation.

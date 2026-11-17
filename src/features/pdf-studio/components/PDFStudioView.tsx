@@ -4,6 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { PDFItem, PDFPageInfo, PDFProcessingResult, PDFStudioMode } from '../types';
 import { PDFDropzone } from './PDFDropzone';
 import { mergePDFs, transformPDFPages } from '../lib/pdf-processor';
+import { PDFThumbnailService } from '../lib/pdf-thumbnail-queue';
+import { PDFPageThumbnail } from './PDFPageThumbnail';
 import { formatBytes } from '@/features/image-studio/lib/image-math';
 import {
   FileText,
@@ -34,13 +36,14 @@ export const PDFStudioView: React.FC = () => {
   // Organize Mode State
   const [organizeItem, setOrganizeItem] = useState<PDFItem | null>(null);
   const [pages, setPages] = useState<PDFPageInfo[]>([]);
+  const [thumbnailService, setThumbnailService] = useState<PDFThumbnailService | null>(null);
 
   // Result & Processing State
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<PDFProcessingResult | null>(null);
 
-  // Cleanup object URLs on unmount or reset
+  // Cleanup object URLs and thumbnail service on unmount or reset
   const cleanupResultUrl = useCallback(() => {
     if (result?.url) {
       URL.revokeObjectURL(result.url);
@@ -50,11 +53,18 @@ export const PDFStudioView: React.FC = () => {
   useEffect(() => {
     return () => {
       cleanupResultUrl();
+      if (thumbnailService) {
+        thumbnailService.destroy();
+      }
     };
-  }, [cleanupResultUrl]);
+  }, [cleanupResultUrl, thumbnailService]);
 
   const handleReset = () => {
     cleanupResultUrl();
+    if (thumbnailService) {
+      thumbnailService.destroy();
+      setThumbnailService(null);
+    }
     setMergeItems([]);
     setOrganizeItem(null);
     setPages([]);
@@ -121,11 +131,20 @@ export const PDFStudioView: React.FC = () => {
   const handleOrganizePDFLoaded = (items: PDFItem[]) => {
     if (items.length > 0) {
       const item = items[0];
+      if (thumbnailService) {
+        thumbnailService.destroy();
+      }
+      const service = new PDFThumbnailService(item.buffer.slice(0), item.id);
+      setThumbnailService(service);
       setOrganizeItem(item);
       setPages([...item.pages]);
       setResult(null);
       setError(null);
     }
+  };
+
+  const removePage = (index: number) => {
+    setPages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const rotatePage = (index: number, delta: 90 | -90) => {
@@ -482,7 +501,7 @@ export const PDFStudioView: React.FC = () => {
                       key={`page-${page.originalIndex}-${index}`}
                       className={`relative flex flex-col items-center p-3 rounded-xl border transition-all ${
                         page.selected
-                          ? 'border-indigo-400 bg-indigo-50/30 shadow-sm'
+                          ? 'border-indigo-500 bg-indigo-50/40 shadow-sm ring-1 ring-indigo-500/20'
                           : 'border-slate-200 bg-slate-100/50 opacity-60'
                       }`}
                     >
@@ -491,7 +510,7 @@ export const PDFStudioView: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => togglePageSelection(index)}
-                          className="flex items-center gap-1 text-xs font-bold text-slate-700 cursor-pointer"
+                          className="flex items-center gap-1.5 text-xs font-bold text-slate-800 cursor-pointer hover:text-indigo-600 transition-colors"
                         >
                           <input
                             type="checkbox"
@@ -501,20 +520,25 @@ export const PDFStudioView: React.FC = () => {
                           />
                           <span>Page {page.originalIndex + 1}</span>
                         </button>
-                        <span className="text-[10px] font-semibold text-slate-400">
+                        <span className="text-[10px] font-bold text-slate-500 bg-slate-200/60 px-1.5 py-0.5 rounded">
                           #{index + 1}
                         </span>
                       </div>
 
-                      {/* Mockup Page Preview with Rotation Display */}
-                      <div
-                        className="w-24 h-32 bg-white border border-slate-300 shadow-xs rounded flex flex-col items-center justify-center p-2 text-slate-400 transition-transform duration-200 my-1"
-                        style={{ transform: `rotate(${page.rotation}deg)` }}
-                      >
-                        <FileText className="w-8 h-8 opacity-40 mb-1" />
-                        <span className="text-[10px] font-bold text-slate-500">
-                          P.{page.originalIndex + 1}
-                        </span>
+                      {/* Visual Page Thumbnail with Live Rotation Display */}
+                      <div className="relative w-full flex items-center justify-center p-2 bg-slate-50/80 border border-slate-200/80 rounded-lg overflow-hidden my-1 min-h-[155px]">
+                        <div
+                          className="transition-transform duration-200 shadow-xs rounded flex items-center justify-center"
+                          style={{ transform: `rotate(${page.rotation}deg)` }}
+                        >
+                          <PDFPageThumbnail
+                            thumbnailService={thumbnailService}
+                            pageNumber={page.originalIndex + 1}
+                            pageWidth={page.width}
+                            pageHeight={page.height}
+                            rotation={page.rotation}
+                          />
+                        </div>
                       </div>
 
                       {/* Rotation & Position Controls */}
@@ -523,21 +547,21 @@ export const PDFStudioView: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => rotatePage(index, -90)}
-                            className="p-1 rounded hover:bg-slate-200 text-slate-600"
-                            title="Rotate Left"
+                            className="p-1 rounded hover:bg-slate-200 text-slate-600 transition-colors"
+                            title="Rotate Left 90°"
                           >
                             <RotateCcw className="w-3.5 h-3.5" />
                           </button>
                           <button
                             type="button"
                             onClick={() => rotatePage(index, 90)}
-                            className="p-1 rounded hover:bg-slate-200 text-slate-600"
-                            title="Rotate Right"
+                            className="p-1 rounded hover:bg-slate-200 text-slate-600 transition-colors"
+                            title="Rotate Right 90°"
                           >
                             <RotateCw className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                        <span className="text-[10px] font-medium text-slate-500">
+                        <span className="text-[10px] font-semibold text-slate-600">
                           {page.rotation}°
                         </span>
                         <div className="flex items-center gap-0.5">
@@ -545,7 +569,7 @@ export const PDFStudioView: React.FC = () => {
                             type="button"
                             disabled={index === 0}
                             onClick={() => movePage(index, 'left')}
-                            className="p-1 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-30"
+                            className="p-1 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-30 transition-colors"
                             title="Move earlier"
                           >
                             <ArrowLeft className="w-3 h-3" />
@@ -554,10 +578,18 @@ export const PDFStudioView: React.FC = () => {
                             type="button"
                             disabled={index === pages.length - 1}
                             onClick={() => movePage(index, 'right')}
-                            className="p-1 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-30"
+                            className="p-1 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-30 transition-colors"
                             title="Move later"
                           >
                             <ArrowRight className="w-3 h-3" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => removePage(index)}
+                            className="p-1 rounded hover:bg-red-100 text-slate-400 hover:text-red-600 transition-colors ml-0.5"
+                            title="Remove Page"
+                          >
+                            <Trash2 className="w-3 h-3" />
                           </button>
                         </div>
                       </div>

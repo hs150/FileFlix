@@ -5,6 +5,9 @@ export interface PDFPageInfo {
   originalIndex: number; // 0-based
   rotation: number; // 0, 90, 180, 270
   selected: boolean;
+  width?: number;
+  height?: number;
+  isLandscape?: boolean;
 }
 
 export interface PDFItem {
@@ -25,4 +28,11 @@ export interface PDFProcessingResult {
   pageCount: number;
   processingTimeMs: number;
   filename: string;
+}
+
+export interface ThumbnailResult {
+  dataUrl: string;
+  width: number;
+  height: number;
+  aspectRatio: number;
 }

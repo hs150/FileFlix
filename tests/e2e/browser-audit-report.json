@@ -19,7 +19,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1812,
+            "latencyMs": 1811,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -42,7 +42,7 @@
         }
       },
       {
-        "name": "PDF Studio (Merge, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)",
+        "name": "PDF Studio (Merge, Visual Thumbnails, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)",
         "status": "PASS",
         "details": {
           "merge": {
@@ -52,7 +52,10 @@
           },
           "organizeAndSplit": {
             "success": true,
-            "hasExportBtn": true
+            "hasExportBtn": true,
+            "thumbnailsRendered": 3,
+            "splitSuccess": true,
+            "error": null
           },
           "corruptRejection": {
             "success": true
@@ -129,7 +132,7 @@
             "success": true,
             "details": {
               "filename": "sample-book.epub",
-              "size": 2021,
+              "size": 2020,
               "isZipHeader": true
             }
           }
@@ -139,8 +142,8 @@
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 163,
-          "localStaticRequests": 133,
+          "totalRequests": 159,
+          "localStaticRequests": 137,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
@@ -148,8 +151,8 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 163,
-      "localStaticRequests": 133,
+      "totalRequests": 159,
+      "localStaticRequests": 137,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
       "payloadLeakingRequestsCount": 0
@@ -175,7 +178,7 @@
           },
           "resizeAndBlob": {
             "success": true,
-            "latencyMs": 1811,
+            "latencyMs": 1813,
             "blobBytes": 454,
             "magicHeader": "89 50 4e 47",
             "blobVerified": true
@@ -198,7 +201,7 @@
         }
       },
       {
-        "name": "PDF Studio (Merge, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)",
+        "name": "PDF Studio (Merge, Visual Thumbnails, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)",
         "status": "PASS",
         "details": {
           "merge": {
@@ -208,7 +211,10 @@
           },
           "organizeAndSplit": {
             "success": true,
-            "hasExportBtn": true
+            "hasExportBtn": true,
+            "thumbnailsRendered": 3,
+            "splitSuccess": true,
+            "error": null
           },
           "corruptRejection": {
             "success": true
@@ -285,7 +291,7 @@
             "success": true,
             "details": {
               "filename": "sample-book.epub",
-              "size": 2021,
+              "size": 2020,
               "isZipHeader": true
             }
           }
@@ -295,8 +301,8 @@
         "name": "Dynamic Network Isolation (Zero Remote Uploads & Zero POST Calls)",
         "status": "PASS",
         "details": {
-          "totalRequests": 153,
-          "localStaticRequests": 133,
+          "totalRequests": 159,
+          "localStaticRequests": 137,
           "remoteNonLocalhostRequests": 0,
           "postRequestsCount": 0,
           "payloadLeakingRequestsCount": 0
@@ -304,8 +310,8 @@
       }
     ],
     "requestBreakdown": {
-      "totalRequests": 153,
-      "localStaticRequests": 133,
+      "totalRequests": 159,
+      "localStaticRequests": 137,
       "remoteNonLocalhostRequests": 0,
       "postRequestsCount": 0,
       "payloadLeakingRequestsCount": 0

@@ -33,11 +33,15 @@ export async function loadPDFInfo(buffer: ArrayBuffer, file: File): Promise<PDFI
     for (let i = 0; i < pageCount; i++) {
       const page = pdfDoc.getPage(i);
       const rotationAngle = page.getRotation().angle;
+      const { width, height } = page.getSize();
       pages.push({
         pageNumber: i + 1,
         originalIndex: i,
         rotation: rotationAngle % 360,
         selected: true,
+        width: Math.round(width),
+        height: Math.round(height),
+        isLandscape: width > height,
       });
     }
 

@@ -135,6 +135,16 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
   await cdp.send('Runtime.enable');
   await cdp.send('Network.enable');
 
+  cdp.on('Runtime.consoleAPICalled', (params) => {
+    const text = params.args?.map(a => a.value !== undefined ? String(a.value) : (a.description || JSON.stringify(a))).join(' ');
+    if (params.type !== 'debug') {
+      console.log(`[Browser Console ${params.type}]`, text);
+    }
+  });
+  cdp.on('Runtime.exceptionThrown', (params) => {
+    console.error(`[Browser Exception]`, params.exceptionDetails?.text, params.exceptionDetails?.exception?.description);
+  });
+
   // Network request instrumentation per browser
   const recordedRequests = [];
   cdp.on('Network.requestWillBeSent', (params) => {
@@ -568,6 +578,15 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
           input.dispatchEvent(new Event('change', { bubbles: true }));
           await new Promise(r => setTimeout(r, 1200));
 
+          // Verify visual page thumbnails rendered via PDF.js queue
+          let thumbnailsRendered = 0;
+          for (let i = 0; i < 20; i++) {
+            const thumbImgs = Array.from(document.querySelectorAll('img[alt*="PDF Page"]'));
+            thumbnailsRendered = thumbImgs.filter(img => img.src && img.src.startsWith('data:image/')).length;
+            if (thumbnailsRendered >= 3) break;
+            await new Promise(r => setTimeout(r, 250));
+          }
+
           // Rotate all pages (+90)
           const rotateAllBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Rotate All (+90°)'));
           if (rotateAllBtn) rotateAllBtn.click();
@@ -585,12 +604,23 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
           if (!exportBtn) return { success: false, error: 'Export button not found' };
 
           exportBtn.click();
-          await new Promise(r => setTimeout(r, 2000));
 
-          const bodyText = document.body.innerText;
-          const splitSuccess = bodyText.includes('PDF Transformed') || bodyText.includes('Download Transformed PDF') || bodyText.includes('Output verified with 2 pages') || bodyText.includes('Exported PDF Generated & Verified');
+          let splitSuccess = false;
+          let lastBody = '';
+          for (let i = 0; i < 15; i++) {
+            await new Promise(r => setTimeout(r, 400));
+            lastBody = document.body.innerText;
+            if (
+              lastBody.includes('Exported PDF Generated & Verified') ||
+              lastBody.includes('Download Organized PDF') ||
+              lastBody.includes('Output contains 2 pages')
+            ) {
+              splitSuccess = true;
+              break;
+            }
+          }
 
-          return { success: splitSuccess, hasExportBtn: !!exportBtn };
+          return { success: splitSuccess && thumbnailsRendered >= 3, hasExportBtn: !!exportBtn, thumbnailsRendered, splitSuccess, error: splitSuccess ? null : lastBody.substring(0, 300) };
         })()
       `,
       awaitPromise: true,
@@ -637,7 +667,7 @@ async function runBrowserAudit(browserName, browserExe, debugPort) {
       corruptPdfResult.result.value.success;
 
     auditResults.tests.push({
-      name: 'PDF Studio (Merge, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)',
+      name: 'PDF Studio (Merge, Visual Thumbnails, Reorder, Rotate All, Page Extraction/Split, Corrupt Handling)',
       status: pdfStudioAllPassed ? 'PASS' : 'FAIL',
       details: {
         merge: pdfMergeResult.result.value,

@@ -24,11 +24,11 @@ export async function extractTextFromPDF(
   } else {
     pdfjs = await import('pdfjs-dist');
     if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-      pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+      pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
     }
   }
 
-  const data = new Uint8Array(buffer);
+  const data = new Uint8Array(buffer.slice(0));
   const loadingTask = pdfjs.getDocument({
     data,
     useSystemFonts: true,

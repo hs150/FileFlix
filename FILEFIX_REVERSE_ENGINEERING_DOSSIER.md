@@ -1,11 +1,11 @@
 # FileFix Reverse-Engineering & Architecture Dossier
 
-**Version:** 1.0 — Universal File Conversion Engine, Unified Capability Registry, 4 Implemented Core Adapters (Archive, Data, Vector, eBooks) & Specialist Feasibility Research  
+**Version:** 1.1 — PDF Studio Visual Page Thumbnails, Concurrency-Limited Queue, Local Worker Hosting, Detached Buffer Protection & Comprehensive Browser Verification  
 **Research, Audit & Implementation Date:** 2026-11-17  
 **Repository Directory:** `D:\Web Tech\FileFlix`  
 **Git Branch:** `main` (tracking `origin/main`)  
 **Project:** FileFix  
-**Status:** MVP Implemented (v0.4); Planning Finalized (v0.5); Application Studio Implemented (v0.6); Official Presets Audited & Hardened (v0.7); Examination Disambiguation & Exact Geometry (v0.8); Multi-Format Conversion System (v0.9); Universal File Conversion Engine & 4 Core Adapters Implemented (v1.0)  
+**Status:** MVP Implemented (v0.4); Planning Finalized (v0.5); Application Studio Implemented (v0.6); Official Presets Audited & Hardened (v0.7); Examination Disambiguation & Exact Geometry (v0.8); Multi-Format Conversion System (v0.9); Universal File Conversion Engine & 4 Core Adapters Implemented (v1.0); PDF Studio Visual Page Thumbnails & Concurrency Queue Implemented (v1.1)  
 
 ---
 
@@ -25,14 +25,25 @@ This dossier maintains strict, transparent evidence discipline across all sectio
 
 FileFix is a free-first, self-service file utility platform built on an absolute privacy-by-default architecture: solve everyday image optimization, document organization, official application preparation, universal multi-format conversion, and text extraction problems directly inside the user's web browser without requiring accounts, paywalls, or remote file uploads.
 
-### Version 1.0 Milestone Highlights: Universal File Conversion Engine
-1. **Unified Conversion Engine Architecture (`src/features/conversion-engine/`) [Measured]**:
-   - Built a modular, extensible conversion engine centered around a single capability registry, decoupled format adapters, and a unified execution pipeline instead of fragmented, ad-hoc converter components.
-   - Comprehensive error hierarchy (`ConversionError`, `SecurityValidationError`, `ResourceLimitError`, `FormatMismatchError`, `UnsupportedConversionError`).
-2. **Multi-Stage Format Detection Engine (`format-detection.ts`) [Measured]**:
-   - Combines binary magic-byte detection (JPEG, PNG, WebP, PDF, GZIP, TAR, ICO, ZIP, EPUB, XLSX, CBZ) with syntactical content sniffing (SVG, HTML, XML, JSON, JSONL, YAML, CSV, TSV, TXT).
-   - Container Disambiguation: Explicitly inspects ZIP entry headers to accurately distinguish generic ZIP archives from EPUB books (`mimetype`), Excel workbooks (`xl/`), and Comic Books (`.cbz` / image streams) without guessing.
-3. **Category 1: Archive Converters (P0 Implemented) [Measured]**:
+### Version 1.1 Milestone Highlights: PDF Studio Visual Page Thumbnails & Queue Architecture
+1. **Visual Page Thumbnails in PDF Studio Organize Mode (`src/features/pdf-studio/`) [Measured]**:
+   - Replaced abstract mock card icons with true client-rendered low-resolution canvas previews generated via `pdfjs-dist` (`page.render()`).
+   - Dimension-aware aspect ratio preservation: Dynamically scales portrait ($105\times 140\text{ px}$) and landscape ($140\times 105\text{ px}$) pages without distortion.
+2. **Concurrency-Limited Priority Queue (`PDFThumbnailService`) [Measured]**:
+   - Enforces a strict 2-worker concurrency cap (`maxConcurrent = 2`) preventing catastrophic CPU saturation and canvas memory exhaustion on large documents.
+   - Priority queue with on-demand preemption: Visible cards requesting thumbnails receive priority 1 and bypass background prefetch jobs (priority 0).
+   - In-memory thumbnail caching via `Map<number, ThumbnailResult>` with instantaneous resolution on cache hit.
+   - Automatic render cancellation on unmount via `renderTask.cancel()` and queue purging on document reset.
+3. **Web Worker Detached Buffer Protection [Measured]**:
+   - Solved the critical web worker buffer-detachment hazard (`TypeError: Cannot perform Construct on a detached ArrayBuffer`) by passing isolated slices (`buffer.slice(0)`) to `pdfjs.getDocument()`, ensuring the primary `organizeItem.buffer` remains intact in the main thread for downstream operations (page transformation, rotation, split, export).
+4. **100% Local Self-Hosted PDF.js Worker [Measured]**:
+   - Eliminated third-party CDN worker requests (`cdnjs.cloudflare.com`) by bundling `pdf.worker.min.mjs` directly in the project's static `/public` directory via automated `prebuild` / `predev` scripts. Zero outbound network traffic is guaranteed.
+5. **Interactive Page Management & State Synchronization [Measured]**:
+   - Live visual rotation feedback: Applying CSS `transform: rotate(${page.rotation}deg)` on thumbnail cards gives instantaneous user feedback, strictly synchronized with `page.setRotation(degrees(pageMeta.rotation % 360))` upon binary PDF export.
+   - Comprehensive card operations: Toggle selection, select all, deselect all, move earlier, move later, and remove page (trash icon).
+6. **Automated & Cross-Browser Verification [Measured]**:
+   - 106 automated tests passing across 17 test suites in Vitest.
+   - Full Chrome 157 and Edge 157 CDP browser automation: All 7 test categories PASS, including Merge, Visual Thumbnails, Reorder, Rotate All, Split, Corrupt PDF rejection, and Dynamic Network Isolation (159 recorded requests, 0 remote, 0 POST, 0 leaks).
    - Supports ZIP, TAR, GZIP, and TAR.GZ across create, extract, repack, and gunzip workflows.
    - Built a pure TypeScript POSIX ustar TAR creation and extraction engine (512-byte headers, octal checksums, symlink rejection).
    - Strict security guards: Zip Slip protection (rejects path traversal `../`, absolute paths `/`, `C:\`, reserved Windows device names `NUL`, `CON`, null bytes) and decompression bomb limits (`MAX_ENTRIES = 1000`, `MAX_TOTAL_EXPANDED_BYTES = 100 MB`, `MAX_COMPRESSION_RATIO = 100:1`).
@@ -316,9 +327,11 @@ Following the completion of the **Universal File Conversion Engine & 4 Core Adap
    - Implemented Category 3: Vector Graphics (SVG, ICO, PNG, JPEG, WebP, PDF).
    - Implemented Category 4: eBooks & Comics (TXT, HTML, EPUB, CBZ, PDF).
    - Feasibility research completed for Categories 5–9 (Subtitles, Fonts, GIS, 3D/CAD, Email).
-3. **Rank 3 — PDF Studio Visual Page Thumbnails** *(Target: v1.1)*:
-   - Low-resolution visual canvas preview for each page in PDF Studio Organize mode using `pdfjs-dist` `page.render()`.
-   - Concurrency queue (max 2 concurrent renders) to prevent memory pressure.
+3. **Rank 3 — PDF Studio Visual Page Thumbnails** *(Status: COMPLETE in v1.1)* [Measured]:
+   - Client-rendered canvas preview for each page in PDF Studio Organize mode using `pdfjs-dist` `page.render()`.
+   - Concurrency queue (`maxConcurrent = 2`), in-memory cache, and visible page preemption (priority 1 vs 0).
+   - Buffer slice cloning to eliminate worker detachment crashes.
+   - Self-hosted worker in `/public/pdf.worker.min.mjs` ensuring 0 remote calls.
 4. **Rank 4 — Image Studio Interactive Visual Crop Box** *(Target: v1.2)*:
    - Mouse/touch draggable crop handles overlaying the preview canvas.
    - Aspect ratio locking (1:1, 4:3, 16:9, 7:9).
@@ -331,11 +344,11 @@ Following the completion of the **Universal File Conversion Engine & 4 Core Adap
 
 | Requirement | Audit Verdict | Evidence & Details |
 | :--- | :---: | :--- |
-| **1. Protect current implementation** | `PASS` | All features preserved; Image, PDF, Text Extraction, and Application Studios fully operational. |
+| **1. Protect current implementation** | `PASS` | All features preserved; Image, PDF, Text Extraction, Application, and Conversion Studios fully operational. |
 | **2. TypeScript type checking** | `PASS` | `npx tsc --noEmit` passed with 0 errors. |
 | **3. ESLint compliance** | `PASS` | 0 warnings, 0 errors (`npm run lint`). |
-| **4. Vitest automated tests** | `PASS` | **97 automated tests passing across 16 test suites** (`npm test`, exit code 0). |
-| **5. Production build** | `PASS` | `next build` compiled cleanly; 9 static pages generated (`/convert-files`: 48.3 kB). |
+| **4. Vitest automated tests** | `PASS` | **106 automated tests passing across 17 test suites** (`npm test`, exit code 0). |
+| **5. Production build** | `PASS` | `next build` compiled cleanly; 9 static pages generated (`/pdf-studio`: 9.5 kB). |
 | **6. Dependency security audit** | `PASS` | `npm audit` reports 0 vulnerabilities. |
 | **7. Universal capability registry** | `PASS` | Single registry at `src/features/conversion-engine/core/conversion-registry.ts` defining all formats, categories, and conversions. |
 | **8. Multi-stage format detection** | `PASS` | Binary magic bytes and text sniffing with container disambiguation (ZIP vs EPUB vs XLSX vs CBZ). |
@@ -344,15 +357,16 @@ Following the completion of the **Universal File Conversion Engine & 4 Core Adap
 | **11. Category 3: Vector conversions** | `PASS` | SVG $\rightarrow$ PNG/JPEG/WebP/ICO/PDF, PNG/JPEG $\rightarrow$ ICO. Script/XXE/SSRF sanitizer; authentic `00 00 01 00` ICO encoder. |
 | **12. Category 4: eBook conversions** | `PASS` | TXT/HTML $\rightarrow$ EPUB, EPUB $\rightarrow$ TXT, CBZ $\rightarrow$ PDF. W3C EPUB 3.3 package, spine reader, honest DRM rejection, comic book packager. |
 | **13. Categories 5–9 Specialist Research** | `PASS` | Complete research-only specifications for Subtitles, Fonts, GIS, 3D/CAD, and Email in Section 7. |
-| **14. Permissive Dependency Licensing** | `PASS` | `fflate` (MIT), `js-yaml` (MIT). Zero GPL/AGPL copyleft dependencies. |
-| **15. Image Studio browser workflows** | `PASS` | Verified in Chrome 157 & Edge 157: upload, resize, crop, format conversion, EXIF, target KB, spoof rejection. |
-| **16. PDF Studio browser workflows** | `PASS` | Verified in Chrome 157 & Edge 157: multi-file upload, 4-page merge, page reorder, rotation, split, corrupt rejection. |
-| **17. Text Extraction Studio workflows** | `PASS` | Verified in Chrome 157 & Edge 157: digital extraction, page boundaries, page tabs, TXT download. |
-| **18. Application Studio workflows** | `PASS` | Verified in Chrome 157 & Edge 157: DS-160 exact square, US Passport checker mode, France checker mode, UPSC OTR, SSC CGL/CHSL signatures. |
-| **19. Universal Conversion Hub workflows** | `PASS` | Verified in Chrome 157 & Edge 157: Archive (ZIP $\rightarrow$ TAR), Data (CSV $\rightarrow$ JSON), Vector (SVG $\rightarrow$ PNG), eBook (TXT $\rightarrow$ EPUB). |
-| **20. Dynamic network isolation** | `PASS` | CDP recorded 163 requests on Chrome and 153 on Edge: 0 remote, 0 POST, 0 data-leaking. Full log archived. |
-| **21. Zero server retention** | `PASS` | 100% in-browser processing verified via CDP request inspection. |
-| **22. Git cleanliness** | `PASS` | Working tree clean and properly tracked. |
+| **14. Permissive Dependency Licensing** | `PASS` | `fflate` (MIT), `js-yaml` (MIT), `pdfjs-dist` (Apache-2.0), `pdf-lib` (MIT). Zero GPL/AGPL copyleft dependencies. |
+| **15. PDF Studio Visual Page Thumbnails** | `PASS` | Actual page previews rendered via `pdfjs-dist` with aspect ratio preservation, 2-worker concurrency limiter, priority queue, buffer detachment protection, and self-hosted worker (`/pdf.worker.min.mjs`). |
+| **16. Image Studio browser workflows** | `PASS` | Verified in Chrome 157 & Edge 157: upload, resize, crop, format conversion, EXIF, target KB, spoof rejection. |
+| **17. PDF Studio browser workflows** | `PASS` | Verified in Chrome 157 & Edge 157: multi-file upload, 4-page merge, 3 visual thumbnails rendered, page reorder, rotation, split, corrupt rejection. |
+| **18. Text Extraction Studio workflows** | `PASS` | Verified in Chrome 157 & Edge 157: digital extraction, page boundaries, page tabs, TXT download. |
+| **19. Application Studio workflows** | `PASS` | Verified in Chrome 157 & Edge 157: DS-160 exact square, US Passport checker mode, France checker mode, UPSC OTR, SSC CGL/CHSL signatures. |
+| **20. Universal Conversion Hub workflows** | `PASS` | Verified in Chrome 157 & Edge 157: Archive (ZIP $\rightarrow$ TAR), Data (CSV $\rightarrow$ JSON), Vector (SVG $\rightarrow$ PNG), eBook (TXT $\rightarrow$ EPUB). |
+| **21. Dynamic network isolation** | `PASS` | CDP recorded 159 requests on Chrome and 159 on Edge: 0 remote, 0 POST, 0 data-leaking. Full log archived. |
+| **22. Zero server retention** | `PASS` | 100% in-browser processing verified via CDP request inspection. |
+| **23. Git cleanliness** | `PASS` | Working tree clean and properly tracked. |
 
 ---
 
@@ -362,11 +376,11 @@ Following the completion of the **Universal File Conversion Engine & 4 Core Adap
 You are the lead full-stack engineer and product architect for FileFix.
 Project directory: D:\Web Tech\FileFlix
 Git branch: main
-Current status: Universal File Conversion Engine Implemented (Version 1.0 Dossier finalized; 0 npm audit vulnerabilities; 97 Vitest tests passing across 16 test suites; Chrome 157 and Edge 157 browser verification complete with 0 remote network traffic; Rank 2 milestone fully finalized).
+Current status: PDF Studio Visual Page Thumbnails Implemented (Version 1.1 Dossier finalized; 0 npm audit vulnerabilities; 106 Vitest tests passing across 17 test suites; Chrome 157 and Edge 157 browser verification complete with 0 remote network traffic; Rank 3 milestone fully finalized).
 
-Next Authorized Milestone: Rank 3 — PDF Studio Visual Page Thumbnails
+Next Authorized Milestone: Rank 4 — Image Studio Interactive Visual Crop Box
 Scope:
-1. Render low-resolution canvas previews for each page in PDF Studio Organize mode using pdfjs-dist.
-2. Maintain local-only in-browser execution with concurrency bounds (max 2 concurrent renders).
-3. Update interactive page cards to display live thumbnails, page numbers, and rotation status.
+1. Replace manual pixel crop inputs in Image Studio with an interactive, mouse/touch-draggable crop box overlay on the preview canvas.
+2. Support visual corner/edge resize handles and aspect ratio constraints (1:1, 4:3, 16:9, freeform).
+3. Ensure coordinates strictly clamp within image boundaries and synchronize with Web Worker crop processing.
 ```
